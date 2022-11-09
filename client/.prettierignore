@@ -1,0 +1,12 @@
+# Libraries
+node_modules/
+
+# Assets
+*.png
+
+# Static files
+*.md
+LICENSE
+
+# Package manager files
+pnpm-lock.yaml

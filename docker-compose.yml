@@ -1,0 +1,13 @@
+services:
+    database:
+        image: postgres:15-alpine
+        network_mode: host
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
+        volumes:
+            - dev_db:/var/lib/postgresql/data
+        logging:
+          driver: none
+
+volumes:
+  dev_db:

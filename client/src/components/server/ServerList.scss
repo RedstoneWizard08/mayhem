@@ -1,0 +1,11 @@
+.servers {
+    background-color: var(--color-background-light);
+
+    height: 100%;
+    width: 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
