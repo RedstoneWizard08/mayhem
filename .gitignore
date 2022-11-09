@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+gox
 dist-ssr
 target
 *.local
