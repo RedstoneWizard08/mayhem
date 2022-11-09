@@ -1,7 +1,17 @@
 [package]
 name = "mayhem"
-version = "0.0.0"
+authors = ["RedstoneWizard08"]
+version = "0.1.0"
 edition = "2021"
+
+description = """
+A Discord-like chat application for security, stability, speed, and ultimate customization.
+"""
+
+license = "MIT"
+license-file = "../LICENSE"
+homepage = "https://github.com/RedstoneWizard08/mayhem"
+repository = "https://github.com/RedstoneWizard08/mayhem"
 
 [dependencies]
 config = "0.13.2"
