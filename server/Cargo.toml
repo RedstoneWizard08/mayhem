@@ -10,7 +10,6 @@ A Discord-like chat application for security, stability, speed, and ultimate cus
 """
 
 license = "MIT"
-license-file = "../LICENSE"
 homepage = "https://github.com/RedstoneWizard08/mayhem"
 repository = "https://github.com/RedstoneWizard08/mayhem"
 
