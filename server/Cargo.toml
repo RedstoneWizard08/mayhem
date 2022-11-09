@@ -3,6 +3,7 @@ name = "mayhem"
 authors = ["RedstoneWizard08"]
 version = "0.1.0"
 edition = "2021"
+readme = "../README.md"
 
 description = """
 A Discord-like chat application for security, stability, speed, and ultimate customization.
