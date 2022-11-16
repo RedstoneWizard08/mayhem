@@ -22,7 +22,7 @@ impl Fairing for LoggingMiddleware {
     }
 
     async fn on_response<'r>(&self, req: &'r Request<'_>, res: &mut Response<'r>) {
-        let mut method_type = CustomType::WARN;
+        let method_type: CustomType;
 
         match req.method() {
             Method::Get => method_type = CustomType::GET,

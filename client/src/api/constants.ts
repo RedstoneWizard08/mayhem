@@ -53,7 +53,7 @@ export interface APIRouteListInner {
     [key: string]: APIRoute;
 };
 
-export const API_BASE = "http://dev.local.host:4001/api/v1";
+export const API_BASE: string = import.meta.env.VITE_API_BASE || "http://dev.local.host:4001/api/v1";
 
 export const _ROUTES = {
     servers: {

@@ -7,8 +7,8 @@ pub mod database;
 pub mod errors;
 pub mod logging;
 pub mod middleware;
-pub mod models;
 pub mod routes;
+pub mod server;
 pub mod state;
 pub mod util;
 
@@ -34,6 +34,7 @@ pub async fn main() -> Result<(), Error> {
     server = server.attach(LoggingMiddleware);
 
     server = server.mount("/", routes![handle_index, handle_login, handle_register]);
+    server = server.attach(routes::server::stage());
 
     let figment = server.figment();
     let config: RocketConfig = figment.extract().expect("config");

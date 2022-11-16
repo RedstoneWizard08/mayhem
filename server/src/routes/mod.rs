@@ -1,3 +1,4 @@
+pub mod server;
 pub mod index;
 pub mod login;
 pub mod register;

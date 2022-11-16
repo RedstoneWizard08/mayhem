@@ -23,10 +23,10 @@ pub struct Arguments {
 #[derive(Subcommand, Debug, Clone)]
 pub enum Commands {
     Init {
-        #[arg(short = "f", long = "force-overwrite")]
-        pub force_overwrite: bool,
+        #[arg(short = 'f', long = "force-overwrite")]
+        force_overwrite: bool,
 
-        pub directory: Option<PathBuf>,
+        directory: Option<PathBuf>,
     },
 }
 

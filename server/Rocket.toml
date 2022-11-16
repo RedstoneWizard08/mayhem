@@ -4,7 +4,7 @@ port = 4001
 log_level = "off"
 
 [default.databases.dev_db]
-url = "postgresql://postgres@127.0.0.1:5432/dev_db"
+url = "postgresql://postgres@127.0.0.1:5432/mayhem_dev"
 
 min_connections = 64
 max_connections = 1024

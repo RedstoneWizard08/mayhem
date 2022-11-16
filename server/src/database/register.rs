@@ -1,26 +1,34 @@
 use deadpool_postgres::Client;
-use tokio_pg_mapper::FromTokioPostgresRow;
+use futures::executor::block_on;
+use mayhem_db::models::user::User;
+use rocket::serde::{Serialize, Deserialize};
 
 use crate::{
     errors::AppError,
-    models::{
-        full_user::{FullUser, RealFullUser},
-        user::{RawUserCreation, RealUserWithId, UserWithId},
-        user_settings::UserSettingsWithId,
-    },
     util::password::hash,
 };
 
-pub async fn add_user<'r>(
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(crate = "rocket::serde")]
+pub struct UserCreation {
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub username: String,
+    pub password: String,
+}
+
+pub async fn add_user(
     client: &Client,
-    user_info: RawUserCreation<'r>,
-) -> Result<RealFullUser, AppError> {
+    user_info: UserCreation,
+) -> Result<User, AppError> {
     let _stmt = include_str!("../sql/users/add.sql");
     let stmt = client.prepare(&_stmt).await.unwrap();
 
     let password = hash(&user_info.password);
+    let servers: Vec<i32> = Vec::new();
 
-    let res = client
+    let user = client
         .query(
             &stmt,
             &[
@@ -29,41 +37,17 @@ pub async fn add_user<'r>(
                 &user_info.email,
                 &password,
                 &user_info.username,
+                &servers,
             ],
         )
         .await?
         .iter()
-        .map(|row| RealUserWithId::from_row_ref(row).unwrap())
-        .collect::<Vec<RealUserWithId>>()
+        .map(|row| block_on(User::from_postgres_ref(row.to_owned(), client)).unwrap())
+        .collect::<Vec<User>>()
         .pop();
 
-    let user = res.clone().unwrap();
-
-    let _stmt2 = include_str!("../sql/users/link_settings.sql");
-    let stmt2 = client.prepare(&_stmt2).await.unwrap();
-
-    let res2 = client
-        .query(&stmt2, &[&user.id])
-        .await?
-        .iter()
-        .map(|row| UserSettingsWithId::from_row_ref(row).unwrap())
-        .collect::<Vec<UserSettingsWithId>>()
-        .pop();
-
-    if res2.is_some() {
-        let full = FullUser::new(
-            UserWithId {
-                id: user.id,
-                first_name: user.first_name.as_str(),
-                last_name: user.last_name.as_str(),
-                email: user.email.as_str(),
-                username: user.username.as_str(),
-                password: user.password.as_str(),
-            },
-            res2.unwrap(),
-        );
-
-        return Ok(RealFullUser::from(full));
+    if user.is_some() {
+        return Ok(user.unwrap());
     } else {
         return Err(AppError::NotFound);
     }

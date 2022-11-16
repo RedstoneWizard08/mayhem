@@ -1,0 +1,27 @@
+[package]
+name = "mayhem-db"
+authors = ["RedstoneWizard08"]
+version = "0.1.0-beta.2"
+edition = "2021"
+readme = "../README.md"
+
+description = """
+A Discord-like chat application for security, stability, speed, and ultimate customization.
+
+=> Database Module
+"""
+
+license = "MIT"
+homepage = "https://github.com/RedstoneWizard08/mayhem"
+repository = "https://github.com/RedstoneWizard08/mayhem"
+
+[dependencies]
+async-trait = "0.1.58"
+num = "0.4.0"
+num-derive = "0.3.3"
+num-traits = "0.2.15"
+postgres = "0.19.4"
+rocket = { version = "0.5.0-rc.2", features = ["json", "msgpack", "tls", "serde_json", "secrets", "uuid"] }
+tokio = "1.21.2"
+tokio-pg-mapper = "0.2.0"
+tokio-postgres = "0.7.7"

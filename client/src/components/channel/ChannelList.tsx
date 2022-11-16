@@ -1,4 +1,3 @@
-import { useState } from "preact/hooks";
 import { ChannelGroupComponentProps, ChannelIcon, ChannelIconComponentProps } from "./ChannelIcon";
 import "./ChannelList.scss";
 

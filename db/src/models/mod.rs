@@ -1,3 +1,3 @@
-pub mod full_user;
+pub mod server;
 pub mod user;
 pub mod user_settings;

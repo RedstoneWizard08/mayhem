@@ -1,8 +1,10 @@
+pub mod git;
 pub mod parser;
 pub mod commands;
 
 use clap::Parser;
-use parser::{Arguments, Commands};
+use commands::init::dispatch_init;
+use parser::{Arguments, Commands, InitArgs};
 use path_absolutize::Absolutize;
 
 pub static CONFIG_FILE: &str = "Mayhem.toml";
@@ -27,14 +29,13 @@ pub fn main() {
         _ => println!("Don't be crazy"),
     }
 
-    // match &cli.command {
-    //     Some(Commands::Test { list }) => {
-    //         if *list {
-    //             println!("Printing testing lists...");
-    //         } else {
-    //             println!("Not printing testing lists...");
-    //         }
-    //     }
-    //     None => {}
-    // }
+    match &cli.command {
+        Some(Commands::Init { force_overwrite, directory }) => {
+            dispatch_init(InitArgs {
+                force_overwrite: force_overwrite.clone(),
+                directory: directory.clone(),
+            });
+        }
+        None => {},
+    }
 }

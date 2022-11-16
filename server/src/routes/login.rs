@@ -1,3 +1,4 @@
+use mayhem_db::models::user::User;
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordVerifier},
     Pbkdf2,
@@ -7,17 +8,16 @@ use rocket_db_pools::Connection;
 
 use crate::{
     database::login::{get_user, LoginInfo},
-    models::full_user::RealFullUser,
     state::DatabaseProvider, errors::conflict::BasicResponseError,
 };
 
 #[post("/api/users", data = "<info>")]
 pub async fn login(
     db: Connection<DatabaseProvider>,
-    info: Json<LoginInfo<'_>>,
+    info: Json<LoginInfo>,
 ) -> Result<
     Result<
-        Json<RealFullUser>,
+        Json<User>,
         status::Unauthorized<Json<BasicResponseError>>,
     >,
     status::NotFound<Json<BasicResponseError>>,
@@ -45,7 +45,7 @@ pub async fn login(
                                     Json(
                                         BasicResponseError {
                                             code: 401,
-                                            message: "Invalid password!",
+                                            message: "Invalid password!".to_string(),
                                         }
                                     )
                                 )
@@ -61,7 +61,7 @@ pub async fn login(
                     Json(
                         BasicResponseError {
                             code: 404,
-                            message: "User not found!",
+                            message: "User not found!".to_string(),
                         }
                     )
                 )
