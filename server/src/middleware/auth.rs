@@ -1,4 +1,9 @@
-use rocket::{request::{FromRequest, self}, request::Outcome, Request, http::Status};
+use rocket::{
+    http::Status,
+    request::Outcome,
+    request::{self, FromRequest},
+    Request,
+};
 
 pub struct Authorization<'r>(pub &'r str);
 

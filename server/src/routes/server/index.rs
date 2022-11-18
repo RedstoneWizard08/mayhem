@@ -1,5 +1,5 @@
-use rocket::{response::status, get, http::Status};
 use crate::middleware::auth::Authorization;
+use rocket::{get, http::Status, response::status};
 
 #[get("/")]
 pub fn index(auth: Authorization) -> status::Custom<&str> {

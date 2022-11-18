@@ -1,6 +1,11 @@
 use std::convert::Infallible;
 
-use rocket::{request::{FromRequest, self}, request::Outcome, Request, http::HeaderMap};
+use rocket::{
+    http::HeaderMap,
+    request::Outcome,
+    request::{self, FromRequest},
+    Request,
+};
 
 pub struct RequestHeaders<'h>(pub &'h HeaderMap<'h>);
 

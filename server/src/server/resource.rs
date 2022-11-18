@@ -1,5 +1,5 @@
 use either::Either;
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::{Deserialize, Serialize};
 
 use super::icon::ImageMetadata;
 

@@ -1,2 +1,2 @@
-pub mod resource;
 pub mod icon;
+pub mod resource;

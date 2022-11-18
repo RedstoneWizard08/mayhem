@@ -1,6 +1,9 @@
-use super::{Args, State, util::print};
+use super::{util::print, Args, State};
+use git2::{
+    build::{CheckoutBuilder, RepoBuilder},
+    FetchOptions, RemoteCallbacks,
+};
 use std::{cell::RefCell, path::Path};
-use git2::{RemoteCallbacks, build::{CheckoutBuilder, RepoBuilder}, FetchOptions};
 
 pub fn clone_repository(args: &Args) -> Result<(), git2::Error> {
     let state = RefCell::new(State {
@@ -32,7 +35,8 @@ pub fn clone_repository(args: &Args) -> Result<(), git2::Error> {
     RepoBuilder::new()
         .fetch_options(fo)
         .with_checkout(co)
-        .clone(&args.arg_url, Path::new(&args.arg_path)).unwrap();
+        .clone(&args.arg_url, Path::new(&args.arg_path))
+        .unwrap();
 
     println!();
 

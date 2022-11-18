@@ -1,5 +1,5 @@
-pub mod util;
 pub mod clone;
+pub mod util;
 
 use std::path::PathBuf;
 

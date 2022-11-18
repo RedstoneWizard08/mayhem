@@ -1,6 +1,6 @@
+pub mod commands;
 pub mod git;
 pub mod parser;
-pub mod commands;
 
 use clap::Parser;
 use commands::init::dispatch_init;
@@ -30,12 +30,15 @@ pub fn main() {
     }
 
     match &cli.command {
-        Some(Commands::Init { force_overwrite, directory }) => {
+        Some(Commands::Init {
+            force_overwrite,
+            directory,
+        }) => {
             dispatch_init(InitArgs {
                 force_overwrite: force_overwrite.clone(),
                 directory: directory.clone(),
             });
         }
-        None => {},
+        None => {}
     }
 }

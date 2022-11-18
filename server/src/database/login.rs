@@ -1,7 +1,5 @@
-use deadpool_postgres::Client;
-use futures::executor::block_on;
-use mayhem_db::models::user::User;
-use rocket::serde::{Deserialize, Serialize};
+use mayhem_db::{Client, util::CompleteUser};
+use rocket::{serde::{Deserialize, Serialize}, State};
 
 use crate::errors::AppError;
 
@@ -12,21 +10,8 @@ pub struct LoginInfo {
     pub password: String,
 }
 
-pub async fn get_user(
-    client: &Client,
-    user_info: &LoginInfo,
-) -> Result<User, AppError> {
-    let _stmt = include_str!("../sql/users/get.sql");
-    let _stmt = _stmt.replace("$username", user_info.username.as_str());
-    let stmt = client.prepare(&_stmt).await.unwrap();
-
-    let res = client
-        .query(&stmt, &[])
-        .await?
-        .iter()
-        .map(|row| block_on(User::from_postgres_ref(row, client)).unwrap())
-        .collect::<Vec<User>>()
-        .pop();
+pub async fn get_user(client: &State<Client>, user_info: &LoginInfo) -> Result<CompleteUser, AppError> {
+    let res = client.query.find_user_by_name(user_info.username.clone()).await.unwrap();
 
     match res {
         Some(user) => Ok(user),

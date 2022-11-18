@@ -1,5 +1,5 @@
-use mayhem_db::models::user::User;
-use rocket::{put, response::status, serde::json::Json};
+use mayhem_db::{models::user::Model as User, Client};
+use rocket::{put, response::status, serde::json::Json, State};
 
 use crate::{
     database::{
@@ -7,16 +7,13 @@ use crate::{
         register::{add_user, UserCreation},
     },
     errors::conflict::BasicResponseError,
-    state::DatabaseProvider,
 };
 
 #[put("/api/users", data = "<user>")]
 pub async fn register(
-    db: &DatabaseProvider,
+    client: &State<Client>,
     user: Json<UserCreation>,
 ) -> Result<Json<User>, status::Conflict<Json<BasicResponseError>>> {
-    let client = db.get().await.unwrap();
-
     let user_info_check = LoginInfo {
         username: user.username.clone(),
         password: user.password.clone(),
@@ -37,7 +34,7 @@ pub async fn register(
 
     println!("Making new user");
     let new_user = add_user(&client, user.into_inner()).await.unwrap();
-    let json = Json(new_user);
+    let json = Json(User::from_active(new_user));
 
     return Ok(json);
 }

@@ -1,12 +1,7 @@
-use deadpool_postgres::Client;
-use futures::executor::block_on;
-use mayhem_db::models::user::User;
-use rocket::serde::{Serialize, Deserialize};
+use mayhem_db::{Client, models::user::{ActiveModel as User, Model as UserModel}};
+use rocket::{serde::{Deserialize, Serialize}, State};
 
-use crate::{
-    errors::AppError,
-    util::password::hash,
-};
+use crate::{errors::AppError, util::password::hash};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(crate = "rocket::serde")]
@@ -18,35 +13,19 @@ pub struct UserCreation {
     pub password: String,
 }
 
-pub async fn add_user(
-    client: &Client,
-    user_info: UserCreation,
-) -> Result<User, AppError> {
-    let _stmt = include_str!("../sql/users/add.sql");
-    let stmt = client.prepare(&_stmt).await.unwrap();
-
+pub async fn add_user(client: &State<Client>, user_info: UserCreation) -> Result<User, AppError> {
     let password = hash(&user_info.password);
-    let servers: Vec<i32> = Vec::new();
 
-    let user = client
-        .query(
-            &stmt,
-            &[
-                &user_info.first_name,
-                &user_info.last_name,
-                &user_info.email,
-                &password,
-                &user_info.username,
-                &servers,
-            ],
-        )
-        .await?
-        .iter()
-        .map(|row| block_on(User::from_postgres_ref(row.to_owned(), client)).unwrap())
-        .collect::<Vec<User>>()
-        .pop();
+    let user = client.inserter.create_user(UserModel {
+        first_name: user_info.first_name,
+        last_name: user_info.last_name,
+        email: user_info.email,
+        username: user_info.username,
+        password,
+        id: -1,
+    }).await;
 
-    if user.is_some() {
+    if user.is_ok() {
         return Ok(user.unwrap());
     } else {
         return Err(AppError::NotFound);

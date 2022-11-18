@@ -43,6 +43,6 @@ pub fn print(state: &mut State) {
                 .unwrap_or_default()
         )
     }
-    
+
     io::stdout().flush().unwrap();
 }

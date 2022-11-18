@@ -20,7 +20,7 @@ derive_more = "0.99.17"
 dotenv = "0.15.0"
 either = { version = "1.8.0", features = ["serde"] }
 futures = "0.3.25"
-mayhem-db = { version = "0.1.0-beta.2", path = "../db" }
+mayhem-db = { version = "0.1.0-beta.2", path = "../database" }
 pbkdf2 = "0.11.0"
 postgres = "0.19.4"
 rand = "0.8.5"

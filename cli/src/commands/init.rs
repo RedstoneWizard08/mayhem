@@ -1,15 +1,21 @@
-use std::{path::{PathBuf, Path}, process::exit};
+use std::{
+    path::{Path, PathBuf},
+    process::exit,
+};
 
 use path_absolutize::Absolutize;
-use question::{Question, Answer};
+use question::{Answer, Question};
 
-use crate::{parser::InitArgs, git::{clone::clone_repository, Args}};
+use crate::{
+    git::{clone::clone_repository, Args},
+    parser::InitArgs,
+};
 
 fn check_ok(dir: &Path) -> bool {
     if !dir.exists() {
         return true;
     }
-    
+
     if dir.is_file() {
         return false;
     }
@@ -24,7 +30,12 @@ fn check_ok(dir: &Path) -> bool {
 }
 
 pub fn dispatch_init(args: InitArgs) {
-    let binding = args.directory.unwrap_or(PathBuf::from(".")).absolutize().unwrap().into_owned();
+    let binding = args
+        .directory
+        .unwrap_or(PathBuf::from("."))
+        .absolutize()
+        .unwrap()
+        .into_owned();
     let dir = binding.as_path();
 
     let is_ok = check_ok(dir);
@@ -33,8 +44,9 @@ pub fn dispatch_init(args: InitArgs) {
         let q = Question::new("Directory not empty! Continue? (y/n)")
             .yes_no()
             .until_acceptable()
-            .ask().unwrap();
-        
+            .ask()
+            .unwrap();
+
         if q == Answer::NO {
             println!("Aborting!");
             exit(0);
