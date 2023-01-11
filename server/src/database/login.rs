@@ -1,5 +1,8 @@
-use mayhem_db::{Client, util::CompleteUser};
-use rocket::{serde::{Deserialize, Serialize}, State};
+use mayhem_db::{util::CompleteUser, Client};
+use rocket::{
+    serde::{Deserialize, Serialize},
+    State,
+};
 
 use crate::errors::AppError;
 
@@ -10,8 +13,16 @@ pub struct LoginInfo {
     pub password: String,
 }
 
-pub async fn get_user(client: &State<Client>, user_info: &LoginInfo) -> Result<CompleteUser, AppError> {
-    let res = client.query.find_user_by_name(user_info.username.clone()).await.unwrap();
+pub async fn get_user(
+    client: &State<Client>,
+    user_info: &LoginInfo,
+) -> Result<CompleteUser, AppError> {
+    let res = client
+        .query
+        .user
+        .find_user_by_name(user_info.username.clone())
+        .await
+        .unwrap();
 
     match res {
         Some(user) => Ok(user),

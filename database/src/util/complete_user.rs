@@ -1,4 +1,4 @@
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::{Deserialize, Serialize};
 
 use super::CompleteServer;
 use crate::models::user_settings::Model as UserSettings;
@@ -13,5 +13,5 @@ pub struct CompleteUser {
     pub username: String,
     pub password: String,
     pub servers: Vec<CompleteServer>,
-    pub settings: UserSettings,
+    pub settings: Option<UserSettings>,
 }

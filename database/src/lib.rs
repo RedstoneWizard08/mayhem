@@ -1,4 +1,4 @@
-#![feature(arc_unwrap_or_clone)]
+#![feature(arc_unwrap_or_clone, associated_type_defaults)]
 
 pub use migration::{MigrationTrait, Migrator, MigratorTrait};
 pub use sea_orm;

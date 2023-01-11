@@ -4,14 +4,14 @@ use sea_orm::{ActiveModelTrait, DbConn, DeleteResult, EntityTrait};
 use std::sync::Arc;
 
 #[derive(Clone)]
-pub struct DatabaseRemovalHelper {
+pub struct RemovalHelper {
     client: Arc<DbConn>,
 }
 
-unsafe impl Sync for DatabaseRemovalHelper {}
-unsafe impl Send for DatabaseRemovalHelper {}
+unsafe impl Sync for RemovalHelper {}
+unsafe impl Send for RemovalHelper {}
 
-impl DatabaseRemovalHelper {
+impl RemovalHelper {
     pub fn create(client: Arc<DbConn>) -> Self {
         return Self { client };
     }
@@ -29,6 +29,8 @@ impl DatabaseRemovalHelper {
     }
 
     pub async fn delete_all_users(&self) -> Result<DeleteResult, DbErr> {
-        return user::Entity::delete_many().exec(&self.client as &DbConn).await;
+        return user::Entity::delete_many()
+            .exec(&self.client as &DbConn)
+            .await;
     }
 }

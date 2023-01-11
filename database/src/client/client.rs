@@ -1,41 +1,41 @@
 use std::sync::Arc;
 
-use migration::{Migrator, MigratorTrait, DbErr};
+use migration::{DbErr, Migrator, MigratorTrait};
 use sea_orm::DbConn;
 
 use super::{
-    connector::{connect, DatabaseConnectionOptions},
-    insertion::DatabaseInsertionHelper,
-    mutation::DatabaseMutationHelper,
-    query::DatabaseQueryHelper,
-    removal::DatabaseRemovalHelper,
+    connector::{connect, ConnectionOptions},
+    insertion::InsertionHelper,
+    mutation::MutationHelper,
+    query::QueryHelper,
+    removal::RemovalHelper,
 };
 
 #[derive(Clone)]
 pub struct Client {
-    pub opts: Option<DatabaseConnectionOptions>,
+    pub opts: Option<ConnectionOptions>,
     pub client: Arc<DbConn>,
-    pub inserter: DatabaseInsertionHelper,
-    pub mutator: DatabaseMutationHelper,
-    pub remover: DatabaseRemovalHelper,
-    pub query: DatabaseQueryHelper,
+    pub inserter: InsertionHelper,
+    pub mutator: MutationHelper,
+    pub remover: RemovalHelper,
+    pub query: QueryHelper,
 }
 
 unsafe impl Sync for Client {}
 unsafe impl Send for Client {}
 
 impl Client {
-    pub async fn connect(opts: DatabaseConnectionOptions) -> Self {
+    pub async fn connect(opts: ConnectionOptions) -> Self {
         return Self::of(connect(opts.clone()).await.unwrap());
     }
 
     pub fn of(conn: DbConn) -> Self {
         let conn = Arc::new(conn);
 
-        let inserter = DatabaseInsertionHelper::create(conn.clone());
-        let mutator = DatabaseMutationHelper::create(conn.clone());
-        let remover = DatabaseRemovalHelper::create(conn.clone());
-        let query = DatabaseQueryHelper::create(conn.clone());
+        let inserter = InsertionHelper::create(conn.clone());
+        let mutator = MutationHelper::create(conn.clone());
+        let remover = RemovalHelper::create(conn.clone());
+        let query = QueryHelper::create(conn.clone());
 
         return Self {
             opts: None,

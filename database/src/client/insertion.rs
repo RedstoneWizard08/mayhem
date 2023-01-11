@@ -4,14 +4,14 @@ use sea_orm::{ActiveModelTrait, DbConn, Set};
 use std::sync::Arc;
 
 #[derive(Clone)]
-pub struct DatabaseInsertionHelper {
+pub struct InsertionHelper {
     client: Arc<DbConn>,
 }
 
-unsafe impl Sync for DatabaseInsertionHelper {}
-unsafe impl Send for DatabaseInsertionHelper {}
+unsafe impl Sync for InsertionHelper {}
+unsafe impl Send for InsertionHelper {}
 
-impl DatabaseInsertionHelper {
+impl InsertionHelper {
     pub fn create(client: Arc<DbConn>) -> Self {
         return Self { client };
     }

@@ -14,24 +14,31 @@ homepage = "https://github.com/RedstoneWizard08/mayhem"
 repository = "https://github.com/RedstoneWizard08/mayhem"
 
 [dependencies]
+chrono = "0.4.23"
 config = "0.13.2"
-deadpool-postgres = { version = "0.10.3", features = ["serde"] }
 derive_more = "0.99.17"
 dotenv = "0.15.0"
 either = { version = "1.8.0", features = ["serde"] }
 futures = "0.3.25"
+lazy_static = "1.4.0"
 mayhem-db = { version = "0.1.0-beta.2", path = "../database" }
+oxide-auth = "0.5.3"
 pbkdf2 = "0.11.0"
-postgres = "0.19.4"
 rand = "0.8.5"
 reqwest = "0.11.12"
 rocket = { version = "0.5.0-rc.2", features = ["json", "msgpack", "serde_json", "secrets", "uuid"] }
-rocket_db_pools = { version = "0.1.0-rc.2", features = ["deadpool-postgres", "deadpool_postgres"] }
 serde = { version = "1.0.147", features = ["derive"] }
 serde_json = "1.0.87"
 serde_urlencoded = "0.7.1"
 tokio = { version = "1.21.2", features = ["full"] }
+tokio-codec = "0.1.2"
+tokio-io = "0.1.13"
 tokio-pg-mapper = "0.2.0"
 tokio-pg-mapper-derive = "0.2.0"
 tokio-postgres = "0.7.7"
+tokio-reactor = "0.1.12"
+tokio-stream = "0.1.11"
+tokio-tcp = "0.1.4"
+tokio-tls = "0.3.1"
 url = "2.3.1"
+uuid = { version = "1.2.2", features = ["serde", "v4"] }

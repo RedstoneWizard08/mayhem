@@ -1,9 +1,3 @@
-import { JSX } from "preact/jsx-runtime";
-
-export interface DefaultComponentProps {
-    children?: JSX.Element | JSX.Element[];
-};
-
 export const trim = (str: string, length: number) => {
     if (str.length <= length) return str;
     else {
@@ -11,4 +5,4 @@ export const trim = (str: string, length: number) => {
         for (let i = 0; i < length; i++) out += str.charAt(i);
         return out;
     }
-}
+};

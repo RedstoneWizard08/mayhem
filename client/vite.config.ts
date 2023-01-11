@@ -2,17 +2,13 @@
 import { defineConfig } from "vite";
 
 // Plugins
-import preact from "@preact/preset-vite";
-import { VitePWA as pwa } from "vite-plugin-pwa";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { SvelteKitPWA } from "@vite-pwa/sveltekit";
 
 export default defineConfig({
-    plugins: [
-        preact(),
-        pwa(),
-    ],
+    plugins: [sveltekit(), SvelteKitPWA()],
 
     server: {
-        host: "0.0.0.0",
         port: 4000,
         strictPort: true,
 
@@ -20,7 +16,6 @@ export default defineConfig({
             clientPort: 4000,
             port: 4000,
             protocol: "ws",
-            host: "0.0.0.0",
         },
     },
 });

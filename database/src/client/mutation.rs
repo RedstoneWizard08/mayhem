@@ -4,14 +4,14 @@ use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, Set};
 use std::sync::Arc;
 
 #[derive(Clone)]
-pub struct DatabaseMutationHelper {
+pub struct MutationHelper {
     client: Arc<DbConn>,
 }
 
-unsafe impl Sync for DatabaseMutationHelper {}
-unsafe impl Send for DatabaseMutationHelper {}
+unsafe impl Sync for MutationHelper {}
+unsafe impl Send for MutationHelper {}
 
-impl DatabaseMutationHelper {
+impl MutationHelper {
     pub fn create(client: Arc<DbConn>) -> Self {
         return Self { client };
     }

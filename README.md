@@ -5,4 +5,14 @@
 [![Server Version](https://img.shields.io/crates/v/mayhem?style=for-the-badge)](https://crates.io/crates/mayhem)
 ![Dependencies](https://img.shields.io/librariesio/github/RedstoneWizard08/mayhem?style=for-the-badge)
 
-A Discord-like chat application for security, stability, speed, and ultimate customization.
+An open-source Twitter replacement with Discord and Zoom-like features. Optimized for security, stability, safety, and customization.
+
+## The Stack
+
+Our app is built with:
+- Rust (Backend)
+- Rocket.rs (Backend)
+- Tokio (Backend)
+- SeaORM (Database functions)
+- Preact & Preact Router (Frontend)
+- SASS (Frontend)

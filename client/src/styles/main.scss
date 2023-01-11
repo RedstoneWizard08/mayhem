@@ -1,8 +1,11 @@
+@import "includes";
+
 @import "theme.scss";
 @import "dark.scss";
 @import "light.scss";
 
-html, body, #root {
+html,
+body {
     width: 100%;
     height: 100%;
 

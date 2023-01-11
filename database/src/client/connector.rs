@@ -1,5 +1,5 @@
 use rocket::serde::{Deserialize, Serialize};
-use sea_orm::{Database, DatabaseConnection, DbErr};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -11,7 +11,7 @@ pub enum DatabaseProtocol {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub enum DatabaseAuthentication {
+pub enum Authentication {
     Password(PasswordAuthentication),
     User(UserAuthentication),
     Anonymous,
@@ -44,16 +44,16 @@ impl UserAuthentication {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub struct DatabaseConnectionOptions {
+pub struct ConnectionOptions {
     pub protocol: DatabaseProtocol,
 
-    pub auth: DatabaseAuthentication,
+    pub auth: Authentication,
     pub host: String,
     pub port: i32,
     pub database: String,
 }
 
-impl DatabaseConnectionOptions {
+impl ConnectionOptions {
     pub fn get_protocol(&self) -> String {
         return (match self.protocol.clone() {
             DatabaseProtocol::PostgreSQL => "postgres://",
@@ -67,9 +67,9 @@ impl DatabaseConnectionOptions {
         let auth_str;
 
         match self.auth.clone() {
-            DatabaseAuthentication::Password(val) => auth_str = val.get_auth_string(),
-            DatabaseAuthentication::User(val) => auth_str = val.get_auth_string(),
-            DatabaseAuthentication::Anonymous => auth_str = "".to_string(),
+            Authentication::Password(val) => auth_str = val.get_auth_string(),
+            Authentication::User(val) => auth_str = val.get_auth_string(),
+            Authentication::Anonymous => auth_str = "".to_string(),
         };
 
         return self.get_protocol()
@@ -82,6 +82,11 @@ impl DatabaseConnectionOptions {
     }
 }
 
-pub async fn connect(opts: DatabaseConnectionOptions) -> Result<DatabaseConnection, DbErr> {
-    return Database::connect(opts.get_connection_string()).await;
+pub async fn connect(opts: ConnectionOptions) -> Result<DatabaseConnection, DbErr> {
+    let mut conn = ConnectOptions::new(opts.get_connection_string());
+
+    conn.sqlx_logging(false)
+        .sqlx_logging_level(log::LevelFilter::Error);
+
+    return Database::connect(conn).await;
 }

@@ -1,4 +1,4 @@
-use mayhem_db::{Client, util::CompleteUser};
+use mayhem_db::Client;
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordVerifier},
     Pbkdf2,
@@ -8,6 +8,7 @@ use rocket::{post, response::status, serde::json::Json, State};
 use crate::{
     database::login::{get_user, LoginInfo},
     errors::conflict::BasicResponseError,
+    util::user::PasswordlessUser,
 };
 
 #[post("/api/users", data = "<info>")]
@@ -15,7 +16,7 @@ pub async fn login(
     db: &State<Client>,
     info: Json<LoginInfo>,
 ) -> Result<
-    Result<Json<CompleteUser>, status::Unauthorized<Json<BasicResponseError>>>,
+    Result<Json<PasswordlessUser>, status::Unauthorized<Json<BasicResponseError>>>,
     status::NotFound<Json<BasicResponseError>>,
 > {
     let user_info = info.into_inner();
@@ -29,15 +30,12 @@ pub async fn login(
             let valid = Pbkdf2.verify_password(user_info.password.clone().as_bytes(), &parsed_hash);
 
             match valid {
-                Ok(_) => {
-                    return Ok(Ok(Json(user)));
-                }
-                Err(_) => {
-                    return Ok(Err(status::Unauthorized(Some(Json(BasicResponseError {
-                        code: 401,
-                        message: "Invalid password!".to_string(),
-                    })))));
-                }
+                Ok(_) => Ok(Ok(Json(PasswordlessUser::from_complete(user)))),
+
+                Err(_) => Ok(Err(status::Unauthorized(Some(Json(BasicResponseError {
+                    code: 401,
+                    message: "Invalid password!".to_string(),
+                }))))),
             }
         }
         Err(_) => {

@@ -43,17 +43,18 @@ export interface APIRoute {
      * @default false
      */
     requiresToken?: boolean;
-};
+}
 
 export interface APIRouteList {
     [key: string]: APIRouteListInner;
-};
+}
 
 export interface APIRouteListInner {
     [key: string]: APIRoute;
-};
+}
 
-export const API_BASE: string = import.meta.env.VITE_API_BASE || "http://dev.local.host:4001/api/v1";
+export const API_BASE: string =
+    import.meta.env.VITE_API_BASE || "http://dev.local.host:4001/api/v1";
 
 export const _ROUTES = {
     servers: {
@@ -98,7 +99,7 @@ export const _ROUTES = {
 
             requiresToken: true,
         },
-        
+
         members: {
             path: "/servers/{id}/members",
             method: "GET",
@@ -119,7 +120,7 @@ export const _ROUTES = {
 
             requiresToken: true,
         },
-        
+
         roles: {
             path: "/servers/{id}/roles",
             method: "GET",

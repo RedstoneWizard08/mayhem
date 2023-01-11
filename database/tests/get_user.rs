@@ -8,7 +8,13 @@ pub async fn test_get_invalid_user() {
     Migrator::up(&db, None).await.unwrap();
 
     let client = Client::of(db);
-    let user = client.query.find_user_by_id(999).await.unwrap().unwrap();
+    let user = client
+        .query
+        .user
+        .find_user_by_id(999)
+        .await
+        .unwrap()
+        .unwrap();
 
     println!("{:?}", user);
 }

@@ -11,6 +11,7 @@ pub struct Model {
     pub id: i32,
     pub name: String,
     pub server_id: i32,
+    pub channel_type: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn, Serialize, Deserialize)]
@@ -19,6 +20,7 @@ pub enum Column {
     Id,
     Name,
     ServerId,
+    ChannelType,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey, Serialize, Deserialize)]
@@ -31,6 +33,7 @@ pub enum PrimaryKey {
 #[serde(crate = "rocket::serde")]
 pub enum Relation {
     Server,
+    Message,
 }
 
 impl EntityName for Entity {
@@ -47,6 +50,7 @@ impl ColumnTrait for Column {
             Self::Id => ColumnType::Integer.def(),
             Self::Name => ColumnType::Text.def(),
             Self::ServerId => ColumnType::Integer.def(),
+            Self::ChannelType => ColumnType::Text.def(),
         }
     }
 }
@@ -65,6 +69,12 @@ impl Related<super::server::Entity> for Entity {
     }
 }
 
+impl Related<super::super::message::Entity> for Entity {
+    fn to() -> RelationDef {
+        return Relation::Message.def();
+    }
+}
+
 impl RelationTrait for Relation {
     fn def(&self) -> RelationDef {
         match self {
@@ -72,6 +82,8 @@ impl RelationTrait for Relation {
                 .from(Column::ServerId)
                 .to(super::server::Column::Id)
                 .into(),
+
+            Self::Message => Entity::has_many(super::super::message::Entity).into(),
         }
     }
 }

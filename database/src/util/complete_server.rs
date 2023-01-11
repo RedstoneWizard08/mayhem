@@ -1,7 +1,7 @@
-use rocket::serde::{Serialize, Deserialize};
 use crate::models::server::channel::Model as Channel;
+use rocket::serde::{Deserialize, Serialize};
 
-use super::{CompleteRole, CompleteMember};
+use super::{CompleteMember, CompleteRole};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
