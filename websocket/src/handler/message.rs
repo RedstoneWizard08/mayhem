@@ -6,7 +6,10 @@ use mayhem_db::{
 use serde::{Deserialize, Serialize};
 use warp::ws::Message;
 
-use crate::{logging::warn::warn, Client, Clients};
+use crate::{
+    logging::{debug, warn::warn},
+    Client, Clients,
+};
 
 use super::{ActiveMessage, ActiveMessageAction};
 
@@ -25,6 +28,8 @@ pub struct MessagesData {
 }
 
 pub async fn on_message_send(data: ChatMessageIn, db: &DatabaseConnection, clients: &Clients) {
+    debug("Creating active model for the new message...");
+
     let msg = message::ActiveModel {
         channel_id: Set(data.channel),
         content: Set(data.content),
@@ -34,19 +39,31 @@ pub async fn on_message_send(data: ChatMessageIn, db: &DatabaseConnection, clien
         ..Default::default()
     };
 
+    debug("Inserting the message.");
+
     let message = msg.clone().insert(db).await.unwrap();
+
+    debug("Creating the data struct to send to the client.");
 
     let data_struct = ActiveMessage {
         action: ActiveMessageAction::RecieveMessage,
         data: message,
     };
 
+    debug("Serializing the data.");
+
     let data = serde_json::to_string(&data_struct).unwrap();
+
+    debug("Locking clients.");
 
     let locked = clients.lock().await;
 
+    debug("Looping through clients.");
+
     for (client_id, client) in locked.iter() {
         if let Some(sender) = &client.sender {
+            debug(format!("Sending data to client: {}", client_id.clone()).as_str());
+
             sender.send(Ok(Message::text(data.clone()))).unwrap();
         } else {
             warn(

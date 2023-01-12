@@ -19,7 +19,6 @@ name = "migration"
 path = "src/lib.rs"
 
 [dependencies]
-# async-std = { version = "^1", features = ["attributes", "tokio1"] }
 tokio = { version = "1.21.2", features = ["test-util", "full"] }
 futures = "0.3.25"
 sea-orm-migration = { version = "^0.10.0", features = ["runtime-tokio-rustls", "sqlx-postgres"] }

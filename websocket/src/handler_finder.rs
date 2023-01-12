@@ -6,14 +6,14 @@ use mayhem_db::sea_orm::DatabaseConnection;
 use crate::{
     handler::{
         channel::{on_create_channel, on_get_channel, on_get_channels, ChannelCreateData},
-        message::{on_get_all_messages, on_message_send, ChatMessageIn},
+        message::{on_get_all_messages, ChatMessageIn},
         server::{
             on_create_server, on_get_server, on_join_server, on_leave_server, ServerCreateData,
         },
         ActiveMessage, ActiveMessageAction,
     },
     logging::debug,
-    Client, Clients,
+    Client,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -31,9 +31,10 @@ pub struct UserAndServerIds {
 pub async fn find_handler(
     message: &str,
     db: &DatabaseConnection,
-    clients: &Clients,
     client: &Client,
-) -> Result<(), ()> {
+) -> Result<Option<ActiveMessageAction>, ()> {
+    debug("Trying to find a handler for the request.");
+
     // handler::message::on_*
 
     let json_parsed: Result<ActiveMessage<ChatMessageIn>, Error> = serde_json::from_str(message);
@@ -43,8 +44,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::SendMessage {
             debug("Recognized on_message_send...");
-            on_message_send(parsed.data, &db, &clients).await;
-            return Ok(());
+            return Ok(Some(ActiveMessageAction::SendMessage));
         }
     }
 
@@ -56,7 +56,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::GetMessagesForChannel {
             debug("Recognized on_get_all_messages...");
             on_get_all_messages(parsed.data, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -71,7 +71,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::CreateChannel {
             debug("Recognized on_create_channel...");
             on_create_channel(parsed.data, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -84,7 +84,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::GetChannelInfo {
             debug("Recognized on_get_channel...");
             on_get_channel(parsed.data.server_id, parsed.data.channel_id, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -96,7 +96,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::GetChannelsInServer {
             debug("Recognized on_get_channels...");
             on_get_channels(parsed.data, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -110,7 +110,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::CreateServer {
             debug("Recognized on_create_server...");
             on_create_server(parsed.data, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -122,7 +122,7 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::GetServerInfo {
             debug("Recognized on_get_server...");
             on_get_server(parsed.data, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 
@@ -134,13 +134,13 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::JoinServer {
             debug("Recognized on_join_server...");
             on_join_server(parsed.data.user_id, parsed.data.server_id, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
 
         if parsed.action == ActiveMessageAction::LeaveServer {
             debug("Recognized on_leave_server...");
             on_leave_server(parsed.data.user_id, parsed.data.server_id, &db, &client).await;
-            return Ok(());
+            return Ok(None);
         }
     }
 

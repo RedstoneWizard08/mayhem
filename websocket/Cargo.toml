@@ -24,3 +24,4 @@ tokio-stream = "0.1.11"
 uuid = { version = "1.2.2", features = ["v1", "v3", "v4", "fast-rng"] }
 warp = { version = "0.3.3", features = ["compression"] }
 mayhem-db = { version = "0.1.0-beta.2", path = "../database" }
+sqlx = { version = "0.6.2", features = ["postgres", "uuid", "tls", "time", "json", "chrono", "runtime-tokio-rustls"] }

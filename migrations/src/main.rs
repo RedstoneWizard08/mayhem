@@ -1,5 +1,5 @@
-use std::env;
 use sea_orm_migration::prelude::*;
+use std::env;
 
 #[tokio::main]
 pub async fn main() {

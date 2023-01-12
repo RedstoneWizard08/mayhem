@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use crate::{m20221117_173031_users::Users, m20221117_173054_channels::ServerChannels};
+use crate::{m20221117_173031_users::Users, m20221117_173057_channels::ServerChannels};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

@@ -29,7 +29,8 @@ pub fn debug(value: &str) {
             fs::write(
                 debug_log,
                 "========== Mayhem WebSocket Server Debug Log ==========\n",
-            ).unwrap();
+            )
+            .unwrap();
 
             HAS_WRITTEN = true;
         }
