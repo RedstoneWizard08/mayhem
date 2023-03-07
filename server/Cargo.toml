@@ -40,6 +40,7 @@ tokio-reactor = "0.1.12"
 tokio-stream = "0.1.11"
 tokio-tcp = "0.1.4"
 tokio-tls = "0.3.1"
+toml = "0.7.2"
 tower = { version = "0.4.13", features = ["full"] }
 tracing = { version = "0.1.37", features = ["log", "log-always", "async-await"] }
 tracing-subscriber = { version = "0.3.16", features = ["json", "serde", "regex", "time", "tracing"] }

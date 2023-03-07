@@ -1,9 +1,7 @@
 #![allow(unused_must_use, unused_assignments)]
 #![feature(proc_macro_hygiene, decl_macro, arc_unwrap_or_clone, async_closure)]
 
-#[macro_use]
-extern crate tracing;
-
+pub mod config;
 pub mod database;
 pub mod errors;
 pub mod logging;
@@ -13,25 +11,27 @@ pub mod server;
 pub mod util;
 
 use std::{error::Error, net::SocketAddr, sync::Arc};
-
 use axum::{middleware::from_fn, Router, Server};
-use mayhem::{
-    database::prepare_connection, middleware::logger::logging_middleware, routes::handle_error,
-};
-use mayhem_db::Client;
 
-pub async fn get_root() -> &'static str {
-    return "Hello, world!";
-}
+use mayhem::{
+    config::app::get_config, database::prepare_connection, logging::info,
+    middleware::logger::logging_middleware, routes::handle_error, util::parse_ip,
+};
+
+use mayhem_db::Client;
 
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
 
-    let database_connection = prepare_connection();
+    let config = get_config().await;
+
+    info("Config parsed!");
+
+    let database_connection = prepare_connection(config.clone());
     let client = Arc::new(Client::connect(database_connection).await);
 
-    info!("Connected to the database!");
+    info("Connected to the database!");
 
     let router = Router::new();
 
@@ -43,13 +43,14 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
 
     client.run_migrations().await.unwrap();
 
-    info!("Migrations succeeded!");
+    info("Migrations succeeded!");
 
-    let address = SocketAddr::from(([0, 0, 0, 0], 4001));
+    let ip = parse_ip(config.clone().host);
+    let address = SocketAddr::from((ip, config.clone().port));
     let server = Server::bind(&address);
     let app = server.serve(router.into_make_service());
 
-    info!("Listening on {}", address);
+    info(format!("Listening on {}", address).as_str());
 
     app.await.unwrap();
 

@@ -1,0 +1,15 @@
+host = "0.0.0.0"
+port = 4001
+
+[database]
+protocol = "postgresql"
+host = "127.0.0.1"
+port = 5432
+user = "mayhem"
+pass = "mayhem"
+database = "mayhem_dev"
+
+min_connections = 64
+max_connections = 1024
+connect_timeout = 5
+idle_timeout = 120
