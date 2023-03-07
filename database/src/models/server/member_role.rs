@@ -1,33 +1,28 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use sea_orm::entity::prelude::*;
 
 #[derive(Copy, Clone, Default, Debug, DeriveEntity, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct Entity;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveModel, DeriveActiveModel, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct Model {
     pub member_id: i32,
     pub role_id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveColumn, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub enum Column {
     MemberId,
     RoleId,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub enum PrimaryKey {
     MemberId,
     RoleId,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub enum Relation {
     Member,
     Role,

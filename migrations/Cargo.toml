@@ -22,4 +22,3 @@ path = "src/lib.rs"
 tokio = { version = "1.21.2", features = ["test-util", "full"] }
 futures = "0.3.25"
 sea-orm-migration = { version = "^0.10.0", features = ["runtime-tokio-rustls", "sqlx-postgres"] }
-rocket = "0.5.0-rc.2"

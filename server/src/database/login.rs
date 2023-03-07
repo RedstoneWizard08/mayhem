@@ -1,20 +1,18 @@
+use std::sync::Arc;
+
 use mayhem_db::{util::CompleteUser, Client};
-use rocket::{
-    serde::{Deserialize, Serialize},
-    State,
-};
+use serde::{Deserialize, Serialize};
 
 use crate::errors::AppError;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(crate = "rocket::serde")]
 pub struct LoginInfo {
     pub username: String,
     pub password: String,
 }
 
 pub async fn get_user(
-    client: &State<Client>,
+    client: &Arc<Client>,
     user_info: &LoginInfo,
 ) -> Result<CompleteUser, AppError> {
     let res = client

@@ -1,7 +1,6 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(crate = "rocket::serde")]
 pub enum ImageType {
     PNG,
     JPG,
@@ -11,7 +10,6 @@ pub enum ImageType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(crate = "rocket::serde")]
 pub struct ImageMetadata {
     url: String,
     format: ImageType,

@@ -1,10 +1,9 @@
 use either::Either;
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use super::icon::ImageMetadata;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(crate = "rocket::serde")]
 pub struct ServerResource {
     pub name: String,
     pub id: f32,

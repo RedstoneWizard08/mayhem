@@ -2,10 +2,10 @@ use mayhem_db::{
     models::user_settings::Model as UserSettings,
     util::{CompleteServer, CompleteUser},
 };
-use rocket::serde::{Deserialize, Serialize};
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct PasswordlessUser {
     pub id: i32,
     pub first_name: String,

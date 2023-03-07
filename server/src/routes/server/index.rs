@@ -1,9 +1,29 @@
-use crate::middleware::auth::Authorization;
-use rocket::{get, http::Status, response::status};
+use crate::errors::conflict::BasicResponseError;
+use axum::{
+    debug_handler,
+    http::{HeaderMap, Response, StatusCode},
+};
 
-#[get("/")]
-pub fn index(auth: Authorization) -> status::Custom<&str> {
-    let tkn = auth.0;
+#[debug_handler]
+pub async fn index(headers: HeaderMap) -> Response<String> {
+    let token_header = headers.get("Authorization");
 
-    return status::Custom(Status::Ok, tkn);
+    if let Some(token) = token_header {
+        let token_str = token.to_str().unwrap().to_string();
+
+        return Response::new(token_str);
+    }
+
+    let mut response = Response::new(
+        serde_json::to_string(&BasicResponseError {
+            code: 400,
+            message: "Missing authorization header!".to_string(),
+        })
+        .unwrap(),
+    );
+
+    let s = response.status_mut();
+    *s = StatusCode::BAD_REQUEST;
+
+    return response;
 }

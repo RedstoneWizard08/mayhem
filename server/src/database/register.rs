@@ -1,16 +1,14 @@
+use std::sync::Arc;
+
 use mayhem_db::{
     models::user::{ActiveModel as User, Model as UserModel},
     Client,
 };
-use rocket::{
-    serde::{Deserialize, Serialize},
-    State,
-};
+use serde::{Deserialize, Serialize};
 
 use crate::{errors::AppError, util::password::hash};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(crate = "rocket::serde")]
 pub struct UserCreation {
     pub first_name: String,
     pub last_name: String,
@@ -19,7 +17,7 @@ pub struct UserCreation {
     pub password: String,
 }
 
-pub async fn add_user(client: &State<Client>, user_info: UserCreation) -> Result<User, AppError> {
+pub async fn add_user(client: &Arc<Client>, user_info: UserCreation) -> Result<User, AppError> {
     let password = hash(&user_info.password);
 
     let user = client

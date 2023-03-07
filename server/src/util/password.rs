@@ -2,6 +2,7 @@ use pbkdf2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Pbkdf2,
 };
+
 use rand::rngs::OsRng;
 
 pub fn hash(input: &str) -> String {

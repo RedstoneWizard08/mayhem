@@ -1,8 +1,7 @@
-use rocket::serde::{Deserialize, Serialize};
 use sea_orm::{ConnectOptions, Database, DatabaseConnection, DbErr};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub enum DatabaseProtocol {
     PostgreSQL,
     SQLite,
@@ -10,7 +9,6 @@ pub enum DatabaseProtocol {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub enum Authentication {
     Password(PasswordAuthentication),
     User(UserAuthentication),
@@ -18,7 +16,6 @@ pub enum Authentication {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct PasswordAuthentication {
     pub user: String,
     pub pass: String,
@@ -31,7 +28,6 @@ impl PasswordAuthentication {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct UserAuthentication {
     pub user: String,
 }
@@ -43,7 +39,6 @@ impl UserAuthentication {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct ConnectionOptions {
     pub protocol: DatabaseProtocol,
 

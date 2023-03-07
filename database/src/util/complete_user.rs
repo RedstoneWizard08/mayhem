@@ -1,10 +1,9 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use super::CompleteServer;
 use crate::models::user_settings::Model as UserSettings;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct CompleteUser {
     pub id: i32,
     pub first_name: String,

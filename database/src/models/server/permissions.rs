@@ -1,8 +1,7 @@
 use num_derive::FromPrimitive;
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, FromPrimitive, PartialEq, Copy)]
-#[serde(crate = "rocket::serde")]
 pub enum ServerPermission {
     SendMessage,
     ReadMessage,
@@ -55,7 +54,6 @@ pub enum ServerPermission {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, FromPrimitive, PartialEq, Copy)]
-#[serde(crate = "rocket::serde")]
 pub enum PermissionAccessType {
     GRANTED,
     NONE,

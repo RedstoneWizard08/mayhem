@@ -2,7 +2,7 @@
 #![feature(proc_macro_hygiene, decl_macro, arc_unwrap_or_clone, async_closure)]
 
 #[macro_use]
-extern crate rocket;
+extern crate tracing;
 
 pub mod database;
 pub mod errors;
@@ -10,37 +10,48 @@ pub mod logging;
 pub mod middleware;
 pub mod routes;
 pub mod server;
-pub mod state;
 pub mod util;
 
-use mayhem::database::prepare_connection;
+use std::{error::Error, net::SocketAddr, sync::Arc};
+
+use axum::{middleware::from_fn, Router, Server};
+use mayhem::{
+    database::prepare_connection, middleware::logger::logging_middleware, routes::handle_error,
+};
 use mayhem_db::Client;
-use rocket::Error;
-use routes::{handle_error, handle_index, handle_login, handle_register};
 
-#[main]
-pub async fn main() -> Result<(), Error> {
+pub async fn get_root() -> &'static str {
+    return "Hello, world!";
+}
+
+#[tokio::main]
+pub async fn main() -> Result<(), Box<dyn Error>> {
+    tracing_subscriber::fmt::init();
+
     let database_connection = prepare_connection();
-    let client = Client::connect(database_connection).await;
+    let client = Arc::new(Client::connect(database_connection).await);
 
-    info_!("Connected to the database!");
+    info!("Connected to the database!");
 
-    let mut server = rocket::build();
+    let router = Router::new();
 
-    server = server.manage(client.clone());
+    let router = routes::register(router);
+    let router = router.fallback(handle_error);
+    let router = router.layer(from_fn(logging_middleware));
 
-    server = server.mount("/", routes![handle_index, handle_login, handle_register]);
-    server = server.register("/", catchers![handle_error]);
-
-    server = server.attach(routes::server::stage());
-
-    let app = server.ignite().await.unwrap();
+    let router = router.with_state(client.clone());
 
     client.run_migrations().await.unwrap();
 
-    info_!("Migrations succeeded!");
+    info!("Migrations succeeded!");
 
-    app.launch().await.unwrap();
+    let address = SocketAddr::from(([0, 0, 0, 0], 4001));
+    let server = Server::bind(&address);
+    let app = server.serve(router.into_make_service());
+
+    info!("Listening on {}", address);
+
+    app.await.unwrap();
 
     return Ok(());
 }

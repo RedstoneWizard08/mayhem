@@ -1,9 +1,18 @@
+use std::sync::Arc;
+
+use axum::{
+    debug_handler,
+    extract::State,
+    http::{status, Response},
+    response::Result,
+    Json,
+};
 use mayhem_db::Client;
+
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordVerifier},
     Pbkdf2,
 };
-use rocket::{post, response::status, serde::json::Json, State};
 
 use crate::{
     database::login::{get_user, LoginInfo},
@@ -11,15 +20,11 @@ use crate::{
     util::user::PasswordlessUser,
 };
 
-#[post("/api/users", data = "<info>")]
+#[debug_handler]
 pub async fn login(
-    db: &State<Client>,
-    info: Json<LoginInfo>,
-) -> Result<
-    Result<Json<PasswordlessUser>, status::Unauthorized<Json<BasicResponseError>>>,
-    status::NotFound<Json<BasicResponseError>>,
-> {
-    let user_info = info.into_inner();
+    State(db): State<Arc<Client>>,
+    Json(user_info): Json<LoginInfo>,
+) -> Result<Response<String>, Response<String>> {
     let user_get = get_user(&db, &user_info).await;
 
     match user_get {
@@ -30,19 +35,39 @@ pub async fn login(
             let valid = Pbkdf2.verify_password(user_info.password.clone().as_bytes(), &parsed_hash);
 
             match valid {
-                Ok(_) => Ok(Ok(Json(PasswordlessUser::from_complete(user)))),
+                Ok(_) => Ok(Response::new(
+                    serde_json::to_string(&PasswordlessUser::from_complete(user)).unwrap(),
+                )),
 
-                Err(_) => Ok(Err(status::Unauthorized(Some(Json(BasicResponseError {
-                    code: 401,
-                    message: "Invalid password!".to_string(),
-                }))))),
+                Err(_) => {
+                    let mut resp = Response::new(
+                        serde_json::to_string(&BasicResponseError {
+                            code: 401,
+                            message: "Invalid password!".to_string(),
+                        })
+                        .unwrap(),
+                    );
+
+                    let s = resp.status_mut();
+                    *s = status::StatusCode::UNAUTHORIZED;
+
+                    return Err(resp);
+                }
             }
         }
         Err(_) => {
-            return Err(status::NotFound(Json(BasicResponseError {
-                code: 404,
-                message: "User not found!".to_string(),
-            })));
+            let mut resp = Response::new(
+                serde_json::to_string(&BasicResponseError {
+                    code: 400,
+                    message: "User not found!".to_string(),
+                })
+                .unwrap(),
+            );
+
+            let s = resp.status_mut();
+            *s = status::StatusCode::BAD_REQUEST;
+
+            return Err(resp);
         }
     }
 }

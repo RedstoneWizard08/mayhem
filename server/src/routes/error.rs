@@ -1,19 +1,16 @@
-use rocket::{
-    catch,
-    serde::{json::Json, Deserialize, Serialize},
-};
+use axum::{debug_handler, Json};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
-pub struct ErrorInfo<'r> {
+pub struct ErrorInfo {
     pub code: i64,
-    pub message: &'r str,
+    pub message: String,
 }
 
-#[catch(404)]
-pub fn not_found<'r>() -> Json<ErrorInfo<'r>> {
+#[debug_handler]
+pub async fn not_found() -> Json<ErrorInfo> {
     return Json(ErrorInfo {
         code: 404,
-        message: "Route not found!",
+        message: "Route not found!".to_string(),
     });
 }

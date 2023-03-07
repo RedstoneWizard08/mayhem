@@ -1,5 +1,12 @@
+use std::sync::Arc;
+
+use axum::{
+    debug_handler,
+    extract::State,
+    http::{status::StatusCode, Response},
+    Json,
+};
 use mayhem_db::{models::user::Model as User, Client};
-use rocket::{put, response::status, serde::json::Json, State};
 
 use crate::{
     database::{
@@ -9,11 +16,11 @@ use crate::{
     errors::conflict::BasicResponseError,
 };
 
-#[put("/api/users", data = "<user>")]
+#[debug_handler]
 pub async fn register(
-    client: &State<Client>,
-    user: Json<UserCreation>,
-) -> Result<Json<User>, status::Conflict<Json<BasicResponseError>>> {
+    State(client): State<Arc<Client>>,
+    Json(user): Json<UserCreation>,
+) -> Result<Response<String>, Response<String>> {
     let user_info_check = LoginInfo {
         username: user.username.clone(),
         password: user.password.clone(),
@@ -27,14 +34,21 @@ pub async fn register(
             message: "User already exists!".to_string(),
         };
 
-        let res = status::Conflict(Some(Json(BasicResponseError::from(conflict_error))));
+        let mut res = Response::new(
+            serde_json::to_string(&BasicResponseError::from(conflict_error)).unwrap(),
+        );
+
+        let s = res.status_mut();
+        *s = StatusCode::CONFLICT;
 
         return Err(res);
     }
 
     println!("Making new user");
-    let new_user = add_user(&client, user.into_inner()).await.unwrap();
-    let json = Json(User::from_active(new_user));
+
+    let new_user = add_user(&client, user).await.unwrap();
+
+    let json = Response::new(serde_json::to_string(&User::from_active(new_user)).unwrap());
 
     return Ok(json);
 }

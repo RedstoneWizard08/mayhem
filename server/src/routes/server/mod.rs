@@ -1,10 +1,11 @@
 pub mod index;
 
-use index::index as index_handler;
-use rocket::{fairing::AdHoc, routes};
+use std::sync::Arc;
 
-pub fn stage() -> AdHoc {
-    return AdHoc::on_ignite("Server Routes Stage", |rocket| async {
-        rocket.mount("/api/v1/server", routes![index_handler])
-    });
+use axum::{body::Body, routing::get, Router};
+use index::index as index_handler;
+use mayhem_db::Client;
+
+pub fn register(router: Router<Arc<Client>, Body>) -> Router<Arc<Client>, Body> {
+    return router.route("/api/v1/server", get(index_handler));
 }

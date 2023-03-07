@@ -1,7 +1,6 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(crate = "rocket::serde")]
 pub struct CompleteMember {
     pub id: i32,
     pub name: String,
