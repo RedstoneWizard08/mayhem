@@ -68,7 +68,7 @@ pub async fn messages(
             }
 
             let messages = messages_res.unwrap();
-            let messages = messages.iter().rev().take(20).cloned().collect();
+            let messages = messages.iter().rev().take(20).rev().cloned().collect();
 
             let data_struct = MessagesData {
                 channel_id,

@@ -92,6 +92,7 @@ pub async fn on_get_all_messages(
         }
 
         let messages = messages_res.unwrap();
+        let messages = messages.iter().rev().take(20).rev().cloned().collect();
 
         let data_struct = ActiveMessage {
             action: ActiveMessageAction::GetMessagesForChannel,

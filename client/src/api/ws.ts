@@ -1,6 +1,5 @@
-import { channels, currentChannel, messages } from "../stores/current";
-import { get, type Writable } from "svelte/store";
-import type { ChannelType } from "./channel";
+import { currentChannel } from "../stores/current";
+import { get } from "svelte/store";
 import type { IncomingChatMessage } from "./message";
 
 export class WebSocketAPI {
@@ -22,63 +21,30 @@ export class WebSocketAPI {
             if (data.action == "RecieveMessage") {
                 const messageData = data.data as IncomingChatMessage;
 
-                messages.update((m) => {
-                    m.push({
+                currentChannel.update((c) => {
+                    c?.messages.push({
                         timestamp: new Date(messageData.timestamp),
                         content: messageData.content,
                     });
 
-                    return m;
+                    return c;
                 });
-
-                if (get(currentChannel)?.type == "channel") {
-                    (currentChannel as Writable<ChannelType>).update((c) => {
-                        if (c)
-                            c.messages = get(messages);
-
-                        return c;
-                    });
-
-                    channels.update((cs) => {
-                        const c = cs.find((c) => c.id == get(currentChannel)!.id)! as ChannelType;
-                        
-                        if (c)
-                            c.messages = get(messages);
-
-                        return cs;
-                    });
-                }
             } else if (data.action == "GetMessagesForChannel") {
                 const messagesData = data.data.messages as IncomingChatMessage[];
 
-                messages.update((m) => {
+                currentChannel.update((c) => {
+                    if (c)
+                        c.messages = [];
+
                     messagesData
                         .map((msg) => ({
                             timestamp: new Date(msg.timestamp),
                             content: msg.content,
                         }))
-                        .forEach((msg) => m.push(msg));
+                        .forEach((msg) => c?.messages.push(msg));
 
-                    return m;
+                    return c;
                 });
-
-                if (get(currentChannel)?.type == "channel") {
-                    (currentChannel as Writable<ChannelType>).update((c) => {
-                        if (c)
-                            c.messages = get(messages);
-
-                        return c;
-                    });
-
-                    channels.update((cs) => {
-                        const c = cs.find((c) => c.id == get(currentChannel)!.id)! as ChannelType;
-                        
-                        if (c)
-                            c.messages = get(messages);
-
-                        return cs;
-                    });
-                }
             }
         });
 

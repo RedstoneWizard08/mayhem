@@ -16,9 +16,7 @@ repository = "https://github.com/RedstoneWizard08/mayhem"
 [dependencies]
 axum = { version = "0.6.10", features = ["headers", "macros", "ws", "multipart", "http2", "json"] }
 chrono = "0.4.23"
-config = "0.13.2"
 derive_more = "0.99.17"
-dotenv = "0.15.0"
 either = { version = "1.8.0", features = ["serde"] }
 flate2 = { version = "1.0.25", features = ["zlib"] }
 futures = "0.3.25"
@@ -37,15 +35,9 @@ serde_urlencoded = "0.7.1"
 tar = "0.4.38"
 tempdir = "0.3.7"
 tokio = { version = "1.21.2", features = ["full"] }
-tokio-codec = "0.1.2"
-tokio-io = "0.1.13"
 tokio-pg-mapper = "0.2.0"
-tokio-pg-mapper-derive = "0.2.0"
 tokio-postgres = "0.7.7"
-tokio-reactor = "0.1.12"
 tokio-stream = "0.1.11"
-tokio-tcp = "0.1.4"
-tokio-tls = "0.3.1"
 toml = "0.7.2"
 tower = { version = "0.4.13", features = ["full"] }
 tracing = { version = "0.1.37", features = ["log", "log-always", "async-await"] }
