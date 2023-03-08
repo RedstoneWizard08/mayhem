@@ -1,3 +1,5 @@
+#![allow(clippy::needless_return)]
+
 pub use sea_orm_migration::prelude::*;
 
 mod m20221117_173031_users;

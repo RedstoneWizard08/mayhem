@@ -20,17 +20,15 @@ pub async fn logging_middleware<B>(req: Request<B>, next: Next<B>) -> Response {
 
     let elapsed = now - time_start;
 
-    let method_type: CustomType;
+    let method_type: CustomType = match method.clone() {
+        Method::GET => CustomType::GET,
+        Method::PUT => CustomType::PUT,
+        Method::POST => CustomType::POST,
+        Method::PATCH => CustomType::PATCH,
+        Method::DELETE => CustomType::DELETE,
 
-    match method.clone() {
-        Method::GET => method_type = CustomType::GET,
-        Method::PUT => method_type = CustomType::PUT,
-        Method::POST => method_type = CustomType::POST,
-        Method::PATCH => method_type = CustomType::PATCH,
-        Method::DELETE => method_type = CustomType::DELETE,
-
-        _ => method_type = CustomType::WARN,
-    }
+        _ => CustomType::WARN,
+    };
 
     let temp_output = format!(
         "{}{}{}{} {} ({} MS)",

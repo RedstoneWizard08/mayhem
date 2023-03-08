@@ -17,3 +17,9 @@ impl Room {
         };
     }
 }
+
+impl Default for Room {
+    fn default() -> Self {
+        return Self::new();
+    }
+}

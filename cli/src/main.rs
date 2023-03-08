@@ -1,3 +1,5 @@
+#![allow(clippy::needless_return)]
+
 pub mod commands;
 pub mod git;
 pub mod parser;
@@ -35,7 +37,7 @@ pub fn main() {
             directory,
         }) => {
             dispatch_init(InitArgs {
-                force_overwrite: force_overwrite.clone(),
+                force_overwrite: *force_overwrite,
                 directory: directory.clone(),
             });
         }

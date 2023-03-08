@@ -93,10 +93,8 @@ pub async fn on_join_server(
     wtx: Arc<Mutex<SplitSink<WebSocket, Message>>>,
 ) {
     let user_server_data = user_server::ActiveModel {
-        server_id: Set(server_id.clone()),
-        user_id: Set(user_id.clone()),
-
-        ..Default::default()
+        server_id: Set(server_id),
+        user_id: Set(user_id),
     };
 
     let user_server = user_server_data.clone().insert(db).await.unwrap();

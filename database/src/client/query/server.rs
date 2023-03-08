@@ -35,7 +35,6 @@ impl ServerQueryHelper {
         server: &server::Model,
     ) -> Result<Vec<CompleteRole>, DbErr> {
         let mut roles: Vec<CompleteRole> = Vec::new();
-        let ok_roles: Vec<role::Model>;
 
         let found_roles = server
             .clone()
@@ -43,8 +42,8 @@ impl ServerQueryHelper {
             .all(&self.client as &DbConn)
             .await;
 
-        match found_roles {
-            Ok(res) => ok_roles = res,
+        let ok_roles: Vec<role::Model> = match found_roles {
+            Ok(res) => res,
             Err(err) => return Err(err),
         };
 
@@ -74,7 +73,6 @@ impl ServerQueryHelper {
         server: &server::Model,
     ) -> Result<Vec<CompleteMember>, DbErr> {
         let mut members: Vec<CompleteMember> = Vec::new();
-        let ok_members: Vec<member::Model>;
 
         let members_found = server
             .clone()
@@ -82,8 +80,8 @@ impl ServerQueryHelper {
             .all(&self.client as &DbConn)
             .await;
 
-        match members_found {
-            Ok(res) => ok_members = res,
+        let ok_members: Vec<member::Model> = match members_found {
+            Ok(res) => res,
             Err(err) => return Err(err),
         };
 

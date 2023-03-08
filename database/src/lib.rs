@@ -1,3 +1,4 @@
+#![allow(clippy::needless_return, clippy::module_inception)]
 #![feature(arc_unwrap_or_clone, associated_type_defaults)]
 
 pub use migration::{MigrationTrait, Migrator, MigratorTrait};

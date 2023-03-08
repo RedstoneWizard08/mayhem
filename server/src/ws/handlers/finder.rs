@@ -48,7 +48,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::SendMessage {
             debug!("Recognized on_message_send...");
-            on_message_send(parsed.data, &db, sender).await;
+            on_message_send(parsed.data, db, sender).await;
             return Ok(Some(ActiveMessageAction::SendMessage));
         }
     }
@@ -60,7 +60,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::GetMessagesForChannel {
             debug!("Recognized on_get_all_messages...");
-            on_get_all_messages(parsed.data, &db, wtx).await;
+            on_get_all_messages(parsed.data, db, wtx).await;
             return Ok(None);
         }
     }
@@ -75,7 +75,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::CreateChannel {
             debug!("Recognized on_create_channel...");
-            on_create_channel(parsed.data, &db, wtx).await;
+            on_create_channel(parsed.data, db, wtx).await;
             return Ok(None);
         }
     }
@@ -88,7 +88,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::GetChannelInfo {
             debug!("Recognized on_get_channel...");
-            on_get_channel(parsed.data.server_id, parsed.data.channel_id, &db, wtx).await;
+            on_get_channel(parsed.data.server_id, parsed.data.channel_id, db, wtx).await;
             return Ok(None);
         }
     }
@@ -100,7 +100,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::GetChannelsInServer {
             debug!("Recognized on_get_channels...");
-            on_get_channels(parsed.data, &db, wtx).await;
+            on_get_channels(parsed.data, db, wtx).await;
             return Ok(None);
         }
     }
@@ -114,7 +114,7 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::CreateServer {
             debug!("Recognized on_create_server...");
-            on_create_server(parsed.data, &db, wtx).await;
+            on_create_server(parsed.data, db, wtx).await;
             return Ok(None);
         }
     }
@@ -126,13 +126,13 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::GetServerInfo {
             debug!("Recognized on_get_server...");
-            on_get_server(parsed.data, &db, wtx).await;
+            on_get_server(parsed.data, db, wtx).await;
             return Ok(None);
         }
 
         if parsed.action == ActiveMessageAction::GetServersForUser {
             debug!("Recognized on_get_servers...");
-            on_get_servers(parsed.data, &db, wtx).await;
+            on_get_servers(parsed.data, db, wtx).await;
             return Ok(None);
         }
     }
@@ -144,13 +144,13 @@ pub async fn find_handler(
 
         if parsed.action == ActiveMessageAction::JoinServer {
             debug!("Recognized on_join_server...");
-            on_join_server(parsed.data.user_id, parsed.data.server_id, &db, wtx).await;
+            on_join_server(parsed.data.user_id, parsed.data.server_id, db, wtx).await;
             return Ok(None);
         }
 
         if parsed.action == ActiveMessageAction::LeaveServer {
             debug!("Recognized on_leave_server...");
-            on_leave_server(parsed.data.user_id, parsed.data.server_id, &db, wtx).await;
+            on_leave_server(parsed.data.user_id, parsed.data.server_id, db, wtx).await;
             return Ok(None);
         }
     }

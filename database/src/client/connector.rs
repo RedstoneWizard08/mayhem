@@ -50,7 +50,7 @@ pub struct ConnectionOptions {
 
 impl ConnectionOptions {
     pub fn get_protocol(&self) -> String {
-        return (match self.protocol.clone() {
+        return (match self.protocol {
             DatabaseProtocol::PostgreSQL => "postgres://",
             DatabaseProtocol::MySQL => "mysql://",
             DatabaseProtocol::SQLite => "sqlite://",
@@ -59,12 +59,10 @@ impl ConnectionOptions {
     }
 
     pub fn get_connection_string(&self) -> String {
-        let auth_str;
-
-        match self.auth.clone() {
-            Authentication::Password(val) => auth_str = val.get_auth_string(),
-            Authentication::User(val) => auth_str = val.get_auth_string(),
-            Authentication::Anonymous => auth_str = "".to_string(),
+        let auth_str = match self.auth.clone() {
+            Authentication::Password(val) => val.get_auth_string(),
+            Authentication::User(val) => val.get_auth_string(),
+            Authentication::Anonymous => "".to_string(),
         };
 
         return self.get_protocol()
@@ -73,7 +71,7 @@ impl ConnectionOptions {
             + ":"
             + self.port.clone().to_string().as_str()
             + "/"
-            + self.database.clone().to_string().as_str();
+            + self.database.to_string().as_str();
     }
 }
 

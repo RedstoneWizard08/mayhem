@@ -36,7 +36,7 @@ pub async fn register(
         };
 
         let mut res = Response::new(
-            serde_json::to_string(&BasicResponseError::from(conflict_error)).unwrap(),
+            serde_json::to_string(&conflict_error).unwrap(),
         );
 
         let s = res.status_mut();

@@ -64,7 +64,7 @@ pub async fn on_get_all_messages(
     db: &DatabaseConnection,
     wtx: Arc<Mutex<SplitSink<WebSocket, Message>>>,
 ) {
-    let channel_res = EChannel::find_by_id(channel_id.clone()).one(db).await;
+    let channel_res = EChannel::find_by_id(channel_id).one(db).await;
 
     if let Err(err) = &channel_res {
         wtx.lock()

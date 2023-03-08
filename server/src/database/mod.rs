@@ -45,7 +45,7 @@ pub fn prepare_connection(config: AppConfig) -> ConnectionOptions {
         protocol: proto_from_string(config.database.clone().protocol),
         auth: make_auth(config.database.clone()),
         host: config.database.clone().host,
-        port: config.database.clone().port,
-        database: config.database.clone().database,
+        port: config.database.port,
+        database: config.database.database,
     };
 }

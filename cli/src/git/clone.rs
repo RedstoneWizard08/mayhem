@@ -13,21 +13,24 @@ pub fn clone_repository(args: &Args) -> Result<(), git2::Error> {
         path: None,
         newline: false,
     });
+    
     let mut cb = RemoteCallbacks::new();
+    
     cb.transfer_progress(|stats| {
         let mut state = state.borrow_mut();
         state.progress = Some(stats.to_owned());
-        print(&mut *state);
+        print(&mut state);
         true
     });
 
     let mut co = CheckoutBuilder::new();
+    
     co.progress(|path, cur, total| {
         let mut state = state.borrow_mut();
         state.path = path.map(|p| p.to_path_buf());
         state.current = cur;
         state.total = total;
-        print(&mut *state);
+        print(&mut state);
     });
 
     let mut fo = FetchOptions::new();

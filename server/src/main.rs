@@ -1,6 +1,7 @@
-#![allow(unused_must_use, unused_assignments)]
+#![allow(unused_must_use, unused_assignments, clippy::needless_return)]
 #![feature(proc_macro_hygiene, decl_macro, arc_unwrap_or_clone, async_closure)]
 
+pub mod client;
 pub mod config;
 pub mod database;
 pub mod errors;
@@ -11,21 +12,53 @@ pub mod server;
 pub mod state;
 pub mod util;
 pub mod ws;
-pub mod client;
 
-use axum::{middleware::from_fn, Router, Server};
-use mayhem::client::run_client;
+use axum::{body::Body, middleware::from_fn, Router, Server};
 use std::{error::Error, net::SocketAddr, sync::Arc};
+
+#[cfg(not(debug_assertions))]
+use client::run_client;
+
+#[cfg(not(debug_assertions))]
+use routes::client_handler;
+
+#[cfg(debug_assertions)]
+use routes::handle_error;
+
+#[cfg(debug_assertions)]
+use logging::warn;
 
 use crate::config::get_config;
 use database::prepare_connection;
 use logging::info;
+use mayhem_db::Client;
 use middleware::logger::logging_middleware;
-use routes::handle_error;
 use state::AppState;
 use util::parse_ip;
 
-use mayhem_db::Client;
+#[cfg(not(debug_assertions))]
+async fn _run_client() {
+    info("Starting client...");
+
+    tokio::spawn(async {
+        run_client().await;
+    });
+}
+
+#[cfg(debug_assertions)]
+async fn _run_client() {
+    warn("Not starting client, is a debug build.");
+}
+
+#[cfg(not(debug_assertions))]
+fn _register_client_handler(router: Router<AppState, Body>) -> Router<AppState, Body> {
+    return router.fallback(client_handler);
+}
+
+#[cfg(debug_assertions)]
+fn _register_client_handler(router: Router<AppState, Body>) -> Router<AppState, Body> {
+    return router.fallback(handle_error);
+}
 
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn Error>> {
@@ -40,13 +73,13 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
 
     info("Connected to the database!");
 
-    let state = AppState::new(client.clone());
+    let state = AppState::new(client.clone(), config.clone());
 
     let router = Router::new();
 
     let router = routes::register(router);
     let router = ws::register(router);
-    let router = router.fallback(handle_error);
+    let router = _register_client_handler(router);
     let router = router.layer(from_fn(logging_middleware));
 
     let router = router.with_state(state);
@@ -61,9 +94,7 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
     let service = router.into_make_service_with_connect_info::<SocketAddr>();
     let app = server.serve(service);
 
-    tokio::spawn(async {
-        run_client().await;
-    });
+    _run_client().await;
 
     info(format!("Listening on {}", address).as_str());
 

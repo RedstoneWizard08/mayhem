@@ -130,7 +130,11 @@ pub async fn handle_socket(state: AppState, mut socket: WebSocket, who: SocketAd
         rv_a = (&mut send_task) => {
             match rv_a {
                 Ok(_) => None,
-                Err(a) => Some(info(format!("Error sending messages: {:?}", a).as_str())),
+
+                Err(a) => {
+                    info(format!("Error sending messages: {:?}", a).as_str());
+                    Some(())
+                },
             };
 
             recv_task.abort();
@@ -139,7 +143,11 @@ pub async fn handle_socket(state: AppState, mut socket: WebSocket, who: SocketAd
         rv_b = (&mut recv_task) => {
             match rv_b {
                 Ok(_) => None,
-                Err(b) => Some(info(format!("Error receiving messages: {:?}", b).as_str())),
+                
+                Err(b) => {
+                    info(format!("Error receiving messages: {:?}", b).as_str());
+                    Some(())
+                },
             };
 
             send_task.abort();

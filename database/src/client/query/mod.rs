@@ -23,7 +23,7 @@ impl QueryHelper {
         };
 
         let user = UserQueryHelper {
-            client: client.clone(),
+            client,
             server: Arc::new(server.clone()),
         };
 

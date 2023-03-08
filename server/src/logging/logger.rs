@@ -32,3 +32,9 @@ impl Clone for Logger {
         Self {}
     }
 }
+
+impl Default for Logger {
+    fn default() -> Self {
+        return Self::new();
+    }
+}

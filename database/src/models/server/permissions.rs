@@ -61,9 +61,9 @@ pub enum PermissionAccessType {
 }
 
 pub fn deserialize_permission(string: String) -> (ServerPermission, PermissionAccessType) {
-    let mut split = string.split(":");
+    let mut split = string.split(':');
 
-    let permission_id = split.nth(0).unwrap().parse::<u32>().unwrap();
+    let permission_id = split.next().unwrap().parse::<u32>().unwrap();
     let access = split.nth(1).unwrap().parse::<u32>().unwrap();
 
     let permission: ServerPermission = num::FromPrimitive::from_u32(permission_id).unwrap();

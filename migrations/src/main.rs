@@ -1,3 +1,5 @@
+#![allow(clippy::needless_return)]
+
 use sea_orm_migration::prelude::*;
 use std::env;
 

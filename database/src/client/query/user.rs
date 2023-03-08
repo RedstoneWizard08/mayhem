@@ -39,39 +39,34 @@ impl UserQueryHelper {
         user: &user::Model,
     ) -> Result<Vec<CompleteServer>, DbErr> {
         let mut servers: Vec<CompleteServer> = Vec::new();
-        let servers_query: Vec<server::Model>;
-
+        
         let servers_result = user
             .find_related(server::Entity)
             .all(&self.client as &DbConn)
             .await;
 
-        match servers_result {
-            Ok(res) => servers_query = res,
+        let servers_query: Vec<server::Model> = match servers_result {
+            Ok(res) => res,
             Err(err) => return Err(err),
         };
 
         for server in servers_query {
-            let roles: Vec<CompleteRole>;
-            let members: Vec<CompleteMember>;
-            let channels: Vec<channel::Model>;
-
             let roles_found = self.server.find_server_roles(&server).await;
             let members_found = self.server.find_server_members(&server).await;
             let channels_found = self.server.find_server_channels(&server).await;
 
-            match roles_found {
-                Ok(val) => roles = val,
+            let roles: Vec<CompleteRole> = match roles_found {
+                Ok(val) => val,
                 Err(err) => return Err(err),
             };
 
-            match members_found {
-                Ok(val) => members = val,
+            let members: Vec<CompleteMember> = match members_found {
+                Ok(val) => val,
                 Err(err) => return Err(err),
             };
 
-            match channels_found {
-                Ok(val) => channels = val,
+            let channels: Vec<channel::Model> = match channels_found {
+                Ok(val) => val,
                 Err(err) => return Err(err),
             };
 
@@ -99,25 +94,20 @@ impl UserQueryHelper {
             .one(&self.client as &DbConn)
             .await;
 
-        let user_option: Option<user::Model>;
-
-        match user_result {
-            Ok(res) => user_option = res,
+        let user_option: Option<user::Model> = match user_result {
+            Ok(res) => res,
             Err(err) => return Err(err),
         };
 
-        let user: user::Model;
-
-        match user_option {
-            Some(res) => user = res,
+        let user: user::Model = match user_option {
+            Some(res) => res,
             None => return Ok(None),
         };
 
-        let servers: Vec<CompleteServer>;
         let servers_result = self.find_user_servers(&user).await;
 
-        match servers_result {
-            Ok(res) => servers = res,
+        let servers: Vec<CompleteServer> = match servers_result {
+            Ok(res) => res,
             Err(err) => return Err(err),
         };
 
