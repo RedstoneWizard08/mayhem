@@ -85,14 +85,14 @@
         display: flex;
         flex-direction: column;
         align-items: left;
-        justify-content: flex-start;
+        justify-content: space-between;
 
         padding: 2%;
         padding-top: 1%;
 
         .messages {
             overflow: scroll;
-            height: 92%;
+            height: 94%;
         }
 
         .message-input {

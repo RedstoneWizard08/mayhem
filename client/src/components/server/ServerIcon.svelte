@@ -21,9 +21,9 @@
     }
 
     const handleClick = () => {
-        $channels = [];
         $currentChannel = null;
-        
+        $channels = [];
+
         if (type == "channel") {
             $currentServer = {
                 id: "-1",
