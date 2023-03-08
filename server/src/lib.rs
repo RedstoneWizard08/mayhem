@@ -11,3 +11,4 @@ pub mod server;
 pub mod state;
 pub mod util;
 pub mod ws;
+pub mod client;

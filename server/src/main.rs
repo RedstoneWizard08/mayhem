@@ -11,8 +11,10 @@ pub mod server;
 pub mod state;
 pub mod util;
 pub mod ws;
+pub mod client;
 
 use axum::{middleware::from_fn, Router, Server};
+use mayhem::client::run_client;
 use std::{error::Error, net::SocketAddr, sync::Arc};
 
 use crate::config::get_config;
@@ -58,6 +60,10 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
     let server = Server::bind(&address);
     let service = router.into_make_service_with_connect_info::<SocketAddr>();
     let app = server.serve(service);
+
+    tokio::spawn(async {
+        run_client().await;
+    });
 
     info(format!("Listening on {}", address).as_str());
 
