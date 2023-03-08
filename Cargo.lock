@@ -1379,7 +1379,7 @@ checksum = "b87248edafb776e59e6ee64a79086f65890d3510f2c656c000bf2a7e8a0aea40"
 
 [[package]]
 name = "mayhem"
-version = "0.1.0-beta.2"
+version = "0.2.0-beta.1"
 dependencies = [
  "axum",
  "chrono",
@@ -1415,7 +1415,7 @@ dependencies = [
 
 [[package]]
 name = "mayhem-db"
-version = "0.1.0-beta.2"
+version = "0.2.0-beta.1"
 dependencies = [
  "async-trait",
  "dotenvy",
@@ -1432,7 +1432,7 @@ dependencies = [
 
 [[package]]
 name = "mayhem-migrations"
-version = "0.1.0-beta.2"
+version = "0.2.0-beta.1"
 dependencies = [
  "futures",
  "sea-orm-migration",

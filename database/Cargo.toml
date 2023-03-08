@@ -1,12 +1,12 @@
 [package]
 name = "mayhem-db"
 authors = ["RedstoneWizard08"]
-version = "0.1.0-beta.2"
+version = "0.2.0-beta.1"
 edition = "2021"
 readme = "../README.md"
 
 description = """
-A Discord-like chat application for security, stability, speed, and ultimate customization.
+A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
 
 => Database Module
 """
@@ -24,6 +24,6 @@ num-derive = "0.3.3"
 num-traits = "0.2.15"
 sea-orm = { version = "0.10.3", features = ["sqlx-postgres", "sqlx-sqlite", "runtime-tokio", "runtime-tokio-rustls", "postgres-array", "macros", "mock"] }
 tokio = { version = "1.21.2", features = ["test-util", "full"] }
-mayhem-migrations = { version = "0.1.0-beta.2", path = "../migrations" }
+mayhem-migrations = { version = "0.2.0-beta.1", path = "../migrations" }
 futures = "0.3.25"
 serde = { version = "1.0.153", features = ["derive", "serde_derive"] }
