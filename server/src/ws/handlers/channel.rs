@@ -62,7 +62,11 @@ pub async fn on_get_channel(
     let server_res = EServer::find_by_id(server_id).one(db).await;
 
     if let Err(err) = &server_res {
-        wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(err.to_string()))
+            .await
+            .unwrap();
 
         return;
     }
@@ -77,7 +81,11 @@ pub async fn on_get_channel(
             .await;
 
         if let Err(err) = &channel_res {
-            wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+            wtx.lock()
+                .await
+                .send(Message::Text(err.to_string()))
+                .await
+                .unwrap();
 
             return;
         }
@@ -94,18 +102,22 @@ pub async fn on_get_channel(
 
             wtx.lock().await.send(Message::Text(data)).await.unwrap();
         } else {
-            wtx.lock().await.send(Message::Text(
-                "Could not get the channel from the database!".to_string(),
+            wtx.lock()
+                .await
+                .send(Message::Text(
+                    "Could not get the channel from the database!".to_string(),
+                ))
+                .await
+                .unwrap();
+        }
+    } else {
+        wtx.lock()
+            .await
+            .send(Message::Text(
+                "Could not get the server from the database!".to_string(),
             ))
             .await
             .unwrap();
-        }
-    } else {
-        wtx.lock().await.send(Message::Text(
-            "Could not get the server from the database!".to_string(),
-        ))
-        .await
-        .unwrap();
     }
 }
 
@@ -117,7 +129,11 @@ pub async fn on_get_channels(
     let server_res = EServer::find_by_id(server_id).one(db).await;
 
     if let Err(err) = &server_res {
-        wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(err.to_string()))
+            .await
+            .unwrap();
 
         return;
     }
@@ -128,7 +144,11 @@ pub async fn on_get_channels(
         let channel_res = server.find_related(EChannel).all(db).await;
 
         if let Err(err) = &channel_res {
-            wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+            wtx.lock()
+                .await
+                .send(Message::Text(err.to_string()))
+                .await
+                .unwrap();
 
             return;
         }
@@ -147,10 +167,12 @@ pub async fn on_get_channels(
 
         wtx.lock().await.send(Message::Text(data)).await.unwrap();
     } else {
-        wtx.lock().await.send(Message::Text(
-            "Could not get the server from the database!".to_string(),
-        ))
-        .await
-        .unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(
+                "Could not get the server from the database!".to_string(),
+            ))
+            .await
+            .unwrap();
     }
 }

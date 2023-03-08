@@ -1,9 +1,9 @@
-pub mod store;
 pub mod handler;
 pub mod handlers;
 pub mod message;
+pub mod store;
 
-use axum::{Router, body::Body, routing::get};
+use axum::{body::Body, routing::get, Router};
 
 use crate::state::AppState;
 

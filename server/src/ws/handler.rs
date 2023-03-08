@@ -7,7 +7,7 @@ use axum::{
     },
     response::IntoResponse,
 };
-use futures::{StreamExt, SinkExt};
+use futures::{SinkExt, StreamExt};
 use tokio::sync::Mutex;
 
 use crate::{
@@ -15,7 +15,7 @@ use crate::{
     state::AppState,
 };
 
-use super::{ChatRoom, message::handle_message};
+use super::{message::handle_message, ChatRoom};
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum MessageKind {
@@ -30,7 +30,13 @@ pub fn process_message(msg: Message, who: SocketAddr) -> MessageKind {
     match msg {
         Message::Close(c) => {
             if let Some(cf) = c {
-                info(format!("{} sent close with code {} and reason `{}`", who, cf.code, cf.reason).as_str());
+                info(
+                    format!(
+                        "{} sent close with code {} and reason `{}`",
+                        who, cf.code, cf.reason
+                    )
+                    .as_str(),
+                );
             } else {
                 info(format!("{} somehow sent close message without CloseFrame", who).as_str());
             }
@@ -42,25 +48,25 @@ pub fn process_message(msg: Message, who: SocketAddr) -> MessageKind {
             info(format!("{} sent ping with {:?}", who, v).as_str());
 
             return MessageKind::PING;
-        },
+        }
 
         Message::Pong(v) => {
             info(format!("{} sent pong with {:?}", who, v).as_str());
 
             return MessageKind::PONG;
-        },
-        
+        }
+
         Message::Text(v) => {
             info(format!("{} sent text {}", who, v).as_str());
 
             return MessageKind::TEXT;
-        },
+        }
 
         Message::Binary(v) => {
             info(format!("{} sent {} bytes: {:?}", who, v.len(), v).as_str());
 
             return MessageKind::BINARY;
-        },
+        }
     };
 }
 
@@ -97,7 +103,9 @@ pub async fn handle_socket(state: AppState, mut socket: WebSocket, who: SocketAd
         while let Ok(msg) = rx.recv().await {
             println!("msg: {:?}", msg);
 
-            arc_wtx_1.lock().await
+            arc_wtx_1
+                .lock()
+                .await
                 .send(Message::Text(serde_json::to_string(&msg).unwrap()))
                 .await
                 .unwrap();
@@ -109,7 +117,7 @@ pub async fn handle_socket(state: AppState, mut socket: WebSocket, who: SocketAd
     let mut recv_task = tokio::spawn(async move {
         while let Some(Ok(msg)) = wrx.next().await {
             let processed = process_message(msg.clone(), who);
-            
+
             if processed == MessageKind::CLOSE {
                 break;
             }

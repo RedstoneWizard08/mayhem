@@ -1,11 +1,11 @@
-pub mod finder;
 pub mod channel;
+pub mod finder;
 pub mod message;
 pub mod server;
 
-use std::{sync::Arc, collections::HashMap};
+use std::{collections::HashMap, sync::Arc};
 
-use axum::{Error, extract::ws::Message};
+use axum::{extract::ws::Message, Error};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc::UnboundedSender, Mutex};
 
@@ -23,6 +23,7 @@ pub enum ActiveMessageAction {
     GetServerInfo,
     JoinServer,
     LeaveServer,
+    GetServersForUser,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

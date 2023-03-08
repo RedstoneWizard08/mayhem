@@ -1,35 +1,33 @@
 <script lang="ts">
-    import type { ChannelIconProps, ServerIconProps } from "src/api/icon";
+    import { getServers } from "../../api/server";
+    import { onMount } from "svelte";
     import ServerIcon from "./ServerIcon.svelte";
+    import { updateAllChannels } from "../../api/channel";
+    import { currentServer, servers } from "../../stores/current";
+    import { page } from "$app/stores";
 
-    export let servers: (ServerIconProps | ChannelIconProps)[] = [
-        {
-            id: "1",
-            name: "Test Server 1",
+    onMount(async () => {
+        const resp = await getServers();
+
+        $servers = resp.servers.map((v) => ({
+            id: v.id.toString(),
+            name: v.name,
             type: "server",
-        },
-        {
-            id: "2",
-            name: "Test Server 2",
-            type: "server",
-        },
-        {
-            id: "3",
-            name: "Test Server 3",
-            type: "server",
-        },
-        {
-            id: "4",
-            name: "Test Server 4",
-            type: "server",
-        },
-    ];
+            channels: [],
+        }));
+
+        await updateAllChannels();
+
+        const sid = $page.params.server;
+
+        $currentServer = $servers.find((s) => s.id == sid) || $currentServer || $servers[0];
+    });
 </script>
 
 <div class="servers">
     <ServerIcon type="channel" id="@me" name="DMs" icon="discord" />
 
-    {#each servers as server}
+    {#each $servers as server}
         <ServerIcon {...server} />
     {/each}
 </div>

@@ -1,30 +1,33 @@
 use crate::{
-    errors::conflict::BasicResponseError, state::AppState, ws::handlers::server::ServersData,
+    errors::conflict::BasicResponseError, state::AppState, ws::handlers::channel::ChannelsData,
 };
 use axum::{
     debug_handler,
-    extract::State,
+    extract::{Path, State},
     http::{HeaderMap, Response, StatusCode},
 };
 use mayhem_db::{
-    models::{EServer, EUser},
+    models::{EChannel, EServer},
     sea_orm::{DatabaseConnection, EntityTrait, ModelTrait},
 };
 
 #[debug_handler]
-pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Response<String> {
+pub async fn channels(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Path(server_id): Path<i32>,
+) -> Response<String> {
     let token_header = headers.get("Authorization");
 
     if let Some(token) = token_header {
         let _token_str = token.to_str().unwrap().to_string();
-        let user_id = 2;
 
         let client = &state.client;
         let db: &DatabaseConnection = &client.client.clone();
 
-        let user_res = EUser::find_by_id(user_id).one(db).await;
+        let server_res = EServer::find_by_id(server_id).one(db).await;
 
-        if let Err(err) = &user_res {
+        if let Err(err) = &server_res {
             let mut response = Response::new(
                 serde_json::to_string(&BasicResponseError {
                     code: 500,
@@ -39,12 +42,12 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
             return response;
         }
 
-        let user_opt = user_res.unwrap();
+        let server_opt = server_res.unwrap();
 
-        if let Some(user) = user_opt {
-            let server_res = user.find_related(EServer).all(db).await;
+        if let Some(server) = server_opt {
+            let channel_res = server.find_related(EChannel).all(db).await;
 
-            if let Err(err) = &server_res {
+            if let Err(err) = &channel_res {
                 let mut response = Response::new(
                     serde_json::to_string(&BasicResponseError {
                         code: 500,
@@ -59,9 +62,12 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
                 return response;
             }
 
-            let servers = server_res.unwrap();
+            let channels = channel_res.unwrap();
 
-            let data_struct = ServersData { user_id, servers };
+            let data_struct = ChannelsData {
+                server_id,
+                channels,
+            };
 
             let data = serde_json::to_string(&data_struct).unwrap();
 
@@ -70,7 +76,7 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
             let mut response = Response::new(
                 serde_json::to_string(&BasicResponseError {
                     code: 500,
-                    message: "Could not get the user from the database!".to_string(),
+                    message: "Could not get the server from the database!".to_string(),
                 })
                 .unwrap(),
             );

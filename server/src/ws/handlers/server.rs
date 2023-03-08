@@ -3,7 +3,7 @@ use std::sync::Arc;
 use axum::extract::ws::{Message, WebSocket};
 use futures::{stream::SplitSink, SinkExt};
 use mayhem_db::{
-    models::{server::server, user_server, EServer, EUserServer},
+    models::{server::server, user_server, EServer, EUser, EUserServer},
     sea_orm::{
         ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
         ModelTrait, QueryFilter,
@@ -17,6 +17,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerCreateData {
     pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ServersData {
+    pub user_id: i32,
+    pub servers: Vec<server::Model>,
 }
 
 pub async fn on_create_server(
@@ -49,7 +55,11 @@ pub async fn on_get_server(
     let server_res = EServer::find_by_id(server_id).one(db).await;
 
     if let Err(err) = &server_res {
-        wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(err.to_string()))
+            .await
+            .unwrap();
 
         return;
     }
@@ -66,11 +76,13 @@ pub async fn on_get_server(
 
         wtx.lock().await.send(Message::Text(data)).await.unwrap();
     } else {
-        wtx.lock().await.send(Message::Text(
-            "Could not get the server from the database!".to_string(),
-        ))
-        .await
-        .unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(
+                "Could not get the server from the database!".to_string(),
+            ))
+            .await
+            .unwrap();
     }
 }
 
@@ -123,4 +135,57 @@ pub async fn on_leave_server(
     let data = serde_json::to_string(&data_struct).unwrap();
 
     wtx.lock().await.send(Message::Text(data)).await.unwrap();
+}
+
+pub async fn on_get_servers(
+    user_id: i32,
+    db: &DatabaseConnection,
+    wtx: Arc<Mutex<SplitSink<WebSocket, Message>>>,
+) {
+    let user_res = EUser::find_by_id(user_id).one(db).await;
+
+    if let Err(err) = &user_res {
+        wtx.lock()
+            .await
+            .send(Message::Text(err.to_string()))
+            .await
+            .unwrap();
+
+        return;
+    }
+
+    let user_opt = user_res.unwrap();
+
+    if let Some(user) = user_opt {
+        let server_res = user.find_related(EServer).all(db).await;
+
+        if let Err(err) = &server_res {
+            wtx.lock()
+                .await
+                .send(Message::Text(err.to_string()))
+                .await
+                .unwrap();
+
+            return;
+        }
+
+        let servers = server_res.unwrap();
+
+        let data_struct = ActiveMessage {
+            action: ActiveMessageAction::GetServersForUser,
+            data: ServersData { user_id, servers },
+        };
+
+        let data = serde_json::to_string(&data_struct).unwrap();
+
+        wtx.lock().await.send(Message::Text(data)).await.unwrap();
+    } else {
+        wtx.lock()
+            .await
+            .send(Message::Text(
+                "Could not get the user from the database!".to_string(),
+            ))
+            .await
+            .unwrap();
+    }
 }

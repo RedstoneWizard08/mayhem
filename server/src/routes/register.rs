@@ -11,7 +11,8 @@ use crate::{
         login::{get_user, LoginInfo},
         register::{add_user, UserCreation},
     },
-    errors::conflict::BasicResponseError, state::AppState,
+    errors::conflict::BasicResponseError,
+    state::AppState,
 };
 
 #[debug_handler]
@@ -20,7 +21,7 @@ pub async fn register(
     Json(user): Json<UserCreation>,
 ) -> Result<Response<String>, Response<String>> {
     let client = state.client;
-    
+
     let user_info_check = LoginInfo {
         username: user.username.clone(),
         password: user.password.clone(),

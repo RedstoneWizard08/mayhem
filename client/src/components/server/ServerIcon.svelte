@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
-    import { onMount } from "svelte";
+    import { currentServer, servers } from "../../stores/current";
     import { trim } from "../../util";
 
     export let id: string;
@@ -22,7 +22,10 @@
 
     const handleClick = () => {
         if (type == "channel") goto("/channels/" + id);
-        else goto("/servers/" + id);
+        else {
+            $currentServer = $servers.find((s) => s.id == id)!;
+            goto("/servers/" + id);
+        }
     };
 </script>
 

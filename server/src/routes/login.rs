@@ -14,7 +14,8 @@ use pbkdf2::{
 use crate::{
     database::login::{get_user, LoginInfo},
     errors::conflict::BasicResponseError,
-    util::user::PasswordlessUser, state::AppState,
+    state::AppState,
+    util::user::PasswordlessUser,
 };
 
 #[debug_handler]

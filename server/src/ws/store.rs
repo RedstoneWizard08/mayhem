@@ -1,5 +1,5 @@
+use tokio::sync::broadcast::{channel, Sender};
 use uuid::Uuid;
-use tokio::sync::broadcast::{Sender, channel};
 
 #[derive(Debug, Clone)]
 pub struct Room {

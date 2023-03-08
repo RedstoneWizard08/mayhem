@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { testChannelData, type ChannelGroupType, type ChannelType } from "../../api/channel";
+    import { currentServer } from "../../stores/current";
     import ChannelIcon from "./ChannelIcon.svelte";
-
-    export let channels: (ChannelType | ChannelGroupType)[] = [...testChannelData];
 </script>
 
 <div class="channels">
-    {#each channels as channel}
+    {#each ($currentServer?.channels || []) as channel}
         <ChannelIcon {...channel} />
     {/each}
 </div>

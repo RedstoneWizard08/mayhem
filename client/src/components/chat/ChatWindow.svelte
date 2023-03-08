@@ -1,31 +1,53 @@
 <script lang="ts">
     import { fillMessageProps } from "../../api/message";
     import ChatMessage from "./ChatMessage.svelte";
-    import { messages, currentChannel } from "../../stores/current";
+    import { currentChannel, messages } from "../../stores/current";
+    import { onDestroy, onMount } from "svelte";
+    import { WebSocketAPI } from "../../api/ws";
 
     $: message = "";
 
     let messagesRef: HTMLDivElement | undefined;
 
+    const ws = new WebSocketAPI();
+
+    onMount(() => ws.connect());
+    onDestroy(() => ws.close());
+
+    let prevChannelId = -1;
+
+    currentChannel.subscribe((c) => {
+        if (c && parseInt(c.id) != prevChannelId) {
+            prevChannelId = parseInt(c.id);
+
+            ws.getAll();
+        }
+    });
+
+    messages.subscribe(() => {
+        setTimeout(() => {
+            if (messagesRef)
+                messagesRef.scrollTo({
+                    top: messagesRef.scrollHeight,
+                    behavior: "smooth",
+                });
+        }, 0);
+    });
+
     const onKeyDown = (e: KeyboardEvent) => {
         if (e.key == "Enter") {
             if (message.replace(/\s/gm, "") == "") return;
 
-            $messages.push({ content: message, timestamp: new Date() });
-            $messages = $messages;
+            const data = { content: message, timestamp: new Date() };
 
-            if ($currentChannel && $currentChannel.type == "channel")
-                $currentChannel.messages = $messages;
+            ws.send(
+                JSON.stringify({
+                    action: "SendMessage",
+                    data: { ...data, sender: 2, channel: parseInt($currentChannel!.id) },
+                })
+            );
 
             message = "";
-
-            setTimeout(() => {
-                if (messagesRef)
-                    messagesRef.scrollTo({
-                        top: messagesRef.scrollHeight,
-                        behavior: "smooth",
-                    });
-            }, 0);
         }
     };
 </script>

@@ -1,9 +1,25 @@
+import { page } from "$app/stores";
 import axios from "axios";
-import { buildRequest, ROUTES } from "./constants";
+import { get } from "svelte/store";
 
-export const getServerInfo = async () => {
-    const config = buildRequest(ROUTES.servers.info);
-    const result = await axios.request(config);
+export interface Server {
+    id: number;
+    name: string;
+}
 
-    console.log(result);
+export interface ServerResponse {
+    user_id: number;
+    servers: Server[];
+}
+
+export const getServers = async (): Promise<ServerResponse> => {
+    const url = new URL("/api/v1/servers", get(page).url.href);
+
+    const result = await axios.get<ServerResponse>(url.toString(), {
+        headers: {
+            Authorization: "Bearer a",
+        },
+    });
+
+    return result.data;
 };

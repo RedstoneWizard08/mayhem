@@ -8,7 +8,7 @@ use mayhem_db::{
 };
 
 use serde::{Deserialize, Serialize};
-use tokio::sync::{Mutex, broadcast::Sender};
+use tokio::sync::{broadcast::Sender, Mutex};
 use tracing::debug;
 
 use super::{ActiveMessage, ActiveMessageAction};
@@ -67,7 +67,11 @@ pub async fn on_get_all_messages(
     let channel_res = EChannel::find_by_id(channel_id.clone()).one(db).await;
 
     if let Err(err) = &channel_res {
-        wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(err.to_string()))
+            .await
+            .unwrap();
 
         return;
     }
@@ -78,7 +82,11 @@ pub async fn on_get_all_messages(
         let messages_res = channel.find_related(EChatMessage).all(db).await;
 
         if let Err(err) = &messages_res {
-            wtx.lock().await.send(Message::Text(err.to_string())).await.unwrap();
+            wtx.lock()
+                .await
+                .send(Message::Text(err.to_string()))
+                .await
+                .unwrap();
 
             return;
         }
@@ -97,10 +105,12 @@ pub async fn on_get_all_messages(
 
         wtx.lock().await.send(Message::Text(data)).await.unwrap();
     } else {
-        wtx.lock().await.send(Message::Text(
-            "Could not get the channel from the database!".to_string(),
-        ))
-        .await
-        .unwrap();
+        wtx.lock()
+            .await
+            .send(Message::Text(
+                "Could not get the channel from the database!".to_string(),
+            ))
+            .await
+            .unwrap();
     }
 }

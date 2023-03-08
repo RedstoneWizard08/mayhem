@@ -1,30 +1,38 @@
-use crate::{
-    errors::conflict::BasicResponseError, state::AppState, ws::handlers::server::ServersData,
-};
+use crate::{errors::conflict::BasicResponseError, state::AppState};
 use axum::{
     debug_handler,
-    extract::State,
+    extract::{Path, State},
     http::{HeaderMap, Response, StatusCode},
 };
 use mayhem_db::{
-    models::{EServer, EUser},
+    models::{ChatMessage, EChannel, EChatMessage},
     sea_orm::{DatabaseConnection, EntityTrait, ModelTrait},
 };
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MessagesData {
+    pub channel_id: i32,
+    pub messages: Vec<ChatMessage>,
+}
 
 #[debug_handler]
-pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Response<String> {
+pub async fn messages(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Path((_, channel_id)): Path<(i32, i32)>,
+) -> Response<String> {
     let token_header = headers.get("Authorization");
 
     if let Some(token) = token_header {
         let _token_str = token.to_str().unwrap().to_string();
-        let user_id = 2;
 
         let client = &state.client;
         let db: &DatabaseConnection = &client.client.clone();
 
-        let user_res = EUser::find_by_id(user_id).one(db).await;
+        let channel_res = EChannel::find_by_id(channel_id).one(db).await;
 
-        if let Err(err) = &user_res {
+        if let Err(err) = &channel_res {
             let mut response = Response::new(
                 serde_json::to_string(&BasicResponseError {
                     code: 500,
@@ -39,12 +47,12 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
             return response;
         }
 
-        let user_opt = user_res.unwrap();
+        let channel_opt = channel_res.unwrap();
 
-        if let Some(user) = user_opt {
-            let server_res = user.find_related(EServer).all(db).await;
+        if let Some(channel) = channel_opt {
+            let messages_res = channel.find_related(EChatMessage).all(db).await;
 
-            if let Err(err) = &server_res {
+            if let Err(err) = &messages_res {
                 let mut response = Response::new(
                     serde_json::to_string(&BasicResponseError {
                         code: 500,
@@ -59,9 +67,12 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
                 return response;
             }
 
-            let servers = server_res.unwrap();
+            let messages = messages_res.unwrap();
 
-            let data_struct = ServersData { user_id, servers };
+            let data_struct = MessagesData {
+                channel_id,
+                messages,
+            };
 
             let data = serde_json::to_string(&data_struct).unwrap();
 
@@ -70,7 +81,7 @@ pub async fn index(State(state): State<AppState>, headers: HeaderMap) -> Respons
             let mut response = Response::new(
                 serde_json::to_string(&BasicResponseError {
                     code: 500,
-                    message: "Could not get the user from the database!".to_string(),
+                    message: "Could not get the channel from the database!".to_string(),
                 })
                 .unwrap(),
             );

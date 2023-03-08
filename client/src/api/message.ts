@@ -8,8 +8,8 @@ export interface ChatMessageProps {
 export const fillMessageProps = (partial?: Partial<ChatMessageProps>): ChatMessageProps => {
     const props: Partial<ChatMessageProps> = {};
 
-    props.avatar = partial?.avatar || "https://ui-avatars.com/api/?rounded=true&name=John+Doe";
-    props.name = partial?.name || "John Doe";
+    props.avatar = partial?.avatar || "https://ui-avatars.com/api/?rounded=true&name=John+Dorian";
+    props.name = partial?.name || "John Dorian";
     props.timestamp = partial?.timestamp || new Date();
     props.content = partial?.content || "Unknown Message Content";
 
@@ -43,3 +43,11 @@ export const fixContent = (content: string) => {
 
     return real;
 };
+
+export interface IncomingChatMessage {
+    id: number;
+    user_id: number;
+    channel_id: number;
+    timestamp: string;
+    content: string;
+}

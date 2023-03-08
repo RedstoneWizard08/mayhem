@@ -13,7 +13,8 @@ pub async fn not_found() -> Response<String> {
     let text = serde_json::to_string(&ErrorInfo {
         code: 404,
         message: "Route not found!".to_string(),
-    }).unwrap();
+    })
+    .unwrap();
 
     let mut response = Response::new(text);
 

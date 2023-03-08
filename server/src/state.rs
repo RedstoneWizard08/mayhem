@@ -1,7 +1,7 @@
+use crate::ws::ChatRoom;
+use mayhem_db::Client;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use mayhem_db::Client;
-use crate::ws::ChatRoom;
 
 #[derive(Clone)]
 pub struct AppState {

@@ -1,16 +1,18 @@
 use std::sync::Arc;
 
-use axum::extract::ws::{WebSocket, Message};
+use axum::extract::ws::{Message, WebSocket};
 use futures::stream::SplitSink;
 use serde::{Deserialize, Serialize};
 use serde_json::Error;
 
 use mayhem_db::sea_orm::DatabaseConnection;
-use tokio::sync::{Mutex, broadcast::Sender};
+use tokio::sync::{broadcast::Sender, Mutex};
+
+use crate::ws::handlers::server::on_get_servers;
 
 use super::{
     channel::{on_create_channel, on_get_channel, on_get_channels, ChannelCreateData},
-    message::{on_get_all_messages, ChatMessageIn, on_message_send},
+    message::{on_get_all_messages, on_message_send, ChatMessageIn},
     server::{on_create_server, on_get_server, on_join_server, on_leave_server, ServerCreateData},
     ActiveMessage, ActiveMessageAction,
 };
@@ -125,6 +127,12 @@ pub async fn find_handler(
         if parsed.action == ActiveMessageAction::GetServerInfo {
             debug!("Recognized on_get_server...");
             on_get_server(parsed.data, &db, wtx).await;
+            return Ok(None);
+        }
+
+        if parsed.action == ActiveMessageAction::GetServersForUser {
+            debug!("Recognized on_get_servers...");
+            on_get_servers(parsed.data, &db, wtx).await;
             return Ok(None);
         }
     }

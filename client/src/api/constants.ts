@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import type { AxiosRequestConfig } from "axios";
 
 export interface APIRoute {
     /**
@@ -187,7 +187,7 @@ export const _ROUTES = {
 export const ROUTES = _ROUTES as APIRouteList;
 
 export const buildRequest = (request: APIRoute, token?: string) => {
-    let config: AxiosRequestConfig = {
+    const config: AxiosRequestConfig = {
         url: request.path,
         baseURL: API_BASE,
 

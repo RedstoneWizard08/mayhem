@@ -28,6 +28,7 @@
 
     $: {
         if (selected) {
+            $mstore = [];
             $mstore = messages;
             $currentChannel = $$props as any;
         }

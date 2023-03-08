@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Default, Debug, DeriveEntity, Serialize, Deserialize)]
 pub struct Entity;
