@@ -1,11 +1,11 @@
 [package]
 name = "mayhem-migrations"
 authors = ["RedstoneWizard08"]
-version = "0.1.0-beta.2"
+version = "0.2.0-beta.1"
 edition = "2021"
 
 description = """
-A Discord-like chat application for security, stability, speed, and ultimate customization.
+A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
 
 => Database Migrations Module
 """
