@@ -4,8 +4,6 @@ pub mod login;
 pub mod register;
 pub mod server;
 
-use std::sync::Arc;
-
 use axum::{
     body::Body,
     routing::{get, post, put},
@@ -15,10 +13,11 @@ use axum::{
 pub use error::not_found as handle_error;
 pub use index::index as handle_index;
 pub use login::login as handle_login;
-use mayhem_db::Client;
 pub use register::register as handle_register;
 
-pub fn register(router: Router<Arc<Client>, Body>) -> Router<Arc<Client>, Body> {
+use crate::state::AppState;
+
+pub fn register(router: Router<AppState, Body>) -> Router<AppState, Body> {
     let router = router
         .route("/", get(handle_index))
         .route("/api/users", post(handle_login))

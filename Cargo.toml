@@ -4,5 +4,4 @@ members = [
     "cli",
     "database",
     "migrations",
-    "websocket",
 ]

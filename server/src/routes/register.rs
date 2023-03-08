@@ -1,26 +1,26 @@
-use std::sync::Arc;
-
 use axum::{
     debug_handler,
     extract::State,
     http::{status::StatusCode, Response},
     Json,
 };
-use mayhem_db::{models::user::Model as User, Client};
+use mayhem_db::models::user::Model as User;
 
 use crate::{
     database::{
         login::{get_user, LoginInfo},
         register::{add_user, UserCreation},
     },
-    errors::conflict::BasicResponseError,
+    errors::conflict::BasicResponseError, state::AppState,
 };
 
 #[debug_handler]
 pub async fn register(
-    State(client): State<Arc<Client>>,
+    State(state): State<AppState>,
     Json(user): Json<UserCreation>,
 ) -> Result<Response<String>, Response<String>> {
+    let client = state.client;
+    
     let user_info_check = LoginInfo {
         username: user.username.clone(),
         password: user.password.clone(),

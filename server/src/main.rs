@@ -8,15 +8,20 @@ pub mod logging;
 pub mod middleware;
 pub mod routes;
 pub mod server;
+pub mod state;
 pub mod util;
+pub mod ws;
 
-use std::{error::Error, net::SocketAddr, sync::Arc};
 use axum::{middleware::from_fn, Router, Server};
+use std::{error::Error, net::SocketAddr, sync::Arc};
 
-use mayhem::{
-    config::app::get_config, database::prepare_connection, logging::info,
-    middleware::logger::logging_middleware, routes::handle_error, util::parse_ip,
-};
+use crate::config::get_config;
+use database::prepare_connection;
+use logging::info;
+use middleware::logger::logging_middleware;
+use routes::handle_error;
+use state::AppState;
+use util::parse_ip;
 
 use mayhem_db::Client;
 
@@ -33,13 +38,16 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
 
     info("Connected to the database!");
 
+    let state = AppState::new(client.clone());
+
     let router = Router::new();
 
     let router = routes::register(router);
+    let router = ws::register(router);
     let router = router.fallback(handle_error);
     let router = router.layer(from_fn(logging_middleware));
 
-    let router = router.with_state(client.clone());
+    let router = router.with_state(state);
 
     client.run_migrations().await.unwrap();
 
@@ -48,7 +56,8 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
     let ip = parse_ip(config.clone().host);
     let address = SocketAddr::from((ip, config.clone().port));
     let server = Server::bind(&address);
-    let app = server.serve(router.into_make_service());
+    let service = router.into_make_service_with_connect_info::<SocketAddr>();
+    let app = server.serve(service);
 
     info(format!("Listening on {}", address).as_str());
 

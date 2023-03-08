@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use axum::{
     debug_handler,
     extract::State,
@@ -7,7 +5,6 @@ use axum::{
     response::Result,
     Json,
 };
-use mayhem_db::Client;
 
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordVerifier},
@@ -17,14 +14,15 @@ use pbkdf2::{
 use crate::{
     database::login::{get_user, LoginInfo},
     errors::conflict::BasicResponseError,
-    util::user::PasswordlessUser,
+    util::user::PasswordlessUser, state::AppState,
 };
 
 #[debug_handler]
 pub async fn login(
-    State(db): State<Arc<Client>>,
+    State(state): State<AppState>,
     Json(user_info): Json<LoginInfo>,
 ) -> Result<Response<String>, Response<String>> {
+    let db = state.client;
     let user_get = get_user(&db, &user_info).await;
 
     match user_get {
