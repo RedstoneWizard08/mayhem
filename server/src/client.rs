@@ -1,6 +1,5 @@
 use flate2::read::GzDecoder;
 use indicatif::{ProgressBar, ProgressStyle};
-use tokio_stream::StreamExt;
 use std::{
     cmp::min,
     env::consts::ARCH,
@@ -12,6 +11,7 @@ use std::{
 };
 use tar::Archive;
 use tokio::process::Command;
+use tokio_stream::StreamExt;
 
 use include_dir::{include_dir, Dir};
 use tempdir::TempDir;
@@ -62,7 +62,11 @@ pub async fn download_node(dir: &Path) {
 
     info("Downloading node...");
 
-    let resp = reqwest::Client::new().get(url.clone()).send().await.unwrap();
+    let resp = reqwest::Client::new()
+        .get(url.clone())
+        .send()
+        .await
+        .unwrap();
     let total_size = resp.content_length().unwrap();
 
     let pb = ProgressBar::new(total_size);
@@ -81,9 +85,7 @@ pub async fn download_node(dir: &Path) {
     let mut stream = resp.bytes_stream();
 
     while let Some(item) = stream.next().await {
-        let chunk = item
-            .or(Err("Error while downloading file"))
-            .unwrap();
+        let chunk = item.or(Err("Error while downloading file")).unwrap();
 
         file.write_all(&chunk)
             .or(Err("Error while writing to file"))

@@ -13,9 +13,9 @@ pub fn clone_repository(args: &Args) -> Result<(), git2::Error> {
         path: None,
         newline: false,
     });
-    
+
     let mut cb = RemoteCallbacks::new();
-    
+
     cb.transfer_progress(|stats| {
         let mut state = state.borrow_mut();
         state.progress = Some(stats.to_owned());
@@ -24,7 +24,7 @@ pub fn clone_repository(args: &Args) -> Result<(), git2::Error> {
     });
 
     let mut co = CheckoutBuilder::new();
-    
+
     co.progress(|path, cur, total| {
         let mut state = state.borrow_mut();
         state.path = path.map(|p| p.to_path_buf());

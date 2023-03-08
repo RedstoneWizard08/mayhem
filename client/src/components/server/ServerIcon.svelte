@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
-    import { currentServer, servers } from "../../stores/current";
+    import { channels, currentChannel, currentServer, messages, servers } from "../../stores/current";
     import { trim } from "../../util";
 
     export let id: string;
@@ -21,9 +21,21 @@
     }
 
     const handleClick = () => {
-        if (type == "channel") goto("/channels/" + id);
-        else {
+        $channels = [];
+        $currentChannel = null;
+        
+        if (type == "channel") {
+            $currentServer = {
+                id: "-1",
+                channels: [],
+                name: "DMs",
+                type: "server",
+            };
+
+            goto("/channels/" + id);
+        } else {
             $currentServer = $servers.find((s) => s.id == id)!;
+            
             goto("/servers/" + id);
         }
     };

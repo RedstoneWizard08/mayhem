@@ -35,9 +35,7 @@ pub async fn register(
             message: "User already exists!".to_string(),
         };
 
-        let mut res = Response::new(
-            serde_json::to_string(&conflict_error).unwrap(),
-        );
+        let mut res = Response::new(serde_json::to_string(&conflict_error).unwrap());
 
         let s = res.status_mut();
         *s = StatusCode::CONFLICT;

@@ -29,7 +29,7 @@
     $: {
         if (selected) {
             $mstore = [];
-            $mstore = messages;
+            messages = [];
             $currentChannel = $$props as any;
         }
     }

@@ -54,20 +54,24 @@
 
 <div class="chat-window">
     <div class="messages" bind:this={messagesRef}>
-        {#each $messages as m}
-            <ChatMessage {...fillMessageProps(m)} />
-        {/each}
+        {#if $currentChannel}
+            {#each $currentChannel.messages as m}
+                <ChatMessage {...fillMessageProps(m)} />
+            {/each}
+        {/if}
     </div>
 
-    <div class="message-input">
-        <input
-            type="text"
-            class="message-input--input"
-            placeholder="Type a message..."
-            on:keydown={onKeyDown}
-            bind:value={message}
-        />
-    </div>
+    {#if $currentChannel}
+        <div class="message-input">
+            <input
+                type="text"
+                class="message-input--input"
+                placeholder="Type a message..."
+                on:keydown={onKeyDown}
+                bind:value={message}
+            />
+        </div>
+    {/if}
 </div>
 
 <style lang="scss">

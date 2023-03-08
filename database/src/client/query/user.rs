@@ -39,7 +39,7 @@ impl UserQueryHelper {
         user: &user::Model,
     ) -> Result<Vec<CompleteServer>, DbErr> {
         let mut servers: Vec<CompleteServer> = Vec::new();
-        
+
         let servers_result = user
             .find_related(server::Entity)
             .all(&self.client as &DbConn)

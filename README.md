@@ -9,10 +9,15 @@ An open-source Twitter replacement with Discord and Zoom-like features. Optimize
 
 ## The Stack
 
-Our app is built with:
-- Rust (Backend)
-- Rocket.rs (Backend)
-- Tokio (Backend)
-- SeaORM (Database functions)
-- Preact & Preact Router (Frontend)
-- SASS (Frontend)
+The app is built with:
+- Backend
+    - Rust
+    - Axum
+    - Tokio
+    - SeaORM
+    - Serde
+- Frontend:
+    - TypeScript
+    - Vite
+    - SvelteKit
+    - SASS
