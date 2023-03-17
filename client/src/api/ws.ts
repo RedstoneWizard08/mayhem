@@ -1,6 +1,8 @@
-import { currentChannel } from "../stores/current";
+import { currentChannel, servers } from "../stores/current";
 import { get } from "svelte/store";
 import type { IncomingChatMessage } from "./message";
+import { getServers } from "./server";
+import { updateAllChannels } from "./channel";
 
 export class WebSocketAPI {
     private ws?: WebSocket;
@@ -12,7 +14,7 @@ export class WebSocketAPI {
 
         this.ws = new WebSocket(url.href);
 
-        this.ws.addEventListener("message", (ev) => {
+        this.ws.addEventListener("message", async (ev) => {
             const data =
                 typeof JSON.parse(ev.data) == "string"
                     ? JSON.parse(JSON.parse(ev.data))
@@ -45,6 +47,25 @@ export class WebSocketAPI {
 
                     return c;
                 });
+            } else if (data.action == "CreateServer") {
+                const serverData = data.data as { id: number, name: string };
+
+                this.send(JSON.stringify({
+                    action: "JoinServer",
+                    data: {
+                        user_id: 1,
+                        server_id: serverData.id,
+                    },
+                }));
+            } else if (data.action == "JoinServer") {
+                servers.set((await getServers()).servers.map((s) => ({
+                    id: s.id.toString(),
+                    name: s.name,
+                    type: "server",
+                    channels: [],
+                })));
+            } else if (data.action == "CreateChannel") {
+                await updateAllChannels();
             }
         });
 

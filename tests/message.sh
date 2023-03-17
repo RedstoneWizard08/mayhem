@@ -5,7 +5,7 @@ wscat -c "ws://localhost:4001/api/ws" -x '{
     "data": {
         "content": "AAA",
         "timestamp": "0",
-        "sender": 2,
+        "sender": 1,
         "channel": 4
     }
 }'

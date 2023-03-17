@@ -1,6 +1,7 @@
 import { page } from "$app/stores";
 import axios from "axios";
 import { get } from "svelte/store";
+import { token } from "../stores/current";
 
 export interface Server {
     id: number;
@@ -17,7 +18,7 @@ export const getServers = async (): Promise<ServerResponse> => {
 
     const result = await axios.get<ServerResponse>(url.toString(), {
         headers: {
-            Authorization: "Bearer a",
+            Authorization: "Bearer " + get(token),
         },
     });
 

@@ -32,6 +32,7 @@ impl MutationHelper {
             email: Set(data.email),
             username: Set(data.username),
             password: Set(data.password),
+            token: Set(None),
         })
         .update(&self.client as &DbConn)
         .await;

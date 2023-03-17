@@ -28,6 +28,7 @@ impl MigrationTrait for Migration {
                             .unique_key(),
                     )
                     .col(ColumnDef::new(Users::Password).text().not_null())
+                    .col(ColumnDef::new(Users::Token).text().unique_key().null())
                     .to_owned(),
             )
             .await
@@ -54,4 +55,5 @@ pub enum Users {
     Email,
     Username,
     Password,
+    Token,
 }

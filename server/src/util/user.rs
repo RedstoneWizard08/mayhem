@@ -27,6 +27,7 @@ impl PasswordlessUser {
             servers,
             settings,
             password: _,
+            token: _,
         } = complete;
 
         return PasswordlessUser {

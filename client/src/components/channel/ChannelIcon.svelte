@@ -137,6 +137,8 @@
         i {
             padding: 0;
             margin: 0;
+
+            margin-right: 1%;
         }
     }
 </style>

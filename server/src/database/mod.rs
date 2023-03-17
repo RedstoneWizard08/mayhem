@@ -6,6 +6,7 @@ use crate::config::{AppConfig, DatabaseConfig};
 
 pub mod login;
 pub mod register;
+pub mod token;
 
 pub fn proto_from_string(s: String) -> DatabaseProtocol {
     if s == "postgres" || s == "postgresql" {

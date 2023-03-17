@@ -20,9 +20,48 @@ pub async fn channels(
     let token_header = headers.get("Authorization");
 
     if let Some(token) = token_header {
-        let _token_str = token.to_str().unwrap().to_string();
+        let token_str = token
+            .to_str()
+            .unwrap()
+            .replace("Bearer", "")
+            .trim()
+            .to_string();
 
         let client = &state.client;
+        let user_res = client.query.user.find_user_by_token(token_str).await;
+
+        if let Err(err) = &user_res {
+            let mut response = Response::new(
+                serde_json::to_string(&BasicResponseError {
+                    code: 401,
+                    message: err.to_string(),
+                })
+                .unwrap(),
+            );
+
+            let s = response.status_mut();
+            *s = StatusCode::from_u16(401).unwrap();
+
+            return response;
+        }
+
+        let user = user_res.unwrap().unwrap();
+
+        if user.servers.iter().find(|s| s.id == server_id).is_none() {
+            let mut response = Response::new(
+                serde_json::to_string(&BasicResponseError {
+                    code: 401,
+                    message: "Could not find that server!".to_string(),
+                })
+                .unwrap(),
+            );
+
+            let s = response.status_mut();
+            *s = StatusCode::from_u16(401).unwrap();
+
+            return response;
+        }
+
         let db: &DatabaseConnection = &client.client.clone();
 
         let server_res = EServer::find_by_id(server_id).one(db).await;

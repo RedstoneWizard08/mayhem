@@ -13,4 +13,5 @@ pub struct CompleteUser {
     pub password: String,
     pub servers: Vec<CompleteServer>,
     pub settings: Option<UserSettings>,
+    pub token: Option<String>,
 }

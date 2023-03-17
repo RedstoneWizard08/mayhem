@@ -1,6 +1,6 @@
 import { page } from "$app/stores";
 import axios from "axios";
-import { currentServer, servers } from "../stores/current";
+import { currentServer, servers, token } from "../stores/current";
 import { get } from "svelte/store";
 import type { ChatMessageProps } from "./message";
 export interface ChannelType {
@@ -39,7 +39,7 @@ export const getChannels = async (serverId: number): Promise<ChannelResponse> =>
 
     const result = await axios.get<ChannelResponse>(url.toString(), {
         headers: {
-            Authorization: "Bearer a",
+            Authorization: "Bearer " + get(token),
         },
     });
 
@@ -84,5 +84,15 @@ export const updateAllChannels = async () => {
         );
 
         get(servers).find((s) => s.id == server.id)!.channels = _cs;
+
+        if (get(currentServer)?.id == server.id) {
+            get(currentServer)!.channels = _cs;
+
+            currentServer.update((c) => {
+                c!.channels = _cs;
+
+                return c;
+            });
+        }
     }
 };

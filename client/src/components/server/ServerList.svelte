@@ -30,6 +30,8 @@
     {#each $servers as server}
         <ServerIcon {...server} />
     {/each}
+
+    <ServerIcon type="server" id="__" name="+" icon="add" />
 </div>
 
 <style lang="scss">

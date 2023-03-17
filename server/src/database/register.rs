@@ -29,6 +29,7 @@ pub async fn add_user(client: &Arc<Client>, user_info: UserCreation) -> Result<U
             username: user_info.username,
             password,
             id: -1,
+            token: None,
         })
         .await;
 

@@ -17,6 +17,9 @@ pub struct Model {
     #[sea_orm(column_type = "Text", unique, indexed)]
     pub username: String,
     pub password: String,
+
+    #[sea_orm(column_type = "Text", unique, indexed, nullable)]
+    pub token: Option<String>,
 }
 
 impl Model {
@@ -28,6 +31,7 @@ impl Model {
             email: active.email.unwrap(),
             username: active.username.unwrap(),
             password: active.password.unwrap(),
+            token: active.token.unwrap(),
         };
     }
 }
@@ -40,6 +44,7 @@ pub enum Column {
     Email,
     Username,
     Password,
+    Token,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DerivePrimaryKey, Serialize, Deserialize)]
@@ -70,6 +75,7 @@ impl ColumnTrait for Column {
             Self::Email => ColumnType::Text.def().unique(),
             Self::Username => ColumnType::Text.def().unique(),
             Self::Password => ColumnType::Text.def(),
+            Self::Token => ColumnType::Text.def(),
         }
     }
 }

@@ -1,13 +1,23 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
-    import { channels, currentChannel, currentServer, messages, servers } from "../../stores/current";
+    import { WebSocketAPI } from "../../api/ws";
+    import {
+        channels,
+        currentChannel,
+        currentServer,
+        servers,
+        ws,
+    } from "../../stores/current";
     import { trim } from "../../util";
 
     export let id: string;
     export let name: string;
     export let type: "server" | "channel";
-    export let icon: "discord" | string | undefined = undefined;
+    export let icon: "discord" | "add" | string | undefined = undefined;
+
+    if (!$ws)
+        $ws = new WebSocketAPI();
 
     $: selected = false;
 
@@ -24,6 +34,18 @@
         $currentChannel = null;
         $channels = [];
 
+        if (icon == "add") {
+            $ws?.send(JSON.stringify({
+                action: "CreateServer",
+                
+                data: {
+                    name: "Test Server",
+                },
+            }));
+
+            return;
+        }
+
         if (type == "channel") {
             $currentServer = {
                 id: "-1",
@@ -35,14 +57,14 @@
             goto("/channels/" + id);
         } else {
             $currentServer = $servers.find((s) => s.id == id)!;
-            
+
             goto("/servers/" + id);
         }
     };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="server" class:selected on:click={handleClick}>
+<div class="server" class:add={icon == "add"} class:selected on:click={handleClick}>
     {#if icon}
         {#if icon == "discord"}
             <svg
@@ -62,6 +84,8 @@
                     />
                 </g>
             </svg>
+        {:else if icon == "add"}
+            <i class="fa-solid fa-plus" />
         {:else}
             <img src={icon} alt="icon" />
         {/if}
@@ -126,6 +150,18 @@
         :global(svg) {
             width: 75%;
             height: 75%;
+        }
+
+        &.add {
+            background-color: #4c7c4c;
+
+            &:hover {
+                background-color: #4c9c4c;
+            }
+
+            i {
+                font-size: 20pt;
+            }
         }
     }
 </style>

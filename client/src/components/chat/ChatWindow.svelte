@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fillMessageProps } from "../../api/message";
     import ChatMessage from "./ChatMessage.svelte";
-    import { currentChannel, messages } from "../../stores/current";
+    import { currentChannel, messages, ws } from "../../stores/current";
     import { onDestroy, onMount } from "svelte";
     import { WebSocketAPI } from "../../api/ws";
 
@@ -9,10 +9,11 @@
 
     let messagesRef: HTMLDivElement | undefined;
 
-    const ws = new WebSocketAPI();
+    if (!$ws)
+        $ws = new WebSocketAPI();
 
-    onMount(() => ws.connect());
-    onDestroy(() => ws.close());
+    onMount(() => $ws?.connect());
+    onDestroy(() => $ws?.close());
 
     let prevChannelId = -1;
 
@@ -20,7 +21,7 @@
         if (c && parseInt(c.id) != prevChannelId) {
             prevChannelId = parseInt(c.id);
 
-            ws.getAll();
+            $ws?.getAll();
         }
     });
 
@@ -40,10 +41,10 @@
 
             const data = { content: message, timestamp: new Date() };
 
-            ws.send(
+            $ws?.send(
                 JSON.stringify({
                     action: "SendMessage",
-                    data: { ...data, sender: 2, channel: parseInt($currentChannel!.id) },
+                    data: { ...data, sender: 1, channel: parseInt($currentChannel!.id) },
                 })
             );
 

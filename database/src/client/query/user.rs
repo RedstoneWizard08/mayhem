@@ -126,6 +126,49 @@ impl UserQueryHelper {
             password: user.password,
             servers,
             settings,
+            token: user.token,
+        }));
+    }
+
+    pub async fn find_user_by_token(&self, token: String) -> Result<Option<CompleteUser>, DbErr> {
+        let user_result = user::Entity::find()
+            .filter(user::Column::Token.eq(Some(token.clone())))
+            .one(&self.client as &DbConn)
+            .await;
+
+        let user_option: Option<user::Model> = match user_result {
+            Ok(res) => res,
+            Err(err) => return Err(err),
+        };
+
+        let user: user::Model = match user_option {
+            Some(res) => res,
+            None => return Ok(None),
+        };
+
+        let servers_result = self.find_user_servers(&user).await;
+
+        let servers: Vec<CompleteServer> = match servers_result {
+            Ok(res) => res,
+            Err(err) => return Err(err),
+        };
+
+        let settings = user
+            .find_related(user_settings::Entity)
+            .one(&self.client as &DbConn)
+            .await
+            .unwrap();
+
+        return Ok(Some(CompleteUser {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+            password: user.password,
+            servers,
+            settings,
+            token: user.token,
         }));
     }
 }
