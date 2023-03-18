@@ -100,11 +100,11 @@
 
         .messages {
             overflow: scroll;
-            flex-grow: 1;
+            height: calc(100% - 6%);
         }
 
         .message-input {
-            height: 4rem;
+            height: 6%;
             width: 100%;
 
             margin: 2% 0;
@@ -116,7 +116,7 @@
             justify-content: center;
 
             &--input {
-                flex-grow: 1;
+                height: 100%;
                 width: 100%;
 
                 resize: none;
