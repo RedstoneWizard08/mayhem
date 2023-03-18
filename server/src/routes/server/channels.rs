@@ -47,7 +47,7 @@ pub async fn channels(
 
         let user = user_res.unwrap().unwrap();
 
-        if user.servers.iter().find(|s| s.id == server_id).is_none() {
+        if !user.servers.iter().any(|s| s.id == server_id) {
             let mut response = Response::new(
                 serde_json::to_string(&BasicResponseError {
                     code: 401,
