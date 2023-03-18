@@ -20,12 +20,12 @@
 </script>
 
 <div class="channels">
-    <p class="title">
+    <div class="title">
         <span />
-        Channels
+        <p>Channels</p>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <i class="fa-solid fa-plus add" on:click={addChannel} />
-    </p>
+    </div>
 
     {#each $currentServer?.channels || [] as channel}
         <ChannelIcon {...channel} />
@@ -52,6 +52,9 @@
             width: 100%;
             height: 4%;
 
+            margin: 0;
+            padding: 4% 0;
+
             color: white;
             font-family: "Ubuntu";
 
@@ -61,6 +64,11 @@
             justify-content: center;
             align-content: center;
 
+            span, p {
+                margin: 0;
+                padding: 0;
+            }
+
             .add {
                 justify-self: right;
                 margin-right: 18%;
@@ -68,18 +76,36 @@
 
                 border: 1px solid rgba(255, 255, 255, 0.4);
                 border-radius: 4px;
-                padding: 4% 5%;
+                padding: 5% 6%;
 
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
 
-                transition: background-color 0.5s ease, color 0.5s ease;
+                text-align: center;
+
+                transition:
+                    border-color 0.5s ease,
+                    background-color 0.5s ease,
+                    color 0.5s ease;
 
                 &:hover {
                     color: black;
+                    border-color: transparent;
                     background-color: rgba(255, 255, 255, 0.6);
+                }
+
+                &::after {
+                    width: 100%;
+                    height: 100%;
+
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+
+                    text-align: center;
                 }
             }
         }

@@ -20,7 +20,7 @@
 
         const sid = $page.params.server;
 
-        $currentServer = $servers.find((s) => s.id == sid) || $currentServer || $servers[0];
+        $currentServer = $servers.find((s) => s.id == sid) || $currentServer;
     });
 </script>
 

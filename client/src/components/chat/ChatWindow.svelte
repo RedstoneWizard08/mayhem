@@ -104,7 +104,7 @@
         }
 
         .message-input {
-            height: 9%;
+            height: 4rem;
             width: 100%;
 
             margin: 2% 0;
