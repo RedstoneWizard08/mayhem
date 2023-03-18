@@ -29,11 +29,11 @@ jobs:
       - name: Run ESLint
         run: |
           cd client
-          npx eslint .
-          --config .eslintrc.cjs
-          --ext .js,.jsx,.ts,.tsx,.svelte
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
+          npx eslint . \
+            --config .eslintrc.cjs \
+            --ext .js,.jsx,.ts,.tsx,.svelte \
+            --format @microsoft/eslint-formatter-sarif \
+            --output-file eslint-results.sarif
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
