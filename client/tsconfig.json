@@ -11,5 +11,8 @@
         "strict": true,
         "allowSyntheticDefaultImports": true,
         "strictPropertyInitialization": false
+    },
+    "ts-node": {
+        "esm": true
     }
 }

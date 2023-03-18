@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fillMessageProps } from "../../api/message";
     import ChatMessage from "./ChatMessage.svelte";
-    import { currentChannel, messages, ws } from "../../stores/current";
+    import { currentChannel, messages, user, ws } from "../../stores/current";
     import { onDestroy, onMount } from "svelte";
     import { WebSocketAPI } from "../../api/ws";
 
@@ -44,7 +44,11 @@
             $ws?.send(
                 JSON.stringify({
                     action: "SendMessage",
-                    data: { ...data, sender: 1, channel: parseInt($currentChannel!.id) },
+                    data: {
+                        ...data,
+                        sender: $user!.id,
+                        channel: parseInt($currentChannel!.id)
+                    },
                 })
             );
 
@@ -57,7 +61,7 @@
     <div class="messages" bind:this={messagesRef}>
         {#if $currentChannel}
             {#each $currentChannel.messages as m}
-                <ChatMessage {...fillMessageProps(m)} />
+                <ChatMessage {...m} />
             {/each}
         {/if}
     </div>

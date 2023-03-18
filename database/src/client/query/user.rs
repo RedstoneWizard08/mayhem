@@ -104,6 +104,10 @@ impl UserQueryHelper {
             None => return Ok(None),
         };
 
+        return self.finish_user(user).await;
+    }
+
+    pub async fn finish_user(&self, user: user::Model) -> Result<Option<CompleteUser>, DbErr> {
         let servers_result = self.find_user_servers(&user).await;
 
         let servers: Vec<CompleteServer> = match servers_result {

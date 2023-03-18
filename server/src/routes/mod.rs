@@ -5,6 +5,7 @@ pub mod login;
 pub mod register;
 pub mod server;
 pub mod token;
+pub mod user;
 
 use axum::{
     body::Body,
@@ -18,6 +19,7 @@ pub use index::index as handle_index;
 pub use login::login as handle_login;
 pub use register::register as handle_register;
 pub use token::get_token as handle_token;
+pub use user::user as handle_user;
 
 use crate::state::AppState;
 
@@ -26,7 +28,8 @@ pub fn register(router: Router<AppState, Body>) -> Router<AppState, Body> {
         .route("/", get(handle_index))
         .route("/api/users", post(handle_login))
         .route("/api/users", put(handle_register))
-        .route("/api/token", post(handle_token));
+        .route("/api/token", post(handle_token))
+        .route("/api/users/:user", get(handle_user));
 
     let router = server::register(router);
 

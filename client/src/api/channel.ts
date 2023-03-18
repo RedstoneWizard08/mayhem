@@ -9,7 +9,7 @@ export interface ChannelType {
     type: "channel";
     channelType: "text" | "voice" | "announcement" | "events";
     server: string;
-    messages: Partial<ChatMessageProps>[];
+    messages: ChatMessageProps[];
 }
 
 export interface ChannelGroupType {
