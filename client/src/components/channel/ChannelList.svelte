@@ -8,11 +8,11 @@
             $ws?.send(
                 JSON.stringify({
                     action: "CreateChannel",
-                
+
                     data: {
                         name: "channel",
                         channel_type: "text",
-                        server_id: parseInt($currentServer?.id)
+                        server_id: parseInt($currentServer?.id),
                     },
                 })
             );
@@ -64,7 +64,8 @@
             justify-content: center;
             align-content: center;
 
-            span, p {
+            span,
+            p {
                 margin: 0;
                 padding: 0;
             }
@@ -85,10 +86,7 @@
 
                 text-align: center;
 
-                transition:
-                    border-color 0.5s ease,
-                    background-color 0.5s ease,
-                    color 0.5s ease;
+                transition: border-color 0.5s ease, background-color 0.5s ease, color 0.5s ease;
 
                 &:hover {
                     color: black;

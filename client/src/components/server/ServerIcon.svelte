@@ -2,13 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { WebSocketAPI } from "../../api/ws";
-    import {
-        channels,
-        currentChannel,
-        currentServer,
-        servers,
-        ws,
-    } from "../../stores/current";
+    import { channels, currentChannel, currentServer, servers, ws } from "../../stores/current";
     import { trim } from "../../util";
 
     export let id: string;
@@ -16,8 +10,7 @@
     export let type: "server" | "channel";
     export let icon: "discord" | "add" | string | undefined = undefined;
 
-    if (!$ws)
-        $ws = new WebSocketAPI();
+    if (!$ws) $ws = new WebSocketAPI();
 
     $: selected = false;
 
@@ -35,13 +28,15 @@
         $channels = [];
 
         if (icon == "add") {
-            $ws?.send(JSON.stringify({
-                action: "CreateServer",
-                
-                data: {
-                    name: "Test Server",
-                },
-            }));
+            $ws?.send(
+                JSON.stringify({
+                    action: "CreateServer",
+
+                    data: {
+                        name: "Test Server",
+                    },
+                })
+            );
 
             return;
         }

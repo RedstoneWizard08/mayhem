@@ -3,7 +3,7 @@ use crate::errors::AppError;
 use mayhem_db::{
     models::{user, user_settings},
     sea_orm::{ActiveModelTrait, DbConn, ModelTrait, Set},
-    util::{CompleteUser, CompleteServer},
+    util::{CompleteServer, CompleteUser},
     Client,
 };
 

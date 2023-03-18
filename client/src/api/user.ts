@@ -1,31 +1,31 @@
 export interface CompleteRole {
-    id: number,
-    name: string,
-    server_id: number,
-    member_ids: number[],
+    id: number;
+    name: string;
+    server_id: number;
+    member_ids: number[];
 }
 
 export interface CompleteMember {
-    id: number,
-    name: string,
-    nick: string,
-    role_ids: number[],
-    server_id: number,
+    id: number;
+    name: string;
+    nick: string;
+    role_ids: number[];
+    server_id: number;
 }
 
 export interface Channel {
-    id: number,
-    name: string,
-    server_id: number,
-    channel_type: string,
+    id: number;
+    name: string;
+    server_id: number;
+    channel_type: string;
 }
 
 export interface CompleteServer {
-    id: number,
-    name: string,
-    roles: CompleteRole[],
-    members: CompleteMember[],
-    channels: Channel[],
+    id: number;
+    name: string;
+    roles: CompleteRole[];
+    members: CompleteMember[];
+    channels: Channel[];
 }
 
 export interface UserSettings {

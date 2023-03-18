@@ -1,10 +1,11 @@
 use axum::{
     debug_handler,
-    extract::{Path, State}, response::Response,
+    extract::{Path, State},
+    response::Response,
 };
 use http::status;
 
-use crate::{state::AppState, util::user::PasswordlessUser, errors::conflict::BasicResponseError};
+use crate::{errors::conflict::BasicResponseError, state::AppState, util::user::PasswordlessUser};
 
 #[debug_handler]
 pub async fn user(
@@ -20,7 +21,14 @@ pub async fn user(
         .unwrap();
 
     if let Some(user) = user {
-        let user = state.client.query.user.finish_user(user).await.unwrap().unwrap();
+        let user = state
+            .client
+            .query
+            .user
+            .finish_user(user)
+            .await
+            .unwrap()
+            .unwrap();
         return Ok(serde_json::to_string(&PasswordlessUser::from_complete(user)).unwrap());
     }
 

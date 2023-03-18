@@ -74,11 +74,11 @@
                 width: 48px;
                 height: 48px;
                 margin: 0;
-                
+
                 border: 3px solid transparent;
                 border-left-color: #fff;
                 border-radius: 50%;
-                
+
                 animation: loader 1.2s linear infinite;
             }
         }

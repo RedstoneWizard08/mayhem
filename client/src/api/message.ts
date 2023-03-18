@@ -25,12 +25,16 @@ export const getSender = async (user_id: number) => {
     return resp.data;
 };
 
-export const fillMessageProps = async (partial?: Partial<ChatMessageProps>): Promise<ChatMessageProps> => {
+export const fillMessageProps = async (
+    partial?: Partial<ChatMessageProps>
+): Promise<ChatMessageProps> => {
     const props: Partial<ChatMessageProps> = {};
 
     const sender = await getSender(partial!.user_id!);
 
-    props.avatar = partial?.avatar || "https://ui-avatars.com/api/?background=random&rounded=true&name=" + sender?.username;
+    props.avatar =
+        partial?.avatar ||
+        "https://ui-avatars.com/api/?background=random&rounded=true&name=" + sender?.username;
     props.name = partial?.name || sender?.username;
     props.timestamp = partial?.timestamp || new Date();
     props.content = partial?.content || "Unknown Message Content";

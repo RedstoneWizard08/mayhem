@@ -9,8 +9,7 @@
     let messagesRef: HTMLDivElement | undefined;
     let input: HTMLInputElement | undefined;
 
-    if (!$ws)
-        $ws = new WebSocketAPI();
+    if (!$ws) $ws = new WebSocketAPI();
 
     onMount(() => $ws?.connect());
     onDestroy(() => $ws?.close());
@@ -50,7 +49,7 @@
                     data: {
                         ...data,
                         sender: $user!.id,
-                        channel: parseInt($currentChannel!.id)
+                        channel: parseInt($currentChannel!.id),
                     },
                 })
             );

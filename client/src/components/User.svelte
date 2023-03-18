@@ -32,7 +32,7 @@
             class:fa-phone-slash={deafened}
             on:click={() => (deafened = !deafened)}
         />
-        
+
         <i class="fa-solid fa-gear" />
     </div>
 </div>
@@ -130,7 +130,8 @@
                     background-color: #4d4d4d;
                 }
 
-                &.fa-microphone-slash, &.fa-phone-slash {
+                &.fa-microphone-slash,
+                &.fa-phone-slash {
                     color: #cc1d1c;
                 }
             }
