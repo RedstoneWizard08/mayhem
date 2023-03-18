@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { fillMessageProps } from "../../api/message";
     import ChatMessage from "./ChatMessage.svelte";
     import { currentChannel, messages, user, ws } from "../../stores/current";
     import { onDestroy, onMount } from "svelte";
@@ -86,7 +85,7 @@
 
 <style lang="scss">
     .chat-window {
-        height: 94.5%;
+        height: 100%;
         width: calc(96% - (40% + 67px));
 
         background-color: var(--color-background-light);
@@ -97,30 +96,32 @@
         align-items: left;
         justify-content: space-between;
 
-        padding: 2%;
-        padding-top: 1%;
+        padding: 0 2%;
 
         .messages {
             overflow: scroll;
-            height: 94%;
+            flex-grow: 1;
         }
 
         .message-input {
-            height: 6%;
+            height: 9%;
             width: 100%;
 
-            margin-top: 2%;
+            margin: 2% 0;
+            padding: 0;
 
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
 
             &--input {
-                height: 90%;
+                flex-grow: 1;
                 width: 100%;
 
                 resize: none;
+                margin: 0;
+                padding: 0;
 
                 background-color: var(--color-background-highlight);
                 border: 1px solid var(--color-background-highlight);
