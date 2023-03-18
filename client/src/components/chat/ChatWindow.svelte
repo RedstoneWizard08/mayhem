@@ -8,6 +8,7 @@
     $: message = "";
 
     let messagesRef: HTMLDivElement | undefined;
+    let input: HTMLInputElement | undefined;
 
     if (!$ws)
         $ws = new WebSocketAPI();
@@ -37,6 +38,9 @@
 
     const onKeyDown = (e: KeyboardEvent) => {
         if (e.key == "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+
             if (message.replace(/\s/gm, "") == "") return;
 
             const data = { content: message, timestamp: new Date() };
@@ -74,6 +78,7 @@
                 placeholder="Type a message..."
                 on:keydown={onKeyDown}
                 bind:value={message}
+                bind:this={input}
             />
         </div>
     {/if}
@@ -123,7 +128,7 @@
                 outline: none;
                 text-indent: 2%;
                 color: var(--color-text);
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-family: "Ubuntu";
             }
         }
     }

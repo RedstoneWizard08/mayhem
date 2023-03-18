@@ -1,5 +1,6 @@
 <script lang="ts">
     import { currentServer, ws } from "../../stores/current";
+    import User from "../User.svelte";
     import ChannelIcon from "./ChannelIcon.svelte";
 
     const addChannel = async () => {
@@ -29,6 +30,8 @@
     {#each $currentServer?.channels || [] as channel}
         <ChannelIcon {...channel} />
     {/each}
+
+    <User />
 </div>
 
 <style lang="scss">

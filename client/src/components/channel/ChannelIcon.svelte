@@ -92,7 +92,7 @@
 
         color: var(--color-text);
         font-size: 12pt;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-family: "Ubuntu";
 
         user-select: none;
 

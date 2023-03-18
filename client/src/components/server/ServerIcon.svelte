@@ -122,7 +122,7 @@
 
         color: var(--color-text);
         font-size: 16pt;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-family: "Ubuntu";
 
         transition: border-radius 0.5s ease, border-color 0.5s ease, background-color 0.5s ease;
 

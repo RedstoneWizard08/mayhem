@@ -47,7 +47,7 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-family: "Ubuntu";
             height: 100%;
 
             .info {
