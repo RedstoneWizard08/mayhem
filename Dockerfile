@@ -30,6 +30,10 @@ RUN cargo build --release
 
 FROM ubuntu:20.04
 
+RUN apt-get update
+RUN apt-get -y install libssl1.1
+RUN rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p /app
 WORKDIR /app
 
