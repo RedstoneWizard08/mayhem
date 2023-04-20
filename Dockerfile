@@ -28,11 +28,7 @@ COPY --from=client-builder /app/build /app/build
 ENV RUSTFLAGS="-Z gcc-ld=lld -C target-feature=-crt-static"
 RUN cargo build --release
 
-FROM photon:5.0
-
-RUN tdnf install -y \
-        openssl \
-        postgresql15-libs
+FROM ubuntu:20.04
 
 RUN mkdir -p /app
 WORKDIR /app
