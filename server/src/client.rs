@@ -18,7 +18,7 @@ use tempdir::TempDir;
 
 use crate::{config::get_config, logging::info, util::parse_ip};
 
-pub static CLIENT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../client/build");
+pub static CLIENT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../build");
 
 pub fn get_node_download_url() -> String {
     let base = "https://nodejs.org/dist/v16.19.1/node-v16.19.1-linux-";

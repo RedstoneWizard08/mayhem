@@ -5,13 +5,49 @@
     import ChatWindow from "../components/chat/ChatWindow.svelte";
     import MemberList from "../components/member/MemberList.svelte";
     import ServerList from "../components/server/ServerList.svelte";
-    import { authenticate } from "../api/auth";
     import { onMount } from "svelte";
+    import { browser } from "$app/environment";
+    import { token, user } from "../stores/current";
+    import { loginWithToken } from "../api/auth";
+    import { goto } from "$app/navigation";
+    import type { UserInfo } from "../api/user";
+    import { page } from "$app/stores";
 
     $: loading = true;
+    $: login = false;
 
     onMount(async () => {
-        await authenticate("JohnDoe123", "JohnDoeIsCool");
+        if ($page.url.pathname == "/login") {
+            login = true;
+            loading = false;
+            return;
+        }
+
+        if (browser) {
+            const localToken = localStorage.getItem("__MAYHEM_TOKEN__");
+
+            if (localToken) {
+                let userData: UserInfo | null = null;
+
+                try {
+                    userData = await loginWithToken(localToken);
+                } catch(e) {
+                    goto("/login");
+                    login = true;
+                    loading = false;
+                    return;
+                }
+
+                $user = userData;
+                $token = localToken;
+            } else {
+                goto("/login");
+
+                login = true;
+            }
+        }
+
+        // await authenticate("JohnDoe123", "JohnDoeIsCool");
 
         loading = false;
     });
@@ -23,7 +59,7 @@
 
         <span class="icon" />
     </div>
-{:else}
+{:else if !login}
     <div class="app">
         <ServerList />
         <ChannelList />
@@ -31,6 +67,8 @@
         <MemberList />
         <slot />
     </div>
+{:else}
+    <slot />
 {/if}
 
 <style lang="scss">

@@ -12,7 +12,7 @@ use pbkdf2::{
 };
 
 use crate::{
-    database::login::{get_user, LoginInfo},
+    database::login::{get_user, get_user_by_token, LoginInfo, TokenInfo},
     errors::conflict::BasicResponseError,
     state::AppState,
     util::user::PasswordlessUser,
@@ -54,6 +54,38 @@ pub async fn login(
                 }
             }
         }
+        Err(_) => {
+            let mut resp = Response::new(
+                serde_json::to_string(&BasicResponseError {
+                    code: 400,
+                    message: "User not found!".to_string(),
+                })
+                .unwrap(),
+            );
+
+            let s = resp.status_mut();
+            *s = status::StatusCode::BAD_REQUEST;
+
+            return Err(resp);
+        }
+    }
+}
+
+#[debug_handler]
+pub async fn token_login(
+    State(state): State<AppState>,
+    Json(token_info): Json<TokenInfo>,
+) -> Result<Response<String>, Response<String>> {
+    let db = state.client;
+    let user_get = get_user_by_token(&db, &token_info).await;
+
+    match user_get {
+        Ok(user) => {
+            return Ok(Response::new(
+                serde_json::to_string(&PasswordlessUser::from_complete(user)).unwrap(),
+            ))
+        }
+
         Err(_) => {
             let mut resp = Response::new(
                 serde_json::to_string(&BasicResponseError {

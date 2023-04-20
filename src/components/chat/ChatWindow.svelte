@@ -39,6 +39,11 @@
             e.preventDefault();
             e.stopPropagation();
 
+            if (e.shiftKey) {
+                message += "\n";
+                return;
+            }
+
             if (message.replace(/\s/gm, "") == "") return;
 
             const data = { content: message, timestamp: new Date() };

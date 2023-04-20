@@ -15,6 +15,16 @@ export const login = async (username: string, password: string) => {
     return resp.data;
 };
 
+export const loginWithToken = async (token: string) => {
+    const uri = new URL("/api/users/token", get(page).url.href);
+
+    const resp = await axios.post<UserInfo>(uri.toString(), {
+        token,
+    });
+
+    return resp.data;
+};
+
 export const getToken = async (username: string, password: string) => {
     const uri = new URL("/api/token", get(page).url.href);
 

@@ -11,6 +11,11 @@ pub struct LoginInfo {
     pub password: String,
 }
 
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct TokenInfo {
+    pub token: String,
+}
+
 pub async fn get_user(
     client: &Arc<Client>,
     user_info: &LoginInfo,
@@ -19,6 +24,23 @@ pub async fn get_user(
         .query
         .user
         .find_user_by_name(user_info.username.clone())
+        .await
+        .unwrap();
+
+    match res {
+        Some(user) => Ok(user),
+        None => Err(AppError::NotFound),
+    }
+}
+
+pub async fn get_user_by_token(
+    client: &Arc<Client>,
+    token_info: &TokenInfo,
+) -> Result<CompleteUser, AppError> {
+    let res = client
+        .query
+        .user
+        .find_user_by_token(token_info.token.clone())
         .await
         .unwrap();
 

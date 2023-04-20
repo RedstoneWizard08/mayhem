@@ -27,9 +27,11 @@
         <i class="fa-solid fa-plus add" on:click={addChannel} />
     </div>
 
-    {#each $currentServer?.channels || [] as channel}
-        <ChannelIcon {...channel} />
-    {/each}
+    <div class="list">
+        {#each $currentServer?.channels || [] as channel}
+            <ChannelIcon {...channel} />
+        {/each}
+    </div>
 
     <User />
 </div>
@@ -106,6 +108,13 @@
                     text-align: center;
                 }
             }
+        }
+
+        .list {
+            overflow-y: scroll;
+            width: 100%;
+            height: 88%;
+            overflow-x: hidden;
         }
     }
 </style>
