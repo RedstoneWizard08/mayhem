@@ -28,7 +28,7 @@ COPY --from=client-builder /app/build /app/build
 ENV RUSTFLAGS="-Z gcc-ld=lld -C target-feature=-crt-static"
 RUN cargo build --release
 
-FROM photon
+FROM photon:5.0
 
 RUN mkdir -p /app
 WORKDIR /app

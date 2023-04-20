@@ -1,13 +1,41 @@
 services:
+    server:
+        build:
+            context: .
+        environment:
+            HOST: 0.0.0.0
+            PORT: 4000
+            DB_USER: mayhem
+            DB_PASS: mayhem
+            DB_HOST: database
+            DB_PORT: 5432
+            DB_NAME: mayhem
+        networks:
+            - mayhem_net
+        links:
+            - database
+        ports:
+            - 4000:4000
+            - 4001:4001
+        expose:
+            - 4000
+            - 4001
+        
     database:
         image: postgres:15-alpine
-        network_mode: host
         environment:
-            - POSTGRES_HOST_AUTH_METHOD=trust
+            - POSTGRES_USER=mayhem
+            - POSTGRES_PASSWORD=mayhem
+            - POSTGRES_DB=mayhem
         volumes:
-            - dev_db:/var/lib/postgresql/data
+            - db_data:/var/lib/postgresql/data
         logging:
           driver: none
+        networks:
+            - mayhem_net
 
 volumes:
-  dev_db:
+    db_data:
+
+networks:
+    mayhem_net:
