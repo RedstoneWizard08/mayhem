@@ -30,6 +30,10 @@ RUN cargo build --release
 
 FROM photon:5.0
 
+RUN tdnf install -y \
+        openssl \
+        postgresql15-libs
+
 RUN mkdir -p /app
 WORKDIR /app
 
