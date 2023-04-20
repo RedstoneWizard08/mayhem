@@ -30,6 +30,8 @@
         if (selected) {
             $mstore = [];
             messages = [];
+            
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             $currentChannel = $$props as any;
         }
     }
