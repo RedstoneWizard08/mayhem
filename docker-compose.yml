@@ -1,0 +1,40 @@
+services:
+    server:
+        image: ghcr.io/redstonewizard08/mayhem:latest
+        # build:
+        #     context: .
+        environment:
+            - HOST=0.0.0.0
+            - PORT=4000
+            - DATABASE_USER=mayhem
+            - DATABASE_PASS=mayhem
+            - DATABASE_HOST=database
+            - DATABASE_PORT=5432
+            - DATABASE_NAME=mayhem
+        networks:
+            - mayhem_net
+        ports:
+            - 4000:4000
+            - 4001:4001
+        expose:
+            - 4000
+            - 4001
+        
+    database:
+        image: postgres:15-alpine
+        environment:
+            - POSTGRES_USER=mayhem
+            - POSTGRES_PASSWORD=mayhem
+            - POSTGRES_DB=mayhem
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        logging:
+          driver: none
+        networks:
+            - mayhem_net
+
+volumes:
+    db_data:
+
+networks:
+    mayhem_net:
