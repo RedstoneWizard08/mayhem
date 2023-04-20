@@ -166,11 +166,12 @@ pub async fn run_client() {
     let stdout = Stdio::from(file_stdout);
     let stderr = Stdio::from(file_stderr);
 
-    info("Installing moment.js...");
+    info("Installing moment.js and axios...");
 
     let install = Command::new("node/bin/npm")
         .arg("install")
         .arg("moment")
+        .arg("axios")
         .current_dir(tmp.path())
         .stdout(stdout)
         .stderr(stderr)

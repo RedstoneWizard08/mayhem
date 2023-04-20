@@ -1,5 +1,4 @@
-#!/bin/ash
-# shellcheck shell=bash
+#!/bin/bash
 # shellcheck disable=2129
 
 M_HOST="${HOST:-0.0.0.0}"
