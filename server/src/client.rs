@@ -170,9 +170,9 @@ pub async fn run_client() {
 
     let node_path = tmp.path().clone().join("node");
     let node_path = node_path.to_str().unwrap().to_string();
-    let modified_path = node_path + ":" + &env::var("PATH").unwrap();
+    let modified_path = node_path + "/bin:" + &env::var("PATH").unwrap();
 
-    let install = Command::new("node/bin/npm")
+    let install = Command::new("npm")
         .arg("install")
         .arg("moment")
         .arg("axios")
@@ -202,7 +202,7 @@ pub async fn run_client() {
 
     info(format!("Client listening on {}", address).as_str());
 
-    let out = Command::new("node/bin/node")
+    let out = Command::new("node")
         .arg(tmp.path().join("index.js").to_str().unwrap())
         .env("PORT", listen_port_s)
         .env("HOST", config.clone().host)
