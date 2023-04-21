@@ -9,7 +9,6 @@ WORKDIR /app
 
 ADD "target/${TARGET_TRIPLE}/release/mayhem" /app
 ADD "target/${TARGET_TRIPLE}/release/mayhemctl" /app
-ADD "target/${TARGET_TRIPLE}/release/mayhem-migrations" /app
 
 ADD docker/startup.sh /app/startup.sh
 
