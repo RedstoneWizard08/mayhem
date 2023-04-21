@@ -8,6 +8,15 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ARCH:
+          - docker: linux/arm64
+            rust: aarch64-unknown-linux-gnu
+
+          - docker: linux/amd64
+            rust: x86_64-unknown-linux-gnu
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,11 +33,46 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ ARCH.rust }}
+          override: true
+      
+      - name: Build binary
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target ${{ ARCH.rust }}
       
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ ARCH.docker }}
           push: true
-          tags: ghcr.io/redstonewizard08/mayhem:latest
+          tags: ghcr.io/redstonewizard08/mayhem:${{ ARCH.rust }}
+          file: Dockerfile.cross
+          build-args:
+            TARGET_TRIPLE=${{ ARCH.rust }}
+  
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Merge images
+        run: |
+          docker manifest create ghcr.io/redstonewizard08/mayhem:latest \
+            --amend ghcr.io/redstonewizard08/mayhem:aarch64-unknown-linux-gnu \
+            --amend ghcr.io/redstonewizard08/mayhem:x86_64-unknown-linux-gnu
+        
+          docker manifest push ghcr.io/redstonewizard08/mayhem:latest

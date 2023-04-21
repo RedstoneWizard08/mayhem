@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+
+RUN apt-get update
+RUN apt-get -y install libssl1.1 ca-certificates openssl
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /app
+WORKDIR /app
+
+ADD "target/${TARGET_TRIPLE}/release/mayhem" /app
+ADD "target/${TARGET_TRIPLE}/release/mayhemctl" /app
+ADD "target/${TARGET_TRIPLE}/release/mayhem-migrations" /app
+
+ADD docker/startup.sh /app/startup.sh
+
+EXPOSE 4000
+EXPOSE 4001
+
+CMD [ "/bin/bash", "/app/startup.sh" ]
