@@ -38,7 +38,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: ${{ ARCH.rust }}
+          target: ${{ matrix.ARCH.rust }}
           override: true
       
       - name: Build binary
@@ -46,18 +46,18 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --release --target ${{ ARCH.rust }}
+          args: --release --target ${{ matrix.ARCH.rust }}
       
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
-          platforms: ${{ ARCH.docker }}
+          platforms: ${{ matrix.ARCH.docker }}
           push: true
-          tags: ghcr.io/redstonewizard08/mayhem:${{ ARCH.rust }}
+          tags: ghcr.io/redstonewizard08/mayhem:${{ matrix.ARCH.rust }}
           file: Dockerfile.cross
           build-args:
-            TARGET_TRIPLE=${{ ARCH.rust }}
+            TARGET_TRIPLE=${{ matrix.ARCH.rust }}
   
   merge:
     runs-on: ubuntu-latest
