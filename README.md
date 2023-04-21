@@ -10,12 +10,14 @@ An open-source Discord clone. Optimized for security, stability, safety, and cus
 ## The Stack
 
 The app is built with:
+
 - Backend
     - Rust
     - Axum
     - Tokio
     - SeaORM
     - Serde
+
 - Frontend:
     - TypeScript
     - Vite
@@ -31,7 +33,7 @@ The app is built with:
 - [ ] Themeable
 - [ ] Customizable (plugins)
 - [ ] Bots
-- [ ] Public servers
+- [ ] Public and private servers
 
 ## For Schools
 

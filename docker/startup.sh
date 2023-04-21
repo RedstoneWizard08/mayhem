@@ -27,5 +27,4 @@ echo "max_connections = 1024" >> /app/Mayhem.toml
 echo "connect_timeout = 5" >> /app/Mayhem.toml
 echo "idle_timeout = 120" >> /app/Mayhem.toml
 
-/app/mayhem-migrations up
 /app/mayhem

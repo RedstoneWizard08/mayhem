@@ -11,7 +11,7 @@
         "lint": "eslint .",
         "fmt": "prettier --plugin-search-dir . --write .",
         "postinstall": "svelte-kit sync",
-        "console": "ts-node tests/console.ts"
+        "console": "ts-node scripts/console.ts"
     },
     "devDependencies": {
         "@sveltejs/adapter-auto": "^2.0.0",

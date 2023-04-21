@@ -2,7 +2,7 @@ use flate2::read::GzDecoder;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::{
     cmp::min,
-    env::consts::ARCH,
+    env::{consts::ARCH, self},
     fs::{self, File},
     io::{copy, Cursor, Read, Write},
     net::SocketAddr,
@@ -168,10 +168,15 @@ pub async fn run_client() {
 
     info("Installing moment.js and axios...");
 
+    let node_path = tmp.path().clone().join("node");
+    let node_path = node_path.to_str().unwrap().to_string();
+    let modified_path = node_path + ":" + &env::var("PATH").unwrap();
+
     let install = Command::new("node/bin/npm")
         .arg("install")
         .arg("moment")
         .arg("axios")
+        .env("PATH", &modified_path)
         .current_dir(tmp.path())
         .stdout(stdout)
         .stderr(stderr)
@@ -201,6 +206,7 @@ pub async fn run_client() {
         .arg(tmp.path().join("index.js").to_str().unwrap())
         .env("PORT", listen_port_s)
         .env("HOST", config.clone().host)
+        .env("PATH", &modified_path)
         .current_dir(tmp.path())
         .stdout(stdout)
         .stderr(stderr)
