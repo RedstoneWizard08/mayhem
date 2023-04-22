@@ -113,6 +113,9 @@ jobs:
       
       - name: Merge images
         run: |
+          docker pull ghcr.io/redstonewizard08/mayhem:aarch64-unknown-linux-gnu
+          docker pull ghcr.io/redstonewizard08/mayhem:x86_64-unknown-linux-gnu
+
           docker manifest create ghcr.io/redstonewizard08/mayhem:latest \
             --amend ghcr.io/redstonewizard08/mayhem:aarch64-unknown-linux-gnu \
             --amend ghcr.io/redstonewizard08/mayhem:x86_64-unknown-linux-gnu
