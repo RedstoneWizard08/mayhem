@@ -93,6 +93,11 @@ jobs:
           use-cross: true
           command: build
           args: --release --target aarch64-unknown-linux-gnu
+      
+      - name: Copy binaries
+        run: |
+          cp -r target/x86_64-unknown-linux-gnu target/amd64
+          cp -r target/aarch64-unknown-linux-gnu target/arm64
 
       - name: Build and push
         uses: docker/build-push-action@v4

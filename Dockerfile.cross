@@ -8,9 +8,9 @@ RUN apt-get -y install ca-certificates
 RUN mkdir -p /app
 WORKDIR /app
 
-ADD "target/${TARGET_TRIPLE}/release/mayhem" /app
-ADD "target/${TARGET_TRIPLE}/release/mayhemctl" /app
-ADD "target/${TARGET_TRIPLE}/release/mayhem-migrations" /app
+ADD "target/${TARGETARCH}/release/mayhem" /app
+ADD "target/${TARGETARCH}/release/mayhemctl" /app
+ADD "target/${TARGETARCH}/release/mayhem-migrations" /app
 
 ADD docker/startup.sh /app/startup.sh
 
