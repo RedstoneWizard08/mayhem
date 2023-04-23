@@ -52,6 +52,8 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
         
       - name: Setup Rust (amd64)
         uses: actions-rs/toolchain@v1
