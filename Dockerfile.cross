@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ARG TARGET_TRIPLE
+ARG TARGETARCH
 
 RUN apt-get update
 RUN apt-get -y install ca-certificates
