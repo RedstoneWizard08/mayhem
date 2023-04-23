@@ -3,8 +3,7 @@ FROM ubuntu:20.04
 ARG TARGET_TRIPLE
 
 RUN apt-get update
-RUN apt-get -y install libssl1.1 ca-certificates openssl
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get -y install ca-certificates
 
 RUN mkdir -p /app
 WORKDIR /app
