@@ -9,7 +9,7 @@
     $: username = "";
     $: password = "";
 
-    $: register = true;
+    $: register = false;
 
     const submit = async (ev: SubmitEvent) => {
         ev.preventDefault();

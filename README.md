@@ -1,5 +1,6 @@
 # Mayhem
 
+![Lines of code](https://img.shields.io/tokei/lines/github/RedstoneWizard08/mayhem?label=lines%20of%20code&style=for-the-badge)
 ![License](https://img.shields.io/github/license/RedstoneWizard08/mayhem?style=for-the-badge)
 ![Client Version](https://img.shields.io/github/package-json/v/RedstoneWizard08/mayhem?label=Client&style=for-the-badge)
 [![Server Version](https://img.shields.io/crates/v/mayhem?style=for-the-badge)](https://crates.io/crates/mayhem)
