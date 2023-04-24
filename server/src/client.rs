@@ -2,7 +2,7 @@ use flate2::read::GzDecoder;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::{
     cmp::min,
-    env::{consts::ARCH, self},
+    env::{self, consts::ARCH},
     fs::{self, File},
     io::{copy, Cursor, Read, Write},
     net::SocketAddr,

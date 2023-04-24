@@ -15,10 +15,10 @@ use axum::{
 pub use client::handle_client_proxy as client_handler;
 pub use error::not_found as handle_error;
 pub use login::login as handle_login;
+pub use login::token_login as handle_token_login;
 pub use register::register as handle_register;
 pub use token::get_token as handle_token;
 pub use user::user as handle_user;
-pub use login::token_login as handle_token_login;
 
 use crate::state::AppState;
 

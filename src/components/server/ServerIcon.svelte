@@ -49,6 +49,8 @@
                 type: "server",
             };
 
+            $currentChannel = null;
+
             goto("/channels/" + id);
         } else {
             $currentServer = $servers.find((s) => s.id == id)!;

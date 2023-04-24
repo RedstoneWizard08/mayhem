@@ -47,8 +47,6 @@
             }
         }
 
-        // await authenticate("JohnDoe123", "JohnDoeIsCool");
-
         loading = false;
     });
 </script>

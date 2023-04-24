@@ -1,9 +1,5 @@
-import { page } from "$app/stores";
-import axios from "axios";
-import { get } from "svelte/store";
+import { UserCache } from "./cache";
 import { getDefaultProfilePic } from "./icon";
-import type { UserInfo } from "./user";
-
 export interface ChatMessageProps {
     avatar: string;
     name: string;
@@ -12,18 +8,10 @@ export interface ChatMessageProps {
     user_id: number;
 }
 
-const cache = new Map<number, UserInfo>();
+const cache = new UserCache();
 
 export const getSender = async (user_id: number) => {
-    if (cache.has(user_id)) return cache.get(user_id);
-
-    const uri = new URL("/api/users/" + user_id, get(page).url.href);
-
-    const resp = await axios.get<UserInfo>(uri.toString());
-
-    cache.set(user_id, resp.data);
-
-    return resp.data;
+    return await cache.get(user_id);
 };
 
 export const fillMessageProps = async (
@@ -33,9 +21,7 @@ export const fillMessageProps = async (
 
     const sender = await getSender(partial!.user_id!);
 
-    props.avatar =
-        partial?.avatar ||
-        getDefaultProfilePic(sender?.username);
+    props.avatar = partial?.avatar || getDefaultProfilePic(sender?.username);
     props.name = partial?.name || sender?.username;
     props.timestamp = partial?.timestamp || new Date();
     props.content = partial?.content || "Unknown Message Content";

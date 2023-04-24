@@ -1,6 +1,6 @@
 use std::env;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use super::env::make_env_key;
 
