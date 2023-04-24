@@ -1,6 +1,6 @@
 services:
     server:
-        image: redstonewizard08/mayhem:latest
+        image: redstonewizard/mayhem:latest
         environment:
             - HOST=0.0.0.0
             - PORT=4000
