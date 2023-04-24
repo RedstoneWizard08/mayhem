@@ -1,6 +1,7 @@
 import { page } from "$app/stores";
 import axios from "axios";
 import { get } from "svelte/store";
+import { getDefaultProfilePic } from "./icon";
 import type { UserInfo } from "./user";
 
 export interface ChatMessageProps {
@@ -34,7 +35,7 @@ export const fillMessageProps = async (
 
     props.avatar =
         partial?.avatar ||
-        "https://ui-avatars.com/api/?background=random&rounded=true&name=" + sender?.username;
+        getDefaultProfilePic(sender?.username);
     props.name = partial?.name || sender?.username;
     props.timestamp = partial?.timestamp || new Date();
     props.content = partial?.content || "Unknown Message Content";

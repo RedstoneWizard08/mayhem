@@ -11,35 +11,36 @@ An open-source Discord clone. Optimized for security, stability, safety, and cus
 
 The app is built with:
 
-- Backend
-    - Rust
-    - Axum
-    - Tokio
-    - SeaORM
-    - Serde
+-   Backend
 
-- Frontend:
-    - TypeScript
-    - Vite
-    - SvelteKit
-    - SASS
+    -   Rust
+    -   Axum
+    -   Tokio
+    -   SeaORM
+    -   Serde
+
+-   Frontend:
+    -   TypeScript
+    -   Vite
+    -   SvelteKit
+    -   SASS
 
 ## Features
 
-- [x] Secure token-based auth.
-- [ ] 2FA support.
-- [ ] Session-based token expiry.
-- [ ] Multiplatform
-- [ ] Themeable
-- [ ] Customizable (plugins)
-- [ ] Bots
-- [ ] Public and private servers
+-   [x] Secure token-based auth.
+-   [ ] 2FA support.
+-   [ ] Session-based token expiry.
+-   [ ] Multiplatform
+-   [ ] Themeable
+-   [ ] Customizable (plugins)
+-   [ ] Bots
+-   [ ] Public and private servers
 
 ## For Schools
 
-- [ ] District-level restriction (joining servers, adding friends, content filter, etc.)
-- [ ] School-level restriction (see above for some rules)
-- [ ] Person-level restriction
+-   [ ] District-level restriction (joining servers, adding friends, content filter, etc.)
+-   [ ] School-level restriction (see above for some rules)
+-   [ ] Person-level restriction
 
 ## The Goal
 
@@ -47,12 +48,12 @@ The Goal of Mayhem is to be a viable and fast Discord alternative, that is secur
 
 ## Restrictions for Schools
 
-- [ ] Which servers people can join
-- [ ] Who can be invited to private servers
-- [ ] Content filter settings
-- [ ] Voice and video call limitations
-- [ ] Time limitations
-- [ ] And a few more.
+-   [ ] Which servers people can join
+-   [ ] Who can be invited to private servers
+-   [ ] Content filter settings
+-   [ ] Voice and video call limitations
+-   [ ] Time limitations
+-   [ ] And a few more.
 
 Note that these restrictions will only apply when using a district account.
 

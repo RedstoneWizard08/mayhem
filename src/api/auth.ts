@@ -43,3 +43,27 @@ export const authenticate = async (username: string, password: string) => {
     user.set(userInfo);
     token.set(tokenGet);
 };
+
+export const createAccount = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    username: string,
+    password: string
+) => {
+    const uri = new URL("/api/users", get(page).url.href);
+
+    const resp = await axios.put<UserInfo>(uri.toString(), {
+        first_name: firstName,
+        last_name: lastName,
+        username,
+        email,
+        password,
+    });
+
+    user.set(resp.data);
+
+    const token = await getToken(username, password);
+
+    return token;
+};

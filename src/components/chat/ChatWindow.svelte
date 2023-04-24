@@ -90,7 +90,7 @@
 <style lang="scss">
     .chat-window {
         height: 100%;
-        width: calc(96% - (40% + 67px));
+        width: calc(94% - (40% + 67px));
 
         background-color: var(--color-background-light);
         border-left: 1px solid rgba(255, 255, 255, 0.1);

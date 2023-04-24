@@ -1,4 +1,4 @@
-import { currentChannel, servers } from "../stores/current";
+import { currentChannel, servers, user } from "../stores/current";
 import { get } from "svelte/store";
 import { fillMessageProps, type ChatMessageProps, type IncomingChatMessage } from "./message";
 import { getServers } from "./server";
@@ -65,7 +65,7 @@ export class WebSocketAPI {
                     JSON.stringify({
                         action: "JoinServer",
                         data: {
-                            user_id: 1,
+                            user_id: get(user)?.id,
                             server_id: serverData.id,
                         },
                     })

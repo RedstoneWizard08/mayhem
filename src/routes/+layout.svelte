@@ -31,7 +31,7 @@
 
                 try {
                     userData = await loginWithToken(localToken);
-                } catch(e) {
+                } catch (e) {
                     goto("/login");
                     login = true;
                     loading = false;

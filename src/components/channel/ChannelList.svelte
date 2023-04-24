@@ -41,7 +41,7 @@
         background-color: var(--color-background-light);
 
         height: 100%;
-        width: 20%;
+        width: 22%;
 
         display: flex;
         flex-direction: column;

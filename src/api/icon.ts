@@ -14,3 +14,10 @@ export interface ChannelIconProps {
     type: "channel";
     icon?: "discord" | string;
 }
+
+export const getDefaultProfilePic = (username?: string) => {
+    if (username == "JohnDoe26")
+        username = "John Dorian";
+    
+    return `https://ui-avatars.com/api/?background=random&rounded=true&name=${username}`;
+};

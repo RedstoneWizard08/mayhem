@@ -9,7 +9,7 @@
             <span class="name">{name}</span>
 
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <span class="fa-solid fa-times close" on:click={() => open = !open}></span>
+            <span class="fa-solid fa-times close" on:click={() => (open = !open)} />
         </div>
 
         <slot />

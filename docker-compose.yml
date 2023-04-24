@@ -17,7 +17,7 @@ services:
         expose:
             - 4000
             - 4001
-        
+
     database:
         image: postgres:15-alpine
         environment:
@@ -27,7 +27,7 @@ services:
         volumes:
             - db_data:/var/lib/postgresql/data
         logging:
-          driver: none
+            driver: none
         networks:
             - mayhem_net
 
