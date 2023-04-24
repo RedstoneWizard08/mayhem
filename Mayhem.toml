@@ -13,3 +13,7 @@ min_connections = 64
 max_connections = 1024
 connect_timeout = 5
 idle_timeout = 120
+
+[redis]
+host = "127.0.0.1"
+port = 6379

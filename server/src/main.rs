@@ -12,6 +12,7 @@ pub mod server;
 pub mod state;
 pub mod util;
 pub mod ws;
+pub mod redis;
 
 use axum::{body::Body, middleware::from_fn, Router, Server};
 use std::{error::Error, net::SocketAddr, sync::Arc};

@@ -27,4 +27,8 @@ echo "max_connections = 1024" >> /app/Mayhem.toml
 echo "connect_timeout = 5" >> /app/Mayhem.toml
 echo "idle_timeout = 120" >> /app/Mayhem.toml
 
+echo "[redis]" >> /app/Mayhem.toml
+echo "host = \"127.0.0.1\"" >> /app/Mayhem.toml
+echo "port = 6379" >> /app/Mayhem.toml
+
 /app/mayhem

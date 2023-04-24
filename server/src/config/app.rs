@@ -3,7 +3,7 @@ use std::{env, path::Path};
 use serde::{Deserialize, Serialize};
 use tokio::fs;
 
-use super::{database::DatabaseConfig, env::make_env_key};
+use super::{database::DatabaseConfig, env::make_env_key, redis::RedisConfig};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AppConfig {
@@ -11,6 +11,7 @@ pub struct AppConfig {
     pub port: u16,
 
     pub database: DatabaseConfig,
+    pub redis: RedisConfig,
 }
 
 impl AppConfig {
@@ -29,6 +30,7 @@ impl AppConfig {
         }
 
         config.database = DatabaseConfig::parse_from_env(prefix);
+        config.redis = RedisConfig::parse_from_env(prefix);
 
         return config;
     }
@@ -52,6 +54,7 @@ impl AppConfig {
         }
 
         config.database = DatabaseConfig::layer(first.database, second.database);
+        config.redis = RedisConfig::layer(first.redis, second.redis);
 
         return config;
     }
@@ -84,6 +87,7 @@ impl Default for AppConfig {
             port: 4001,
 
             database: DatabaseConfig::default(),
+            redis: RedisConfig::default(),
         };
     }
 }
