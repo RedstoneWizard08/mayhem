@@ -10,6 +10,8 @@
     export let type: "server" | "channel";
     export let icon: "discord" | "add" | string | undefined = undefined;
 
+    export let onClick: (() => void) | undefined = undefined;
+
     if (!$ws) $ws = new WebSocketAPI();
 
     $: selected = false;
@@ -28,15 +30,7 @@
         $channels = [];
 
         if (icon == "add") {
-            $ws?.send(
-                JSON.stringify({
-                    action: "CreateServer",
-
-                    data: {
-                        name: "Test Server",
-                    },
-                })
-            );
+            onClick?.();
 
             return;
         }

@@ -1,10 +1,13 @@
 <script lang="ts">
     export let name: string;
     export let open = false;
+
+    export let width = "70%";
+    export let height = "70%";
 </script>
 
 <div class="modal" class:open>
-    <div class="inner">
+    <div class="inner" style:width style:height>
         <div class="bar">
             <span class="name">{name}</span>
 
@@ -41,16 +44,13 @@
         }
 
         .inner {
-            width: 70%;
-            height: 70%;
-
             background-color: #3f4140;
 
             border-radius: 8px;
 
             .bar {
                 width: 97%;
-                height: 7.5%;
+                height: 2.5rem;
 
                 padding: 0 1.5%;
 
