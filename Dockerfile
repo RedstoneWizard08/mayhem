@@ -14,7 +14,7 @@ RUN case "$(uname -m)" in \
         *) echo "Unknown system!"; exit 1 ;; \
     esac && \
     wget -O libssl.deb \
-        "$REPO/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.11_$(dpkg --print-architecture).deb" && \
+        "$REPO/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.12_$(dpkg --print-architecture).deb" && \
     dpkg -i libssl.deb && \
     rm libssl.deb
 
