@@ -78,7 +78,7 @@
             <input
                 type="text"
                 class="message-input--input"
-                placeholder="Type a message..."
+                placeholder="Message #{$currentChannel?.name}"
                 on:keydown={onKeyDown}
                 bind:value={message}
                 bind:this={input}

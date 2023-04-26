@@ -1,9 +1,18 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
+
     export let name: string;
     export let open = false;
 
     export let width = "70%";
     export let height = "70%";
+
+    if (browser) {
+        window.addEventListener("keydown", (e) => {
+            if (e.code == "Escape")
+                open = false;
+        });
+    }
 </script>
 
 <div class="modal" class:open>
