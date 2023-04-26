@@ -9,7 +9,7 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "eslint .",
-        "fmt": "prettier --plugin-search-dir . --write .",
+        "fmt": "prettier --plugin-search-dir . --write . && cargo fmt",
         "postinstall": "svelte-kit sync",
         "console": "ts-node scripts/console.ts"
     },

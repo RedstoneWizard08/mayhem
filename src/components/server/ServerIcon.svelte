@@ -98,6 +98,7 @@
 
         width: 50px;
         height: 50px;
+        min-height: 50px;
 
         margin: 7px 0px;
 

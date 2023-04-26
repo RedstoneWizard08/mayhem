@@ -15,6 +15,12 @@ const config = {
             polyfill: true,
             precompress: true,
         }),
+
+        files: {
+            hooks: {
+                server: "src/hooks.ts",
+            },
+        },
     },
 };
 

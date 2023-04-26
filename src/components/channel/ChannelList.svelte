@@ -1,5 +1,6 @@
 <script lang="ts">
     import { currentServer, ws } from "../../stores/current";
+    import { isBlank } from "../../util";
     import Modal from "../Modal.svelte";
     import User from "../User.svelte";
     import ChannelIcon from "./ChannelIcon.svelte";
@@ -9,6 +10,8 @@
     $: creatingChannel = false;
 
     const createChannel = async () => {
+        if (isBlank(channelName)) return;
+
         if ($currentServer)
             $ws?.send(
                 JSON.stringify({

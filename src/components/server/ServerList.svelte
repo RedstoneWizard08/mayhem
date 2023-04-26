@@ -6,6 +6,7 @@
     import { currentServer, servers, ws } from "../../stores/current";
     import { page } from "$app/stores";
     import Modal from "../Modal.svelte";
+    import { isBlank } from "../../util";
 
     let serverName = "";
 
@@ -29,6 +30,8 @@
     });
 
     const createServer = () => {
+        if (isBlank(serverName)) return;
+
         $ws?.send(
             JSON.stringify({
                 action: "CreateServer",
@@ -78,12 +81,16 @@
         background-color: var(--color-background-light);
 
         height: 100%;
+        max-height: 100%;
+        min-height: 100%;
         width: 65px;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
+
+        overflow: scroll;
     }
 
     .server-modal {
