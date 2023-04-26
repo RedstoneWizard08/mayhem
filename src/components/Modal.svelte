@@ -9,8 +9,7 @@
 
     if (browser) {
         window.addEventListener("keydown", (e) => {
-            if (e.code == "Escape")
-                open = false;
+            if (e.code == "Escape") open = false;
         });
     }
 </script>

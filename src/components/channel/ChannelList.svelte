@@ -21,7 +21,7 @@
                     },
                 })
             );
-        
+
         creatingChannel = false;
         channelName = "";
     };
@@ -56,7 +56,7 @@
         <span />
         <p>Channels</p>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <i class="fa-solid fa-plus add" on:click={() => creatingChannel = !creatingChannel} />
+        <i class="fa-solid fa-plus add" on:click={() => (creatingChannel = !creatingChannel)} />
     </div>
 
     <div class="list">

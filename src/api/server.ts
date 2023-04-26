@@ -1,7 +1,7 @@
 import { page } from "$app/stores";
 import axios from "axios";
 import { get } from "svelte/store";
-import { token } from "../stores/current";
+import { servers, token } from "../stores/current";
 
 export interface Server {
     id: number;
@@ -23,4 +23,15 @@ export const getServers = async (): Promise<ServerResponse> => {
     });
 
     return result.data;
+};
+
+export const updateServers = async () => {
+    servers.set(
+        (await getServers()).servers.map((s) => ({
+            id: s.id.toString(),
+            name: s.name,
+            type: "server",
+            channels: [],
+        }))
+    );
 };
