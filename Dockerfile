@@ -18,9 +18,9 @@ RUN case "$(uname -m)" in \
     dpkg -i libssl.deb && \
     rm libssl.deb
 
-ADD "target/${TARGETARCH}/release/mayhem" /app
-ADD "target/${TARGETARCH}/release/mayhemctl" /app
-ADD "target/${TARGETARCH}/release/mayhem-migrations" /app
+ADD "dist/target/server/${TARGETARCH}/release/server" /app
+ADD "dist/target/cli/${TARGETARCH}/release/mayhemctl" /app
+ADD "dist/target/migrations/${TARGETARCH}/release/migrations" /app
 
 ADD docker/startup.sh /app/startup.sh
 

@@ -1,0 +1,53 @@
+{
+    "name": "server",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "apps/server/src",
+    "implicitDependencies": ["mayhem-db", "client"],
+    "targets": {
+        "build": {
+            "executor": "@monodon/rust:build",
+            "outputs": ["{options.target-dir}"],
+            "options": {
+                "target-dir": "dist/target/server"
+            },
+            "configurations": {
+                "production": {
+                    "release": true
+                }
+            }
+        },
+        "test": {
+            "executor": "@monodon/rust:test",
+            "outputs": ["{options.target-dir}"],
+            "options": {
+                "target-dir": "dist/target/server"
+            },
+            "configurations": {
+                "production": {
+                    "release": true
+                }
+            }
+        },
+        "lint": {
+            "executor": "@monodon/rust:lint",
+            "outputs": ["{options.target-dir}"],
+            "options": {
+                "target-dir": "dist/target/server"
+            }
+        },
+        "run": {
+            "executor": "@monodon/rust:run",
+            "outputs": ["{options.target-dir}"],
+            "options": {
+                "target-dir": "dist/target/server"
+            },
+            "configurations": {
+                "production": {
+                    "release": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

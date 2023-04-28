@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "rust",
+  "version": "0.0.1",
+  "generators": {
+    "binary": {
+      "factory": "./src/generators/binary/generator",
+      "schema": "./src/generators/binary/schema.json",
+      "description": "Generate a Rust bin with Cargo",
+      "x-type": "application",
+      "aliases": [
+        "bin"
+      ]
+    },
+    "init": {
+      "factory": "./src/generators/init/generator",
+      "schema": "./src/generators/init/schema.json",
+      "description": "initializes a Cargo workspace within a Nx workspace",
+      "hidden": true
+    },
+    "library": {
+      "factory": "./src/generators/library/generator",
+      "schema": "./src/generators/library/schema.json",
+      "description": "Generate a Rust library with Cargo",
+      "x-type": "library",
+      "aliases": [
+        "lib"
+      ]
+    },
+    "add-wasm": {
+      "factory": "./src/generators/add-wasm/generator",
+      "schema": "./src/generators/add-wasm/schema.json",
+      "description": "Adds wasm support to a Cargo project",
+      "hidden": true
+    },
+    "add-wasm-reference": {
+      "factory": "./src/generators/add-wasm-reference/generator",
+      "schema": "./src/generators/add-wasm-reference/schema.json",
+      "description": "Adds wasm support to an existing JavaScript/TypeScript project",
+      "hidden": true
+    },
+    "preset": {
+      "factory": "./src/generators/preset/generator",
+      "schema": "./src/generators/preset/schema.json",
+      "description": "preset generator",
+      "hidden": true
+    },
+    "add-napi": {
+      "factory": "./src/generators/add-napi/generator",
+      "schema": "./src/generators/add-napi/schema.json",
+      "description": "Generates support for napi-rs"
+    },
+    "create-napi-npm-dirs": {
+      "factory": "./src/generators/create-napi-npm-dirs/generator",
+      "schema": "./src/generators/create-napi-npm-dirs/schema.json",
+      "description": "Generates npm package directories for a NAPI project"
+    }
+  }
+}

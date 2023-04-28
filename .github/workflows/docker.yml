@@ -82,6 +82,9 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: Setup NX SHAs
+              uses: nrwl/nx-set-shas@v3
+
             - name: Install dependencies
               run: pnpm install
 
@@ -89,23 +92,25 @@ jobs:
               run: pnpm build
 
             - name: Build binary (amd64)
-              uses: actions-rs/cargo@v1
-              with:
-                  use-cross: true
-                  command: build
-                  args: --release --target x86_64-unknown-linux-gnu
+              run: |
+                  alias cargo=cross
+                  nx build server --release --target=x86_64-unknown-linux-gnu
 
             - name: Build binary (arm64)
-              uses: actions-rs/cargo@v1
-              with:
-                  use-cross: true
-                  command: build
-                  args: --release --target aarch64-unknown-linux-gnu
+              run: |
+                  alias cargo=cross
+                  nx build server --release --target=aarch64-unknown-linux-gnu
 
             - name: Copy binaries
               run: |
-                  cp -r target/x86_64-unknown-linux-gnu target/amd64
-                  cp -r target/aarch64-unknown-linux-gnu target/arm64
+                  cp -r dist/target/server/x86_64-unknown-linux-gnu dist/target/server/amd64
+                  cp -r dist/target/server/aarch64-unknown-linux-gnu dist/target/server/arm64
+
+                  cp -r dist/target/cli/x86_64-unknown-linux-gnu dist/target/cli/amd64
+                  cp -r dist/target/cli/aarch64-unknown-linux-gnu dist/target/cli/arm64
+
+                  cp -r dist/target/migrations/x86_64-unknown-linux-gnu dist/target/migrations/amd64
+                  cp -r dist/target/migrations/aarch64-unknown-linux-gnu dist/target/migrations/arm64
 
             - name: Build and push
               uses: docker/build-push-action@v4

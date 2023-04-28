@@ -1,7 +1,11 @@
+
 [workspace]
 members = [
-    "server",
-    "cli",
-    "database",
-    "migration",
+	'apps/server',
+	'apps/cli',
+	'packages/database',
+	'packages/migrations',
 ]
+
+[profile.release]
+lto = true

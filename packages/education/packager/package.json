@@ -1,0 +1,29 @@
+{
+    "name": "packager",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "fmt": "prettier --write .",
+        "run": "ts-node src/index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/execa": "^2.0.0",
+        "@types/node": "^18.16.1",
+        "@typescript-eslint/eslint-plugin": "^5.59.1",
+        "@typescript-eslint/parser": "^5.59.1",
+        "eslint-plugin-svelte3": "^4.0.0",
+        "prettier": "^2.8.8",
+        "prettier-plugin-svelte": "^2.10.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.4"
+    },
+    "dependencies": {
+        "execa": "^7.1.1",
+        "jszip": "^3.10.1"
+    }
+}

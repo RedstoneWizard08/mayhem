@@ -1521,43 +1521,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b87248edafb776e59e6ee64a79086f65890d3510f2c656c000bf2a7e8a0aea40"
 
 [[package]]
-name = "mayhem"
-version = "0.2.0-beta.1"
-dependencies = [
- "axum",
- "chrono",
- "derive_more",
- "either",
- "flate2",
- "futures",
- "http",
- "hyper",
- "include_dir",
- "indicatif",
- "lazy_static",
- "mayhem-db",
- "pbkdf2",
- "rand 0.8.5",
- "redis",
- "reqwest",
- "serde",
- "serde_json",
- "serde_urlencoded",
- "tar",
- "tempdir",
- "tokio",
- "tokio-pg-mapper",
- "tokio-postgres",
- "tokio-stream",
- "toml 0.7.3",
- "tower",
- "tracing",
- "tracing-subscriber",
- "url",
- "uuid",
-]
-
-[[package]]
 name = "mayhem-db"
 version = "0.2.0-beta.1"
 dependencies = [
@@ -1565,21 +1528,12 @@ dependencies = [
  "dotenvy",
  "futures",
  "log",
- "mayhem-migrations",
+ "migrations",
  "num",
  "num-derive",
  "num-traits",
  "sea-orm",
  "serde",
- "tokio",
-]
-
-[[package]]
-name = "mayhem-migrations"
-version = "0.2.0-beta.1"
-dependencies = [
- "futures",
- "sea-orm-migration",
  "tokio",
 ]
 
@@ -1609,6 +1563,15 @@ name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
+
+[[package]]
+name = "migrations"
+version = "0.2.0-beta.1"
+dependencies = [
+ "futures",
+ "sea-orm-migration",
+ "tokio",
+]
 
 [[package]]
 name = "mime"
@@ -2390,6 +2353,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "ring"
+version = "0.17.0-alpha.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4575a179070909595bea5f999d67934737c2e0757a1eb9839af555917817b257"
+dependencies = [
+ "cc",
+ "libc",
+ "once_cell",
+ "spin 0.5.2",
+ "untrusted",
+ "web-sys",
+ "winapi",
+]
+
+[[package]]
 name = "rkyv"
 version = "0.7.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2468,7 +2446,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fff78fc74d175294f4e83b28343315ffcfb114b156f0185e9741cb5570f50e2f"
 dependencies = [
  "log",
- "ring",
+ "ring 0.16.20",
  "sct",
  "webpki",
 ]
@@ -2521,7 +2499,7 @@ version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d53dcdb7c9f8158937a7981b48accfd39a43af418591a5d008c7b22b5e1b7ca4"
 dependencies = [
- "ring",
+ "ring 0.16.20",
  "untrusted",
 ]
 
@@ -2779,6 +2757,44 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "server"
+version = "0.2.0-beta.1"
+dependencies = [
+ "axum",
+ "chrono",
+ "derive_more",
+ "either",
+ "flate2",
+ "futures",
+ "http",
+ "hyper",
+ "include_dir",
+ "indicatif",
+ "lazy_static",
+ "mayhem-db",
+ "pbkdf2",
+ "rand 0.8.5",
+ "redis",
+ "reqwest",
+ "ring 0.17.0-alpha.11",
+ "serde",
+ "serde_json",
+ "serde_urlencoded",
+ "tar",
+ "tempdir",
+ "tokio",
+ "tokio-pg-mapper",
+ "tokio-postgres",
+ "tokio-stream",
+ "toml 0.7.3",
+ "tower",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+ "uuid",
 ]
 
 [[package]]
@@ -3747,7 +3763,7 @@ version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f095d78192e208183081cc07bc5515ef55216397af48b873e5edcd72637fa1bd"
 dependencies = [
- "ring",
+ "ring 0.16.20",
  "untrusted",
 ]
 

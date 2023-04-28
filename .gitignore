@@ -23,13 +23,20 @@ gox
 dist-ssr
 target
 *.local
+tmp
+out-tsc
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+web-ext-artifacts
+
+# moon
+.moon/cache
+.moon/docker
+target
+
+!tools/nx-rust/src/executors/build

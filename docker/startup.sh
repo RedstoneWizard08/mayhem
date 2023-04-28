@@ -31,4 +31,4 @@ echo "[redis]" >> /app/Mayhem.toml
 echo "host = \"127.0.0.1\"" >> /app/Mayhem.toml
 echo "port = 6379" >> /app/Mayhem.toml
 
-/app/mayhem
+/app/server
