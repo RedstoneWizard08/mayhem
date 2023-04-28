@@ -82,9 +82,6 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Setup NX SHAs
-              uses: nrwl/nx-set-shas@v3
-
             - name: Install dependencies
               run: pnpm install
 
