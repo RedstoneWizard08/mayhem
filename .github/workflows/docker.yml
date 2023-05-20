@@ -89,7 +89,9 @@ jobs:
               run: pnpm install
 
             - name: Build frontend
-              run: pnpm build
+              run: |
+                  source ~/.bashrc
+                  pnpm build
 
             - name: Build binary (amd64)
               run: |
