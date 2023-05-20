@@ -61,7 +61,7 @@
 
     const onDeleteClick = async () => {
         if ($currentServer && $ws && $ws.get())
-            await deleteServer(parseInt($currentServer.id), $ws?.get()!);
+            await deleteServer(parseInt($currentServer.id), $ws.get()!);
 
         actions = false;
     };
