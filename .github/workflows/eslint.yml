@@ -34,8 +34,8 @@ jobs:
 
             - name: Install ESLint
               run: |
-                  pnpm install eslint@8.10.0
-                  pnpm install @microsoft/eslint-formatter-sarif@2.1.7
+                  pnpm add -w eslint@8.10.0
+                  pnpm add -w @microsoft/eslint-formatter-sarif@2.1.7
 
             - name: Run ESLint
               run: |
