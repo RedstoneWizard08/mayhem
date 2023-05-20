@@ -1,11 +1,16 @@
 <script lang="ts">
-    import { currentServer, ws } from "../../stores/current";
+    import { onMount } from "svelte";
+    import { leaveServer, deleteServer } from "../../api/ws/server";
+    import { currentServer, ws, user } from "../../stores/current";
     import { isBlank } from "../../util";
     import Modal from "../Modal.svelte";
     import User from "../User.svelte";
     import ChannelIcon from "./ChannelIcon.svelte";
+    import { browser } from "$app/environment";
 
     let channelName = "";
+    let dropdown: HTMLDivElement;
+    let trigger: HTMLElement;
 
     $: actions = false;
     $: creatingChannel = false;
@@ -29,6 +34,37 @@
         creatingChannel = false;
         channelName = "";
     };
+
+    onMount(() => {
+        if (browser) {
+            window.addEventListener("keydown", (ev) => {
+                if (ev.code == "Escape") actions = false;
+            });
+
+            window.addEventListener("click", (ev) => {
+                const tgt = ev.target as HTMLElement;
+                const parent = tgt.parentElement;
+                const parent2 = parent?.parentElement;
+
+                if (parent != dropdown && parent2 != dropdown) actions = false;
+            });
+        }
+    });
+
+    const onLeaveClick = async () => {
+        if ($currentServer && $user && $ws && $ws.get()) {
+            await leaveServer($user.id, parseInt($currentServer.id), $ws.get()!);
+        }
+
+        actions = false;
+    };
+
+    const onDeleteClick = async () => {
+        if ($currentServer && $ws && $ws.get())
+            await deleteServer(parseInt($currentServer.id), $ws?.get()!);
+
+        actions = false;
+    };
 </script>
 
 <Modal name="Create Channel" open={creatingChannel} width="40%" height="40%">
@@ -50,10 +86,11 @@
             <span />
             <p>{$currentServer?.name}</p>
 
-            <div class="options">
+            <div class="options" bind:this={dropdown}>
                 {#if $currentServer?.id != "-1"}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <i
+                        bind:this={trigger}
                         class="fa-solid fa-chevron-down trigger"
                         class:open={actions}
                         on:click={() => (actions = !actions)}
@@ -64,12 +101,12 @@
                     <span class="title">Options</span>
                     <hr class="divider" />
 
-                    <button type="button" class="action red">
+                    <button type="button" class="action red" on:click={onLeaveClick}>
                         <i class="fa-solid fa-right-from-bracket" />
                         Leave Server
                     </button>
 
-                    <button type="button" class="action red">
+                    <button type="button" class="action red" on:click={onDeleteClick}>
                         <i class="fa-solid fa-trash-can" />
                         Delete Server
                     </button>

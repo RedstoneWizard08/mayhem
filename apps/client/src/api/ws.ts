@@ -50,4 +50,8 @@ export class WebSocketAPI {
     public close() {
         this.ws?.close();
     }
+
+    public get() {
+        return this.ws;
+    }
 }

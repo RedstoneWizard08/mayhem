@@ -4,7 +4,6 @@ use axum::{
     http::{status::StatusCode, Response},
     Json,
 };
-use mayhem_db::models::user::Model as User;
 
 use crate::{
     database::{
@@ -12,7 +11,7 @@ use crate::{
         register::{add_user, UserCreation},
     },
     errors::conflict::BasicResponseError,
-    state::AppState,
+    state::AppState, util::user::PasswordlessActiveUser,
 };
 
 #[debug_handler]
@@ -46,8 +45,9 @@ pub async fn register(
     println!("Making new user");
 
     let new_user = add_user(&client, user).await.unwrap();
+    let user = PasswordlessActiveUser::from_active(new_user);
 
-    let json = Response::new(serde_json::to_string(&User::from_active(new_user)).unwrap());
+    let json = Response::new(serde_json::to_string(&user).unwrap());
 
     return Ok(json);
 }

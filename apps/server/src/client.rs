@@ -1,3 +1,10 @@
+// ============== !!! WARNING !!! ==============
+// There is a Bun.js module for this which can
+// run the server but it is very much a work-in-
+// progress feature! DO NOT USE IT YET! It is not
+// in a state where it will work yet!
+// ============== !!! WARNING !!! ==============
+
 use flate2::read::GzDecoder;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::{

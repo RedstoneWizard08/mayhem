@@ -20,10 +20,22 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
 
+            - name: Install Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - uses: pnpm/action-setup@v2
+              name: Install pnpm
+              id: pnpm-install
+              with:
+                  version: 7
+                  run_install: false
+
             - name: Install ESLint
               run: |
-                  npm install eslint@8.10.0
-                  npm install @microsoft/eslint-formatter-sarif@2.1.7
+                  pnpm install eslint@8.10.0
+                  pnpm install @microsoft/eslint-formatter-sarif@2.1.7
 
             - name: Run ESLint
               run: |

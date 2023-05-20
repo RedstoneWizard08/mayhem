@@ -1,5 +1,5 @@
 use mayhem_db::{
-    models::user_settings::Model as UserSettings,
+    models::{user_settings::Model as UserSettings, user::ActiveModel},
     util::{CompleteServer, CompleteUser},
 };
 
@@ -38,6 +38,39 @@ impl PasswordlessUser {
             username,
             servers,
             settings,
+        };
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PasswordlessActiveUser {
+    pub id: i32,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub username: String,
+    pub token: Option<String>,
+}
+
+impl PasswordlessActiveUser {
+    pub fn from_active(active: ActiveModel) -> PasswordlessActiveUser {
+        let ActiveModel {
+            id,
+            first_name,
+            last_name,
+            email,
+            username,
+            token,
+            password: _,
+        } = active;
+
+        return PasswordlessActiveUser {
+            id: id.unwrap(),
+            first_name: first_name.unwrap(),
+            last_name: last_name.unwrap(),
+            email: email.unwrap(),
+            username: username.unwrap(),
+            token: token.unwrap(),
         };
     }
 }

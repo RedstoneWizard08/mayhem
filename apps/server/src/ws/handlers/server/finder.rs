@@ -39,7 +39,7 @@ pub async fn find_server_handler(
     let json_parsed: Result<ActiveMessage<i32>, Error> = serde_json::from_str(message);
 
     if let Ok(parsed) = json_parsed {
-        debug!("Parse ok: on_get_server | on_get_servers | on_delete_servers");
+        debug!("Parse ok: on_get_server | on_get_servers | on_delete_server");
 
         if parsed.action == ActiveMessageAction::GetServerInfo {
             debug!("Recognized on_get_server...");
@@ -54,7 +54,7 @@ pub async fn find_server_handler(
         }
 
         if parsed.action == ActiveMessageAction::DeleteServer {
-            debug!("Recognized on_delete_servers...");
+            debug!("Recognized on_delete_server...");
             on_delete_server(parsed.data, db, wtx).await;
             return Ok(None);
         }

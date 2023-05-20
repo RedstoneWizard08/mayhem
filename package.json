@@ -8,7 +8,8 @@
         "fmt": "prettier --write .",
         "dev": "scripts/dev.sh",
         "build": "scripts/build.sh",
-        "docker": "scripts/build-image.sh"
+        "docker": "scripts/build-image.sh",
+        "lint": "scripts/lint.sh"
     },
     "workspaces": [
         "apps/client",
