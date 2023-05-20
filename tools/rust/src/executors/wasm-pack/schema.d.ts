@@ -1,5 +1,5 @@
 export interface WasmPackExecutorSchema {
-  ['target-dir']: string;
-  target: 'bundler' | 'nodejs' | 'web' | 'no-module';
-  release: boolean;
+    ["target-dir"]: string;
+    target: "bundler" | "nodejs" | "web" | "no-module";
+    release: boolean;
 }

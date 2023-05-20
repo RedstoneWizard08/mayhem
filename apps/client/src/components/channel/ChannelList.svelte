@@ -7,6 +7,7 @@
 
     let channelName = "";
 
+    $: actions = false;
     $: creatingChannel = false;
 
     const createChannel = async () => {
@@ -49,9 +50,31 @@
             <span />
             <p>{$currentServer?.name}</p>
 
-            {#if $currentServer?.id != "-1"}
-                <i class="fa-solid fa-chevron-down options" />
-            {/if}
+            <div class="options">
+                {#if $currentServer?.id != "-1"}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <i
+                        class="fa-solid fa-chevron-down trigger"
+                        class:open={actions}
+                        on:click={() => (actions = !actions)}
+                    />
+                {/if}
+
+                <div class="content" class:open={actions}>
+                    <span class="title">Options</span>
+                    <hr class="divider" />
+
+                    <button type="button" class="action red">
+                        <i class="fa-solid fa-right-from-bracket" />
+                        Leave Server
+                    </button>
+
+                    <button type="button" class="action red">
+                        <i class="fa-solid fa-trash-can" />
+                        Delete Server
+                    </button>
+                </div>
+            </div>
         </div>
     {/if}
 
@@ -114,30 +137,20 @@
             .options {
                 justify-self: right;
                 margin-right: 18%;
-                cursor: pointer;
 
-                border: none;
-                border-radius: 4px;
-                padding: 5% 6%;
-
-                display: flex;
+                display: inline-flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
 
-                text-align: center;
+                position: relative;
 
-                transition: border-color 0.5s ease, background-color 0.5s ease, color 0.5s ease;
+                .trigger {
+                    cursor: pointer;
 
-                &:hover {
-                    color: black;
-                    border-color: transparent;
-                    background-color: rgba(255, 255, 255, 0.6);
-                }
-
-                &::after {
-                    width: 100%;
-                    height: 100%;
+                    border: none;
+                    border-radius: 4px;
+                    padding: 0.5rem;
 
                     display: flex;
                     flex-direction: row;
@@ -145,6 +158,109 @@
                     justify-content: center;
 
                     text-align: center;
+
+                    transition: background-color 0.5s ease;
+
+                    &:hover {
+                        background-color: #2f3130;
+                    }
+
+                    &::after {
+                        width: 100%;
+                        height: 100%;
+
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+
+                        text-align: center;
+                    }
+
+                    &::before {
+                        transition: transform 0.5s ease;
+                    }
+
+                    &.open {
+                        &::before {
+                            transform: rotate(-180deg);
+                        }
+                    }
+                }
+
+                .content {
+                    top: 1.75rem;
+                    display: block;
+                    position: absolute;
+                    background-color: #2f3130;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    padding: 0.5rem;
+                    z-index: 1;
+                    border-radius: 4px;
+
+                    opacity: 0;
+                    transform: scaleY(0);
+                    transform-origin: top;
+
+                    pointer-events: none;
+
+                    transition: opacity 0.5s ease, transform 0.25s ease;
+
+                    &.open {
+                        opacity: 1;
+                        transform: scaleY(1);
+                        pointer-events: unset;
+                    }
+
+                    .title {
+                        font-size: 12pt;
+                        padding: 0 2.2rem;
+                    }
+
+                    .divider {
+                        border: none;
+                        border-bottom: 1px solid #9c9c9c;
+                        width: 100%;
+                    }
+
+                    .action {
+                        width: 100%;
+                        background-color: transparent;
+                        border: none;
+                        border-radius: 4px;
+
+                        color: #fdfdfd;
+                        font-family: Ubuntu;
+
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        padding: 0.5rem 0.6rem;
+                        margin: 0.4rem 0;
+
+                        cursor: pointer;
+                        outline: none;
+
+                        transition: background-color 0.25s ease;
+
+                        &:hover {
+                            background-color: #4f5150;
+                        }
+
+                        &:last-child {
+                            margin: 0;
+                        }
+
+                        &.red {
+                            background-color: rgba(210, 32, 32, 0.4);
+
+                            &:hover {
+                                background-color: rgba(210, 32, 32, 0.8);
+                            }
+                        }
+                    }
                 }
             }
         }

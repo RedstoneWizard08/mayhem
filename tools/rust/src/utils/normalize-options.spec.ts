@@ -1,21 +1,21 @@
-import { Tree, updateJson } from '@nrwl/devkit';
-import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
-import { normalizeOptions } from './normalize-options';
+import { Tree, updateJson } from "@nrwl/devkit";
+import { createTreeWithEmptyWorkspace } from "@nrwl/devkit/testing";
+import { normalizeOptions } from "./normalize-options";
 
-describe('normalize options', () => {
-  let appTree: Tree;
+describe("normalize options", () => {
+    let appTree: Tree;
 
-  beforeEach(() => {
-    appTree = createTreeWithEmptyWorkspace();
-  });
-
-  it('should normalize options for an app', () => {
-    const options = normalizeOptions(appTree, 'app', {
-      name: 'test-name',
-      directory: 'test-directory/sub/sub-two',
-      tags: 'test-tag, test-tag-two',
+    beforeEach(() => {
+        appTree = createTreeWithEmptyWorkspace();
     });
-    expect(options).toMatchInlineSnapshot(`
+
+    it("should normalize options for an app", () => {
+        const options = normalizeOptions(appTree, "app", {
+            name: "test-name",
+            directory: "test-directory/sub/sub-two",
+            tags: "test-tag, test-tag-two",
+        });
+        expect(options).toMatchInlineSnapshot(`
       {
         "directory": "test-directory/sub/sub-two",
         "edition": "2021",
@@ -31,14 +31,14 @@ describe('normalize options', () => {
         "targetDir": "dist/target/test_directory_sub_sub_two_test_name",
       }
     `);
-  });
-  it('should normalize options for a lib', () => {
-    const options = normalizeOptions(appTree, 'lib', {
-      name: 'test-name',
-      directory: 'test-directory/sub/sub-two',
-      tags: 'test-tag, test-tag-two',
     });
-    expect(options).toMatchInlineSnapshot(`
+    it("should normalize options for a lib", () => {
+        const options = normalizeOptions(appTree, "lib", {
+            name: "test-name",
+            directory: "test-directory/sub/sub-two",
+            tags: "test-tag, test-tag-two",
+        });
+        expect(options).toMatchInlineSnapshot(`
       {
         "directory": "test-directory/sub/sub-two",
         "edition": "2021",
@@ -54,21 +54,21 @@ describe('normalize options', () => {
         "targetDir": "dist/target/test_directory_sub_sub_two_test_name",
       }
     `);
-  });
-
-  it('should handle empty appsDir or libsDir', () => {
-    updateJson(appTree, 'nx.json', (json) => {
-      json.workspaceLayout = {
-        appsDir: '',
-        libsDir: '',
-      };
-      return json;
-    });
-    const options = normalizeOptions(appTree, 'lib', {
-      name: 'test-name',
     });
 
-    expect(options).toMatchInlineSnapshot(`
+    it("should handle empty appsDir or libsDir", () => {
+        updateJson(appTree, "nx.json", (json) => {
+            json.workspaceLayout = {
+                appsDir: "",
+                libsDir: "",
+            };
+            return json;
+        });
+        const options = normalizeOptions(appTree, "lib", {
+            name: "test-name",
+        });
+
+        expect(options).toMatchInlineSnapshot(`
       {
         "edition": "2021",
         "name": "test-name",
@@ -79,5 +79,5 @@ describe('normalize options', () => {
         "targetDir": "dist/target/test_name",
       }
     `);
-  });
+    });
 });

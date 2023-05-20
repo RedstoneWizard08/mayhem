@@ -1,3 +1,3 @@
 export interface AddNapiGeneratorSchema {
-  project: string;
+    project: string;
 }

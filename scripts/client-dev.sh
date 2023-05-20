@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pnpm dev
+bun run --cwd apps/client dev

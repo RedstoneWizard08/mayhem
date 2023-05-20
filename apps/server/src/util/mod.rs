@@ -1,4 +1,5 @@
 pub mod password;
+pub mod serde;
 pub mod user;
 
 pub fn parse_ip(ip: String) -> [u8; 4] {

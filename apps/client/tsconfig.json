@@ -10,7 +10,8 @@
         "sourceMap": true,
         "strict": true,
         "allowSyntheticDefaultImports": true,
-        "strictPropertyInitialization": false
+        "strictPropertyInitialization": false,
+        "ignoreDeprecations": "5.0"
     },
     "ts-node": {
         "esm": true

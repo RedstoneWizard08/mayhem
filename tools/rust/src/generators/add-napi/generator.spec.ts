@@ -1,31 +1,31 @@
-import { Tree, readProjectConfiguration } from '@nrwl/devkit';
-import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
+import { Tree, readProjectConfiguration } from "@nrwl/devkit";
+import { createTreeWithEmptyWorkspace } from "@nrwl/devkit/testing";
 
-import libraryGenerator from '../library/generator';
-import generator from './generator';
-import { AddNapiGeneratorSchema } from './schema';
+import libraryGenerator from "../library/generator";
+import generator from "./generator";
+import { AddNapiGeneratorSchema } from "./schema";
 
-jest.mock('@nrwl/devkit', (): typeof import('@nrwl/devkit') => {
-  const originalModule = jest.requireActual('@nrwl/devkit');
-  return {
-    ...originalModule,
-    ensurePackage: jest.fn(),
-  };
+jest.mock("@nrwl/devkit", (): typeof import("@nrwl/devkit") => {
+    const originalModule = jest.requireActual("@nrwl/devkit");
+    return {
+        ...originalModule,
+        ensurePackage: jest.fn(),
+    };
 });
 
-describe('add-napi generator', () => {
-  let appTree: Tree;
-  const options: AddNapiGeneratorSchema = { project: 'test' };
+describe("add-napi generator", () => {
+    let appTree: Tree;
+    const options: AddNapiGeneratorSchema = { project: "test" };
 
-  beforeEach(async () => {
-    appTree = createTreeWithEmptyWorkspace();
-    await libraryGenerator(appTree, { name: 'test' });
-  });
+    beforeEach(async () => {
+        appTree = createTreeWithEmptyWorkspace();
+        await libraryGenerator(appTree, { name: "test" });
+    });
 
-  it('should update the Cargo.toml file', async () => {
-    await generator(appTree, options);
-    const cargoString = appTree.read('./test/Cargo.toml')?.toString() ?? '';
-    expect(cargoString).toMatchInlineSnapshot(`
+    it("should update the Cargo.toml file", async () => {
+        await generator(appTree, options);
+        const cargoString = appTree.read("./test/Cargo.toml")?.toString() ?? "";
+        expect(cargoString).toMatchInlineSnapshot(`
       "
       [package]
       name = 'test'
@@ -47,12 +47,12 @@ describe('add-napi generator', () => {
       napi-build = '2.0.1'
       "
     `);
-  });
+    });
 
-  it('should update the base tsconfig file', async () => {
-    await generator(appTree, options);
-    expect(JSON.parse(appTree.read('tsconfig.base.json')?.toString() ?? ''))
-      .toMatchInlineSnapshot(`
+    it("should update the base tsconfig file", async () => {
+        await generator(appTree, options);
+        expect(JSON.parse(appTree.read("tsconfig.base.json")?.toString() ?? ""))
+            .toMatchInlineSnapshot(`
       {
         "compilerOptions": {
           "paths": {
@@ -63,12 +63,12 @@ describe('add-napi generator', () => {
         },
       }
     `);
-  });
+    });
 
-  it('should update a project', async () => {
-    await generator(appTree, options);
-    const project = readProjectConfiguration(appTree, 'test');
-    expect(project.targets?.build).toMatchInlineSnapshot(`
+    it("should update a project", async () => {
+        await generator(appTree, options);
+        const project = readProjectConfiguration(appTree, "test");
+        expect(project.targets?.build).toMatchInlineSnapshot(`
       {
         "configurations": {
           "production": {
@@ -83,5 +83,5 @@ describe('add-napi generator', () => {
         },
       }
     `);
-  });
+    });
 });

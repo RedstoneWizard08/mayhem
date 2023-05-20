@@ -3,61 +3,14 @@ use std::sync::Arc;
 use axum::extract::ws::{Message, WebSocket};
 use futures::{stream::SplitSink, SinkExt};
 use mayhem_db::{
-    models::{message, EChannel, EChatMessage},
-    sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, EntityTrait, ModelTrait},
+    models::{EChannel, EChatMessage},
+    sea_orm::{DatabaseConnection, EntityTrait, ModelTrait},
 };
+use tokio::sync::Mutex;
 
-use serde::{Deserialize, Serialize};
-use tokio::sync::{broadcast::Sender, Mutex};
-use tracing::debug;
+use crate::ws::handlers::{ActiveMessage, ActiveMessageAction};
 
-use super::{ActiveMessage, ActiveMessageAction};
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ChatMessageIn {
-    pub content: String,
-    pub timestamp: String,
-    pub sender: i32,
-    pub channel: i32,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct MessagesData {
-    pub channel_id: i32,
-    pub messages: Vec<message::Model>,
-}
-
-pub async fn on_message_send(data: ChatMessageIn, db: &DatabaseConnection, sender: Sender<String>) {
-    debug!("Creating active model for the new message...");
-
-    let msg = message::ActiveModel {
-        channel_id: Set(data.channel),
-        content: Set(data.content),
-        timestamp: Set(data.timestamp),
-        user_id: Set(data.sender),
-
-        ..Default::default()
-    };
-
-    debug!("Inserting the message.");
-
-    let message = msg.clone().insert(db).await.unwrap();
-
-    debug!("Creating the data struct to send to the client.");
-
-    let data_struct = ActiveMessage {
-        action: ActiveMessageAction::RecieveMessage,
-        data: message,
-    };
-
-    debug!("Serializing the data.");
-
-    let data = serde_json::to_string(&data_struct).unwrap();
-
-    debug!("Sending to clients.");
-
-    sender.send(data);
-}
+use super::MessagesData;
 
 pub async fn on_get_all_messages(
     channel_id: i32,

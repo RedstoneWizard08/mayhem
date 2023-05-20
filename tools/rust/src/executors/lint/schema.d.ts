@@ -1,5 +1,5 @@
-import { BaseOptions } from '../../models/base-options';
+import { BaseOptions } from "../../models/base-options";
 
 export interface LintExecutorSchema extends BaseOptions {
-  fix?: boolean;
+    fix?: boolean;
 } // eslint-disable-line

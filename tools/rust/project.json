@@ -1,70 +1,70 @@
 {
-  "name": "rust",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "tools/rust/src",
-  "projectType": "library",
-  "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "tools/rust/**/*.ts",
-          "tools/rust/generators.json",
-          "tools/rust/executors.json",
-          "tools/rust/package.json"
-        ]
-      },
-      "outputs": ["{options.outputFile}"]
+    "name": "rust",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "tools/rust/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": [
+                    "tools/rust/**/*.ts",
+                    "tools/rust/generators.json",
+                    "tools/rust/executors.json",
+                    "tools/rust/package.json"
+                ]
+            },
+            "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/packages/rust"],
+            "options": {
+                "jestConfig": "tools/rust/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/tools/rust",
+                "tsConfig": "tools/rust/tsconfig.lib.json",
+                "packageJson": "tools/rust/package.json",
+                "buildableProjectDepsInPackageJsonType": "dependencies",
+                "main": "tools/rust/src/index.ts",
+                "assets": [
+                    "tools/rust/*.md",
+                    {
+                        "input": "./tools/rust/src",
+                        "glob": "**/!(*.ts)",
+                        "output": "./src"
+                    },
+                    {
+                        "input": "./tools/rust/src",
+                        "glob": "**/*.d.ts",
+                        "output": "./src"
+                    },
+                    {
+                        "input": "./tools/rust",
+                        "glob": "generators.json",
+                        "output": "."
+                    },
+                    {
+                        "input": "./tools/rust",
+                        "glob": "executors.json",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "version": {
+            "executor": "@jscutlery/semver:version",
+            "options": {
+                "preset": "conventional",
+                "postTargets": ["rust:build"]
+            }
+        }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/packages/rust"],
-      "options": {
-        "jestConfig": "tools/rust/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/tools/rust",
-        "tsConfig": "tools/rust/tsconfig.lib.json",
-        "packageJson": "tools/rust/package.json",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "main": "tools/rust/src/index.ts",
-        "assets": [
-          "tools/rust/*.md",
-          {
-            "input": "./tools/rust/src",
-            "glob": "**/!(*.ts)",
-            "output": "./src"
-          },
-          {
-            "input": "./tools/rust/src",
-            "glob": "**/*.d.ts",
-            "output": "./src"
-          },
-          {
-            "input": "./tools/rust",
-            "glob": "generators.json",
-            "output": "."
-          },
-          {
-            "input": "./tools/rust",
-            "glob": "executors.json",
-            "output": "."
-          }
-        ]
-      }
-    },
-    "version": {
-      "executor": "@jscutlery/semver:version",
-      "options": {
-        "preset": "conventional",
-        "postTargets": ["rust:build"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

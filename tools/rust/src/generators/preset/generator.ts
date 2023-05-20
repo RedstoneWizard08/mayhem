@@ -1,6 +1,6 @@
-import { Tree } from '@nrwl/devkit';
-import init from '../init/generator';
+import { Tree } from "@nrwl/devkit";
+import init from "../init/generator";
 
 export default async function (tree: Tree) {
-  init(tree);
+    init(tree);
 }

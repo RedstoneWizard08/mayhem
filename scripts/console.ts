@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import { blue, cyan, green, magenta, red, yellow } from "colorette";
 import puppeteer from "puppeteer";
 

@@ -1,7 +1,9 @@
 #![allow(unused_must_use, unused_assignments, clippy::needless_return)]
 #![feature(proc_macro_hygiene, decl_macro, arc_unwrap_or_clone, async_closure)]
 
+#[cfg(not(debug_assertions))]
 pub mod client;
+
 pub mod config;
 pub mod database;
 pub mod errors;
@@ -18,7 +20,7 @@ use axum::{body::Body, middleware::from_fn, Router, Server};
 use std::{error::Error, net::SocketAddr, sync::Arc};
 
 #[cfg(not(debug_assertions))]
-use client::run_client;
+use client::run_client_node;
 
 #[cfg(not(debug_assertions))]
 use routes::client_handler;
@@ -42,7 +44,7 @@ async fn _run_client() {
     info("Starting client...");
 
     tokio::spawn(async {
-        run_client().await;
+        run_client_node().await;
     });
 }
 

@@ -12,10 +12,12 @@ use tokio::sync::{mpsc::UnboundedSender, Mutex};
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub enum ActiveMessageAction {
     SendMessage,
+    DeleteMessage,
     RecieveMessage,
     GetMessagesForChannel,
 
     CreateChannel,
+    DeleteChannel,
     GetChannelInfo,
     GetChannelsInServer,
 
@@ -24,6 +26,7 @@ pub enum ActiveMessageAction {
     JoinServer,
     LeaveServer,
     GetServersForUser,
+    DeleteServer,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
