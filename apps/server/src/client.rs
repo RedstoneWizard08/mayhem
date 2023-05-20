@@ -256,7 +256,7 @@ pub async fn download_bun(dir: &Path) {
     extract(Cursor::new(in_bytes), &dir, true).unwrap();
 }
 
-pub async fn run_client() {
+pub async fn run_client_node() {
     let tmp = TempDir::new("mayhem").unwrap();
 
     download_node(tmp.path()).await;
