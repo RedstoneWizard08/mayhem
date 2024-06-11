@@ -1,12 +1,18 @@
 [package]
 name = "mayhemctl"
-version = "0.0.0"
-edition = "2021"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+description.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
 
 [dependencies]
-clap = { version = "4.0.22", features = ["debug", "env", "derive", "cargo", "string"] }
-git2 = "0.16.1"
-lazy_static = "1.4.0"
-path-absolutize = "3.0.14"
-question = "0.2.2"
-structopt = "0.3.26"
+clap.workspace = true
+git2.workspace = true
+lazy_static.workspace = true
+path-absolutize.workspace = true
+question.workspace = true
+structopt.workspace = true

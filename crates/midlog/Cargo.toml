@@ -1,0 +1,15 @@
+[package]
+name = "midlog"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+
+[dependencies]
+axum.workspace = true
+chrono.workspace = true
+colored.workspace = true
+lazy_static.workspace = true
+tracing.workspace = true

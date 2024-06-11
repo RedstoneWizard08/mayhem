@@ -1,49 +1,47 @@
 [package]
-name = "server"
-authors = ["RedstoneWizard08"]
-version = "0.2.0-beta.1"
-edition = "2021"
-readme = "../README.md"
-
-description = """
-A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
-"""
-
-license = "MIT"
-homepage = "https://github.com/RedstoneWizard08/mayhem"
-repository = "https://github.com/RedstoneWizard08/mayhem"
+name = "mayhem-server"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+description.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
 
 [dependencies]
-axum = { version = "0.6.10", features = ["headers", "macros", "ws", "multipart", "http2", "json"] }
-chrono = "0.4.23"
-derive_more = "0.99.17"
-either = { version = "1.8.0", features = ["serde"] }
-flate2 = { version = "1.0.25", features = ["zlib"] }
-futures = "0.3.25"
-http = "0.2.9"
-hyper = { version = "0.14.24", features = ["full"] }
-include_dir = "0.7.3"
-indicatif = "0.17.3"
-lazy_static = "1.4.0"
-mayhem-db = { version = "0.2.0-beta.1", path = "../../packages/database" }
-pbkdf2 = "0.11.0"
-rand = "0.8.5"
-redis = { version = "0.23.0", features = ["tokio", "serde", "serde_json", "tokio-comp", "connection-manager"] }
-reqwest = { version = "0.11.12", features = ["stream", "json", "gzip", "rustls"] }
-ring = "0.17.0-alpha.11"
-serde = { version = "1.0.147", features = ["derive"] }
-serde_json = "1.0.87"
-serde_urlencoded = "0.7.1"
-tar = "0.4.38"
-tempdir = "0.3.7"
-tokio = { version = "1.21.2", features = ["full"] }
-tokio-pg-mapper = "0.2.0"
-tokio-postgres = "0.7.7"
-tokio-stream = "0.1.11"
-toml = "0.7.2"
-tower = { version = "0.4.13", features = ["full"] }
-tracing = { version = "0.1.37", features = ["log", "log-always", "async-await"] }
-tracing-subscriber = { version = "0.3.16", features = ["json", "serde", "regex", "time", "tracing"] }
-url = "2.3.1"
-uuid = { version = "1.2.2", features = ["serde", "v4"] }
-zip-extract = "0.1.2"
+anyhow.workspace = true
+axum.workspace = true
+chrono.workspace = true
+derive_more.workspace = true
+either.workspace = true
+flate2.workspace = true
+futures.workspace = true
+http.workspace = true
+hyper.workspace = true
+include_dir.workspace = true
+indicatif.workspace = true
+lazy_static.workspace = true
+mayhem-db.workspace = true
+pbkdf2.workspace = true
+rand.workspace = true
+redis.workspace = true
+reqwest.workspace = true
+ring.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_urlencoded.workspace = true
+tar.workspace = true
+tempdir.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-pg-mapper.workspace = true
+tokio-postgres.workspace = true
+tokio-stream.workspace = true
+toml.workspace = true
+tower.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+url.workspace = true
+uuid.workspace = true
+zip-extract.workspace = true

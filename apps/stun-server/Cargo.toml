@@ -1,35 +1,30 @@
 [package]
 name = "stun-server"
-authors = ["RedstoneWizard08"]
-version = "0.2.0-beta.1"
-edition = "2021"
-readme = "../README.md"
-
-description = """
-A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
-"""
-
-license = "MIT"
-homepage = "https://github.com/RedstoneWizard08/mayhem"
-repository = "https://github.com/RedstoneWizard08/mayhem"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+description.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
 
 [dependencies]
-anyhow = "1.0.71"
-base64 = "0.21.1"
-chrono = "0.4.24"
-hyper = { version = "0.14.26", features = ["full"] }
-lazy_static = "1.4.0"
-log = "0.4.17"
-mayhem-db = { version = "0.2.0-beta.1", path = "../../packages/database" }
-redis = { version = "0.23.0", features = ["tokio", "serde", "serde_json", "tokio-comp", "connection-manager"] }
-reqwest = { version = "0.11.12", features = ["stream", "json", "gzip", "rustls"] }
-serde = { version = "1.0.147", features = ["derive"] }
-serde_json = "1.0.87"
-stun = "0.4.4"
-stun_codec = "0.3.1"
-tokio = { version = "1.21.2", features = ["full"] }
-tokio-stream = "0.1.11"
-toml = "0.7.2"
-tracing = { version = "0.1.37", features = ["log", "log-always", "async-await"] }
-tracing-subscriber = { version = "0.3.16", features = ["json", "serde", "regex", "time", "tracing"] }
-webrtc = "0.7.3"
+anyhow.workspace = true
+base64.workspace = true
+chrono.workspace = true
+hyper.workspace = true
+lazy_static.workspace = true
+mayhem-db.workspace = true
+redis.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+stun.workspace = true
+stun_codec.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+webrtc.workspace = true

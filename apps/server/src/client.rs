@@ -121,7 +121,7 @@ pub fn get_bun_dir_name() -> String {
 pub async fn download_node(dir: &Path) {
     let url = get_node_download_url();
 
-    info("Downloading node...");
+    info!("Downloading node...");
 
     let resp = reqwest::Client::new()
         .get(url.clone())
@@ -165,7 +165,7 @@ pub async fn download_node(dir: &Path) {
         dl_dest_file.as_os_str().to_str().unwrap()
     ));
 
-    info("Setting up node install...");
+    info!("Setting up node install...");
 
     let dest_file = dir.join("node.tar");
     let mut in_file = File::open(dl_dest_file).unwrap();
@@ -176,7 +176,7 @@ pub async fn download_node(dir: &Path) {
     let mut dest = File::create(dest_file.clone()).unwrap();
     let content = Cursor::new(in_bytes);
 
-    info("Extracting node (1/2)...");
+    info!("Extracting node (1/2)...");
 
     let mut gz = GzDecoder::new(content);
     let mut tar_content = Vec::new();
@@ -187,7 +187,7 @@ pub async fn download_node(dir: &Path) {
 
     copy(&mut tar_cursor, &mut dest).unwrap();
 
-    info("Extracting node (2/2)...");
+    info!("Extracting node (2/2)...");
 
     let mut tar = Archive::new(File::open(dest_file).unwrap());
 
@@ -199,7 +199,7 @@ pub async fn download_node(dir: &Path) {
 pub async fn download_bun(dir: &Path) {
     let url = get_bun_download_url();
 
-    info("Downloading Bun...");
+    info!("Downloading Bun...");
 
     let resp = reqwest::Client::new()
         .get(url.clone())
@@ -244,14 +244,14 @@ pub async fn download_bun(dir: &Path) {
         dl_dest_file.as_os_str().to_str().unwrap()
     ));
 
-    info("Setting up Bun install...");
+    info!("Setting up Bun install...");
 
     let mut in_file = File::open(dl_dest_file).unwrap();
     let mut in_bytes = Vec::new();
 
     in_file.read_to_end(&mut in_bytes);
 
-    info("Extracting Bun...");
+    info!("Extracting Bun...");
 
     extract(Cursor::new(in_bytes), &dir, true).unwrap();
 }
@@ -261,7 +261,7 @@ pub async fn run_client_node() {
 
     download_node(tmp.path()).await;
 
-    info("Extracting frontend files...");
+    info!("Extracting frontend files...");
 
     CLIENT_DIR.extract(tmp.path());
 
@@ -287,7 +287,7 @@ pub async fn run_client_node() {
     let stdout = Stdio::from(file_stdout);
     let stderr = Stdio::from(file_stderr);
 
-    info("Installing moment.js and axios...");
+    info!("Installing moment.js and axios...");
 
     let node_path = tmp.path().clone().join("node");
     let node_path = node_path.to_str().unwrap().to_string();
@@ -321,7 +321,7 @@ pub async fn run_client_node() {
     let stdout = Stdio::from(file_stdout);
     let stderr = Stdio::from(file_stderr);
 
-    info(format!("Client listening on {}", address).as_str());
+    info!(format!("Client listening on {}", address).as_str());
 
     let out = Command::new("node")
         .arg(tmp.path().join("index.js").to_str().unwrap())
@@ -345,7 +345,7 @@ pub async fn run_client_node() {
         String::from_utf8(out.stderr).unwrap()
     );
 
-    info("Exiting client process...");
+    info!("Exiting client process...");
 }
 
 pub async fn run_client_bun() {
@@ -353,7 +353,7 @@ pub async fn run_client_bun() {
 
     download_bun(tmp.path()).await;
 
-    info("Extracting frontend files...");
+    info!("Extracting frontend files...");
 
     CLIENT_DIR.extract(tmp.path());
 
@@ -370,7 +370,7 @@ pub async fn run_client_bun() {
     let stdout = Stdio::from(file_stdout);
     let stderr = Stdio::from(file_stderr);
 
-    info("Installing dependencies...");
+    info!("Installing dependencies...");
 
     let bun_path = tmp.path().clone().join("bun");
     let bun_path = bun_path.to_str().unwrap().to_string();
@@ -405,7 +405,7 @@ pub async fn run_client_bun() {
     let stdout = Stdio::from(file_stdout);
     let stderr = Stdio::from(file_stderr);
 
-    info(format!("Client listening on {}", address).as_str());
+    info!(format!("Client listening on {}", address).as_str());
 
     let out = Command::new("bun")
         .arg(tmp.path().join("index.js").to_str().unwrap())
@@ -429,5 +429,5 @@ pub async fn run_client_bun() {
         String::from_utf8(out.stderr).unwrap()
     );
 
-    info("Exiting client process...");
+    info!("Exiting client process...");
 }
