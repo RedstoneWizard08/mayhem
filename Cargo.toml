@@ -3,6 +3,7 @@
 members = [
 	'apps/server',
 	'apps/cli',
+    'apps/stun-server',
 	'packages/database',
 	'packages/migrations',
 ]

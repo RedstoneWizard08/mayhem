@@ -1,5 +1,5 @@
 use mayhem_db::{
-    models::{user_settings::Model as UserSettings, user::ActiveModel},
+    models::{user::ActiveModel, user_settings::Model as UserSettings},
     util::{CompleteServer, CompleteUser},
 };
 

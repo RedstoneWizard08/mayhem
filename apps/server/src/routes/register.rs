@@ -11,7 +11,8 @@ use crate::{
         register::{add_user, UserCreation},
     },
     errors::conflict::BasicResponseError,
-    state::AppState, util::user::PasswordlessActiveUser,
+    state::AppState,
+    util::user::PasswordlessActiveUser,
 };
 
 #[debug_handler]
