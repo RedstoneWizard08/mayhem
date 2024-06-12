@@ -3,22 +3,22 @@ use hyper::{
     client::{Client as RequestClient, HttpConnector},
     Body,
 };
-use mayhem_db::Client;
+use mayhem_db::diesel_async::{pooled_connection::deadpool::Pool, AsyncPgConnection};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub client: Arc<Client>,
+    pub pool: Pool<AsyncPgConnection>,
     pub rooms: Arc<Mutex<Vec<ChatRoom>>>,
     pub config: AppConfig,
     pub request_client: RequestClient<HttpConnector, Body>,
 }
 
 impl AppState {
-    pub fn new(client: Arc<Client>, config: AppConfig) -> Self {
+    pub fn new(pool: Pool<AsyncPgConnection>, config: AppConfig) -> Self {
         return Self {
-            client,
+            pool,
             rooms: Arc::new(Mutex::new(Vec::new())),
             config,
             request_client: RequestClient::new(),

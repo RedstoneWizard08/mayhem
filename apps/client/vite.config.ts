@@ -10,21 +10,15 @@ export default defineConfig({
     clearScreen: false,
 
     server: {
-        port: 4000,
+        port: 4001,
         strictPort: true,
+        cors: true,
 
         hmr: {
             clientPort: 443,
-            port: 4000,
+            port: 4001,
             protocol: "wss",
-        },
-
-        proxy: {
-            "/api": {
-                target: "http://localhost:4001",
-                changeOrigin: true,
-                ws: true,
-            },
+            path: "/vite-hmr",
         },
     },
 });

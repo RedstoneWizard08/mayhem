@@ -1,18 +1,27 @@
+pub mod birthday;
+pub mod channel;
+pub mod channel_category;
+pub mod friend;
+pub mod member_role;
 pub mod message;
+pub mod role;
 pub mod server;
+pub mod server_member;
+pub mod server_settings;
 pub mod user;
-pub mod user_server;
 pub mod user_settings;
+pub mod user_token;
 
-pub use message::Model as ChatMessage;
-pub use user::Model as User;
-pub use user_server::Model as UserServer;
-pub use user_settings::Model as UserSettings;
-
-pub use message::Entity as EChatMessage;
-pub use user::Entity as EUser;
-pub use user_server::Entity as EUserServer;
-pub use user_settings::Entity as EUserSettings;
-
-pub use server::{Channel, Member, MemberRole, Role, Server};
-pub use server::{EChannel, EMember, EMemberRole, ERole, EServer};
+pub use birthday::*;
+pub use channel::*;
+pub use channel_category::*;
+pub use friend::*;
+pub use member_role::*;
+pub use message::*;
+pub use role::*;
+pub use server::*;
+pub use server_member::*;
+pub use server_settings::*;
+pub use user::*;
+pub use user_settings::*;
+pub use user_token::*;

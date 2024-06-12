@@ -40,3 +40,4 @@ web-ext-artifacts
 target
 
 !tools/nx-rust/src/executors/build
+rustc-ice*

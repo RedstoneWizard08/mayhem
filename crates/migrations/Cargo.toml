@@ -1,20 +1,20 @@
 [package]
 name = "migrations"
-authors = ["RedstoneWizard08"]
-version = "0.2.0-beta.1"
-edition = "2021"
-
-description = """
-A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
-
-=> Database Migrations Module
-"""
-
-license = "MIT"
-homepage = "https://github.com/RedstoneWizard08/mayhem"
-repository = "https://github.com/RedstoneWizard08/mayhem"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description.workspace = true
 
 [dependencies]
-tokio.workspace = true
-futures.workspace = true
-sea-orm-migration = { version = "0.12.15", features = ["runtime-tokio-rustls", "sqlx-postgres"] }
+diesel.workspace = true
+diesel-async.workspace = true
+migrations-macros.workspace = true
+scoped-futures.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+lazy_static.workspace = true

@@ -13,6 +13,7 @@ A Discord-like chat application optimized for security, stability, speed, and ul
 
 [workspace.dependencies]
 anyhow = "1.0.86"
+argon2 = "0.5.3"
 async-trait = "0.1.80"
 axum = { version = "0.7.5", features = ["macros", "ws", "multipart", "http2", "json"] }
 axum-core = "0.4.3"
@@ -23,8 +24,12 @@ chrono = "0.4.38"
 clap = { version = "4.5.7", features = ["debug", "env", "derive", "cargo", "string"] }
 colored = "2.1.0"
 ctrlc = "3.4.4"
+deadpool = "0.12.1"
 derive_builder = "0.20.0"
 derive_more = "0.99.17"
+diesel = { version = "2.2.0", features = ["postgres"] }
+diesel-async = { version = "0.4.1", git = "https://github.com/weiznich/diesel_async", rev = "86cf7cd", features = ["postgres", "deadpool"] }
+diesel-derive-enum = { version = "2.1.0", features = ["postgres"] }
 dotenvy = "0.15.6"
 either = { version = "1.12.0", features = ["serde"] }
 flate2 = { version = "1.0.30", features = ["zlib"] }
@@ -45,12 +50,16 @@ num-traits = "0.2.19"
 once_cell = "1.19.0"
 path-absolutize = "3.1.1"
 pbkdf2 = "0.12.2"
+proc-macro2 = "1.0.85"
 question = "0.2.2"
+quote = "1.0.36"
 rand = "0.8.5"
+random-string = "1.1.0"
 redis = { version = "0.25.4", features = ["tokio", "serde", "serde_json", "tokio-comp", "connection-manager"] }
 regex = "1.10.5"
 reqwest = { version = "0.12.4", default-features = false, features = ["stream", "json", "gzip", "rustls-tls"] }
 ring = "0.17.8"
+scoped-futures = "0.1.3"
 serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0.117"
 serde_urlencoded = "0.7.1"
@@ -70,6 +79,7 @@ tokio-tungstenite = "0.23.0"
 toml = "0.8.14"
 tower = { version = "0.4.13", features = ["full"] }
 tracing = { version = "0.1.40", features = ["log", "log-always", "async-await"] }
+tracing-appender = "0.2.3"
 tracing-subscriber = { version = "0.3.18", features = ["json", "serde", "regex", "time", "tracing"] }
 url = "2.5.1"
 uuid = { version = "1.8.0", features = ["serde", "v4"] }
@@ -82,6 +92,7 @@ mayhem-db = { path = "crates/db" }
 glue = { path = "crates/glue" }
 midlog = { path = "crates/midlog" }
 migrations = { path = "crates/migrations" }
+migrations-macros = { path = "crates/migrations-macros" }
 
 [workspace]
 resolver = "2"
@@ -90,10 +101,11 @@ members = [
 	"apps/cli",
     "apps/stun-server",
 	"crates/db",
-	"crates/migrations",
     "crates/axumite",
     "crates/glue",
     "crates/midlog",
+    "crates/migrations",
+    "crates/migrations-macros",
 ]
 
 [profile.release]

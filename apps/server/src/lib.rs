@@ -1,104 +1,91 @@
-#![allow(unused_must_use, unused_assignments, clippy::needless_return)]
-#![feature(proc_macro_hygiene, decl_macro, arc_unwrap_or_clone, async_closure)]
-
-#[cfg(not(debug_assertions))]
-pub mod client;
-
 pub mod config;
 pub mod database;
-pub mod errors;
+pub mod glue;
+pub mod log;
 pub mod redis;
+pub mod router;
 pub mod routes;
 pub mod server;
 pub mod state;
-pub mod util;
 pub mod ws;
 
-use anyhow::Result;
-use axum::{body::Body, middleware::from_fn, Router, Server};
-use tracing::info;
-use std::{error::Error, net::SocketAddr, sync::Arc};
-
-#[cfg(not(debug_assertions))]
-use client::run_client_node;
-
-#[cfg(not(debug_assertions))]
-use routes::client_handler;
-
-#[cfg(debug_assertions)]
-use routes::handle_error;
-
-#[cfg(debug_assertions)]
-use logging::warn;
-
 use crate::config::get_config;
-use database::prepare_connection;
-use logging::info;
-use mayhem_db::Client;
-use middleware::logger::logging_middleware;
+use anyhow::Result;
+use axum::serve;
+use database::connect;
+use glue::{abort::register_exit_handler, make_glue};
+use log::init_logger;
+use mayhem_db::migrate;
+use router::RouterBuilder;
 use state::AppState;
-use util::parse_ip;
-
-#[cfg(not(debug_assertions))]
-async fn _run_client() {
-    info!("Starting client...");
-
-    tokio::spawn(async {
-        run_client_node().await;
-    });
-}
-
-#[cfg(debug_assertions)]
-async fn _run_client() {
-    warn!("Not starting client, is a debug build.");
-}
-
-#[cfg(not(debug_assertions))]
-fn _register_client_handler(router: Router<AppState, Body>) -> Router<AppState, Body> {
-    return router.fallback(client_handler);
-}
-
-#[cfg(debug_assertions)]
-fn _register_client_handler(router: Router<AppState, Body>) -> Router<AppState, Body> {
-    return router.fallback(handle_error);
-}
+use std::{error::Error, net::SocketAddr};
+use tokio::{join, net::TcpListener};
+use tracing::{info, level_filters::LevelFilter};
 
 pub async fn start() -> Result<()> {
-    tracing_subscriber::fmt::init();
+    init_logger("logs/server.log", LevelFilter::current());
+
+    info!("Registering CTRL+C handler...");
+
+    register_exit_handler()?;
+
+    info!("Registered!");
+    info!("Parsing config...");
 
     let config = get_config().await;
 
     info!("Config parsed!");
+    info!("Connecting to the database...");
 
-    let database_connection = prepare_connection(config.clone());
-    let client = Arc::new(Client::connect(database_connection).await);
+    let pool = connect(config)?;
 
-    info!("Connected to the database!");
+    info!("Connected!");
+    info!("Running migrations...");
 
-    let state = AppState::new(client.clone(), config.clone());
-
-    let router = Router::new();
-    let router = routes::register(router);
-    let router = ws::register(router);
-    let router = _register_client_handler(router);
-    let router = router.layer(from_fn(logging_middleware));
-    let router = router.with_state(state);
-
-    client.run_migrations().await.unwrap();
+    migrate(pool).await?;
 
     info!("Migrations succeeded!");
+    info!("Creating glue...");
 
-    let ip = parse_ip(config.clone().host);
-    let address = SocketAddr::from((ip, config.clone().port));
-    let server = Server::bind(&address);
-    let service = router.into_make_service_with_connect_info::<SocketAddr>();
-    let app = server.serve(service);
+    let glue = make_glue()?;
 
-    _run_client().await;
+    info!("Created!");
+    info!("Creating router...");
 
-    info!(format!("Listening on {}", address).as_str());
+    let state = AppState::new(pool, config.clone());
 
-    app.await.unwrap();
+    let router = RouterBuilder::new()
+        .glue(glue.clone())
+        .routes()
+        .log()
+        .build(state)
+        .into_make_service_with_connect_info::<SocketAddr>();
+
+    info!("Created!");
+    info!("Initializing server...");
+
+    let ip: IpAddr = config.host.parse()?;
+    let addr = SocketAddr::from((ip, config.port));
+    let listener = TcpListener::bind(&addr).await?;
+
+    info!("Initialized!");
+    info!("Listening on {}:{}!", cli.host, cli.port);
+
+    let server = tokio::spawn(async move { serve(listener, router).await });
+
+    if is_debug() {
+        info!("Starting client...");
+
+        let client = glue.spawn().await;
+        let (a, b) = join!(client, server);
+
+        a?;
+        b??;
+
+        return Ok(());
+    }
+
+    server.await??;
 
     return Ok(());
 }

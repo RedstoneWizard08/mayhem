@@ -1,29 +1,32 @@
 [package]
 name = "mayhem-db"
-authors = ["RedstoneWizard08"]
-version = "0.2.0-beta.1"
-edition = "2021"
-readme = "../README.md"
-
-description = """
-A Discord-like chat application optimized for security, stability, speed, and ultimate customization.
-
-=> Database Module
-"""
-
-license = "MIT"
-homepage = "https://github.com/RedstoneWizard08/mayhem"
-repository = "https://github.com/RedstoneWizard08/mayhem"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+description.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
 
 [dependencies]
+argon2.workspace = true
 async-trait.workspace = true
+base64.workspace = true
+chrono.workspace = true
+deadpool.workspace = true
+diesel.workspace = true
+diesel-async.workspace = true
+diesel-derive-enum.workspace = true
 dotenvy.workspace = true
+futures.workspace = true
+migrations.workspace = true
 num.workspace = true
 num-derive.workspace = true
 num-traits.workspace = true
-sea-orm = { version = "0.12.15", features = ["sqlx-postgres", "sqlx-sqlite", "runtime-tokio", "runtime-tokio-rustls", "postgres-array", "macros", "mock"] }
+rand.workspace = true
+random-string.workspace = true
+thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
-migrations.workspace = true
-futures.workspace = true
 serde.workspace = true

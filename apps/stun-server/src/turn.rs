@@ -1,8 +1,24 @@
-use std::{collections::HashMap, sync::Arc, net::{IpAddr, SocketAddr}, str::FromStr};
+use std::{
+    collections::HashMap,
+    net::{IpAddr, SocketAddr},
+    str::FromStr,
+    sync::Arc,
+};
 
 use anyhow::Result;
-use tokio::{net::UdpSocket, time::Duration, signal};
-use webrtc::{turn::{auth::{generate_auth_key, AuthHandler}, server::{Server, config::{ServerConfig, ConnConfig}}, relay::relay_static::RelayAddressGeneratorStatic, Error}, util::vnet::net::Net};
+use tokio::{net::UdpSocket, signal, time::Duration};
+use webrtc::{
+    turn::{
+        auth::{generate_auth_key, AuthHandler},
+        relay::relay_static::RelayAddressGeneratorStatic,
+        server::{
+            config::{ConnConfig, ServerConfig},
+            Server,
+        },
+        Error,
+    },
+    util::vnet::net::Net,
+};
 
 pub struct MyAuthHandler {
     cred_map: HashMap<String, Vec<u8>>,
@@ -52,22 +68,21 @@ pub async fn start_turn_server() -> Result<()> {
     println!("Listening {}...", conn.local_addr()?);
 
     let server = Server::new(ServerConfig {
-        conn_configs: vec![
-            ConnConfig {
-                conn,
+        conn_configs: vec![ConnConfig {
+            conn,
 
-                relay_addr_generator: Box::new(RelayAddressGeneratorStatic {
-                    relay_address: IpAddr::from_str(public_ip)?,
-                    address: "0.0.0.0".to_owned(),
-                    net: Arc::new(Net::new(None)),
-                }),
-            },
-        ],
+            relay_addr_generator: Box::new(RelayAddressGeneratorStatic {
+                relay_address: IpAddr::from_str(public_ip)?,
+                address: "0.0.0.0".to_owned(),
+                net: Arc::new(Net::new(None)),
+            }),
+        }],
 
         realm: realm.to_owned(),
         auth_handler: Arc::new(MyAuthHandler::new(cred_map)),
         channel_bind_timeout: Duration::from_secs(0),
-    }).await?;
+    })
+    .await?;
 
     println!("Waiting for CTRL+C...");
 

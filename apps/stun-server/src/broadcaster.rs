@@ -1,7 +1,7 @@
+use super::signal;
 use anyhow::Result;
 use std::sync::Arc;
 use tokio::time::Duration;
-use super::signal;
 
 use webrtc::{
     api::{

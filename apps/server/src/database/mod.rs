@@ -1,52 +1,27 @@
-use mayhem_db::client::connector::{
-    Authentication, ConnectionOptions, DatabaseProtocol, PasswordAuthentication, UserAuthentication,
-};
+use anyhow::Result;
+use mayhem_db::diesel_async::{pooled_connection::deadpool::Pool, AsyncPgConnection};
 
 use crate::config::{AppConfig, DatabaseConfig};
 
-pub mod login;
-pub mod register;
-pub mod token;
+pub fn create_connection_url(config: &DatabaseConfig) -> String {
+    let mut prefix = String::new();
 
-pub fn proto_from_string(s: String) -> DatabaseProtocol {
-    if s == "postgres" || s == "postgresql" {
-        return DatabaseProtocol::PostgreSQL;
-    }
+    if let Some(user) = config.user {
+        prefix = user;
 
-    if s == "mysql" {
-        return DatabaseProtocol::MySQL;
-    }
-
-    if s == "sqlite" || s == "sqlite3" {
-        return DatabaseProtocol::SQLite;
-    }
-
-    panic!("Unknown protocol!");
-}
-
-pub fn make_auth(config: DatabaseConfig) -> Authentication {
-    if config.user.is_some() {
-        if config.pass.is_none() {
-            return Authentication::User(UserAuthentication {
-                user: config.user.unwrap(),
-            });
+        if let Some(pass) = config.pass {
+            prefix = format!("{}:{}", prefix, pass);
         }
 
-        return Authentication::Password(PasswordAuthentication {
-            user: config.user.unwrap(),
-            pass: config.pass.unwrap(),
-        });
+        prefix = format!("{}@", prefix);
     }
 
-    return Authentication::Anonymous;
+    return format!(
+        "postgresql://{}{}:{}/{}",
+        prefix, config.host, config.port, config.database
+    );
 }
 
-pub fn prepare_connection(config: AppConfig) -> ConnectionOptions {
-    return ConnectionOptions {
-        protocol: proto_from_string(config.database.clone().protocol),
-        auth: make_auth(config.database.clone()),
-        host: config.database.clone().host,
-        port: config.database.port,
-        database: config.database.database,
-    };
+pub fn connect(config: &DatabaseConfig) -> Result<Pool<AsyncPgConnection>> {
+    Ok(mayhem_db::connect(create_connection_url(config))?)
 }

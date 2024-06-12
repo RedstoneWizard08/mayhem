@@ -1,11 +1,36 @@
-#![allow(clippy::needless_return, clippy::module_inception)]
-#![feature(arc_unwrap_or_clone, associated_type_defaults)]
+use diesel_async::{
+    pooled_connection::{deadpool::Pool, AsyncDieselConnectionManager},
+    AsyncPgConnection,
+};
+use error::DbError;
 
-pub use migrations::{MigrationTrait, Migrator, MigratorTrait};
-pub use sea_orm;
+#[macro_use]
+extern crate serde;
 
-pub mod client;
+#[macro_use]
+extern crate diesel_derive_enum;
+
+#[macro_use]
+pub extern crate diesel;
+pub extern crate diesel_async;
+
+pub mod error;
+pub mod helpers;
+pub mod macros;
+pub mod migrate;
 pub mod models;
-pub mod util;
+pub mod relations;
+pub mod schema;
+pub mod token;
+pub mod types;
 
-pub use client::Client;
+pub type Result<T, E = DbError> = std::result::Result<T, E>;
+
+pub fn connect(url: impl AsRef<str>) -> Result<Pool<AsyncPgConnection>> {
+    Ok(
+        Pool::builder(AsyncDieselConnectionManager::<AsyncPgConnection>::new(
+            url.as_ref(),
+        ))
+        .build()?,
+    )
+}

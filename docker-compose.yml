@@ -19,7 +19,7 @@ services:
             - 4001
 
     database:
-        image: postgres:15-alpine
+        image: postgres:16-alpine
         environment:
             - POSTGRES_USER=mayhem
             - POSTGRES_PASSWORD=mayhem
