@@ -86,10 +86,12 @@ uuid = { version = "1.8.0", features = ["serde", "v4"] }
 webrtc = "0.11.0"
 zip-extract = "0.1.3"
 
+# My Packages
+axumite = "0.1.2"
+jsglue = "0.1.0"
+
 # Internal packages
-axumite = { path = "crates/axumite" }
 mayhem-db = { path = "crates/db" }
-glue = { path = "crates/glue" }
 midlog = { path = "crates/midlog" }
 migrations = { path = "crates/migrations" }
 migrations-macros = { path = "crates/migrations-macros" }
@@ -101,8 +103,6 @@ members = [
 	"apps/cli",
     "apps/stun-server",
 	"crates/db",
-    "crates/axumite",
-    "crates/glue",
     "crates/midlog",
     "crates/migrations",
     "crates/migrations-macros",

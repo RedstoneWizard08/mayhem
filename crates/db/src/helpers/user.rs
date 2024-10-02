@@ -19,7 +19,7 @@ impl User {
         username: impl AsRef<str>,
         email: impl AsRef<str>,
         password: impl AsRef<str>,
-        birthday: Birthday,
+        birthday: &Birthday,
         pool: &Pool<AsyncPgConnection>,
     ) -> Result<User> {
         let user = User {

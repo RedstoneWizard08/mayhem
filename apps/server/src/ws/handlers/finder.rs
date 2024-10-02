@@ -4,7 +4,6 @@ use axum::extract::ws::{Message, WebSocket};
 use futures::stream::SplitSink;
 use serde::{Deserialize, Serialize};
 
-use mayhem_db::sea_orm::DatabaseConnection;
 use tokio::sync::{broadcast::Sender, Mutex};
 
 use super::{
