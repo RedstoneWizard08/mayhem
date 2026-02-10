@@ -1,5 +1,0 @@
-{
-    "rust-analyzer.showUnlinkedFileNotification": false,
-    "rust-analyzer.server.path": "rust-analyzer",
-    "prettier.prettierPath": "./node_modules/prettier"
-}
